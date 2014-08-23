@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="2.5" type="plugin" group="system">
+	<name>System - My City Selector</name>
+	<creationDate>May 2014</creationDate>
+	<author>Konstantin Kutsevalov</author>
+	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
+	<authorEmail>konstantin@kutsevalov.name</authorEmail>
+	<authorUrl>www.kutsevalov.name</authorUrl>
+	<version>1.2.5</version>
+	<description>
+	<![CDATA[
+	<h3>My City Content PLG</h3>
+	Данный плагин является частью модуля <a href="http://www.kutsevalov.name/2013/08/12/modul-vibora-goroda-dlya-joomla/" title="перейти" target="_blank">MyCitySelector</a> и выполняет фильтрацию текста на выходе, с учетом выбранного города.<br/>
+	Более подробное описание читайте <a href="http://www.kutsevalov.name/2013/08/13/modul-vibora-goroda-dlya-joomla/" title="перейти" target="_blank">на странице модуля</a>.
+	]]>
+	</description>
+	<scriptfile>plg_mycityselector.scriptfile.php</scriptfile>
+	<files>
+		<filename plugin="plg_mycityselector">plg_mycityselector.php</filename>
+		<filename>ext_plugin_mini.png</filename>
+	</files>
+	<!--updateservers>
+		<server type="extension" priority="1" name="MyCitySelector Update Site">http://www.kutsevalov.name/wp-content/uploads/works/mycityselector/mcs_upd.xml</server>
+	</updateservers-->
+</extension>
