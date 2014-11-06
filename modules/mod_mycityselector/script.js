@@ -6,15 +6,21 @@ if( window.addEvent ){
 	jQuery( function(){  myCitySelectorInit('jq');  } );
 }else{
 	// каким по очереди будет загружен этот скрипт заранее не известно, поэтому ждем, пока не подгрузится mootools
+    var myCitySelectorReady = 0;
 	window.mcsint = setInterval( function(){
-			if( window.addEvent ){
-				clearInterval( window.mcsint );
+			if (window.addEvent) {
+				clearInterval(window.mcsint);
 				window.addEvent( 'domready', function(){  myCitySelectorInit('mt');  } );
-			}else if( window.jQuery ){
+			} else if(window.jQuery) {
+                clearInterval(window.mcsint);
 				jQuery( function(){  myCitySelectorInit('jq');  } );
-			}
-		},
-		50
+			} else {
+                if (myCitySelectorReady > 60) {
+                    clearInterval(window.mcsint);
+                    console.log('My City Selector: Не найден ни один из требуемых фреймворков (jQuery или Mootools)');
+                }
+            }
+		}, 50
 	);
 }
 
@@ -44,7 +50,7 @@ function myCitySelectorInit( fw ){
 }
 
 
-// переключает но новый город
+// переключает на новый город
 function myCitySelector_switcher( city, title, fw ){
 	city = city || 'false';
 	var tmp, content;

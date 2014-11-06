@@ -145,7 +145,6 @@ class plgSystemPlg_Mycityselector extends JPlugin {
 		$jcList = trim( $jcList, ',' ) . '];'."\n";
 		$doc = JFactory::getDocument();
 		$doc->addScriptDeclaration( $jcList );
-		$mydir = dirname(__FILE__) . '/';
 		$baseIP = $this->params->get( 'baseip', 'none' );
 		$city = JRequest::getVar( 'mycity' );
 		if( empty($city) || empty($_COOKIE['mycity_selected_name']) ){
@@ -227,7 +226,7 @@ class plgSystemPlg_Mycityselector extends JPlugin {
 
 							) */
 						}
-						$city = isset($resp['city']) ? $resp['city'] : $defaultCity;
+						$city = isset($resp['city']) ? $resp['city']['name_ru'] : $defaultCity;
 					}
 				}
 				if( empty($city) ){

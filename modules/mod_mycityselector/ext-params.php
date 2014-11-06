@@ -54,7 +54,9 @@ $cities = '<tr style="border-bottom: 1px solid gray"><th>Город</th><th titl
     . '&#34moscow&#34\nбудет соответствовать поддомену\nmoscow.site.ru\n'
     . 'Адрес страницы, также не должен\nсодержать имени домена,\n'
     . 'но должен начинаться со слеша.">Subdomain/Page (?)</th>'
-    . '<th><a href="javascipt:void(0)" class="add"><img style="float:none;margin:0;position:relative;top:2px;" src="/administrator/templates/hathor/images/menu/icon-16-new.png" alt=""/> Добавить</a></th>'
+    . '<th><a href="javascipt:void(0)" class="add">'
+    . '<img style="float:none;margin:0;position:relative;top:-2px;" src="/administrator/templates/hathor/images/menu/icon-16-new.png" alt=""/> Добавить</a>'
+    . '</th>'
     . '</tr>';
 foreach ($cities_list as $city) {
     $city = explode('=', $city);
@@ -66,7 +68,8 @@ foreach ($cities_list as $city) {
     }
     $cities .= '<tr style="border-bottom: 1px solid gray"><td><input type="text" name="city[]" class="city" value="' . htmlspecialchars(trim($city[0])) . '" /></td>'
         . '<td><input type="text" name="sub[]" class="sub" value="' . htmlspecialchars(trim($city[1])) . '" /></td>'
-        . '<td><a href="javascipt:void(0)" class="remove"><img style="float:none;margin:0;position:relative;top:2px;" src="/administrator/templates/hathor/images/menu/icon-16-delete.png" alt=""/> Удалить</a></td>'
+        . '<td><a href="javascipt:void(0)" class="remove">'
+        . '<img style="float:none;margin:0;position:relative;top:-2px;" src="/administrator/templates/hathor/images/menu/icon-16-delete.png" alt=""/> Удалить</a></td>'
         . '</tr>';
 }
 

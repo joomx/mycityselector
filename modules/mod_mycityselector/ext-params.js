@@ -38,7 +38,7 @@ function myCitySelectorParams() {
         "class": "mcs_table_cities_list",
         "id": "table-1",
         "html": '<?= $cities ?>',
-        "style": "width: 80%; border-top: 1px solid gray; border-collapse: collapse; margin-bottom: 12px;"
+        "style": "width: 560px; border-top: 1px solid gray; border-collapse: collapse; margin-bottom: 12px;"
     });
     table.inject($$("#jform_params_cities_list")[0], 'before');
     $$(".mcs_table_cities_list .remove").addEvent('click', function () {
@@ -56,13 +56,13 @@ function myCitySelectorParams() {
     $$(".mcs_table_cities_list tr .add").addEvent("click", function () { // добавление новой строки
         var tr = new Element("tr", { // создаем
             "style": "border-bottom: 1px solid gray",
-            "html": '< td > <input type="text" name="city[]" class="city"/> </td >\
-                <td><input type="text" name="sub[]" class="sub"/></td >\
-                < td > <a href="javascipt:void(0)" class="remove">\
-                <img style="float:none;margin:0;position:relative;top:2px;"\
+            "html": '<td> <input type="text" name="city[]" class="city"/> </td>\
+                <td><input type="text" name="sub[]" class="sub"/></td>\
+                <td> <a href="javascipt:void(0)" class="remove">\
+                <img style="float: none; margin: 0; position: relative; top: -2px;"\
                     src="/administrator/templates/hathor/images/menu/icon-16-delete.png"\
                     alt=""/>Удалить</a>\
-                </td >'
+                </td>'
         });
         tr.getElement(".remove").addEvent('click', function () { // прикручиваем событие удаления
             var tr = this.getParent("tr");

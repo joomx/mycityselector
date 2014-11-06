@@ -32,7 +32,7 @@ function mod_mycityselector( &$params ){
 		unset( $citiesDom['nogroup'] );
 	}
 	
-	// берем данные из плагина, обработанные ранее
+	// берем данные из плагина (он вызывается раньше модуля)
 	global $MSC_CURRENT_CITY;
 	global $MSC_BASE_DOMAIN;
 	$city = $MSC_CURRENT_CITY;
@@ -41,7 +41,7 @@ function mod_mycityselector( &$params ){
 		echo 'MSC: Плагин не активирован или не установлен!';
 	}
 
-	// всякие дополняшки
+	// всякие дополняшки (используются в шаблоне)
 	$moduleClassSfx = $params->get( 'moduleclass_sfx', '' );
 	$textBefore = $params->get( 'text_before', '' );
 	$textAfter = $params->get( 'text_after', '' );

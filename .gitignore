@@ -342,6 +342,7 @@
 /media/system/*
 /media/index.html
 /modules/mod_articles_archive/*
+/modules/mod_junewsultra/*
 /modules/mod_articles_categories/*
 /modules/mod_articles_category/*
 /modules/mod_articles_latest/*
@@ -428,6 +429,8 @@
 /plugins/index.html
 /templates/atomic/*
 /templates/beez_20/*
+/templates/protostar/*
+/templates/beez3/*
 /templates/beez5/*
 /templates/system/*
 /templates/index.html
