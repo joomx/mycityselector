@@ -12,7 +12,7 @@
 	<![CDATA[
 	<h3>My City Selector</h3>
 	<div style="text-align:left;">
-		Данные модуль позволяет управлять отображением контента для разных городов.<br/>
+		Данный модуль позволяет управлять отображением контента для разных городов.<br/>
 		Пользователю предоставляется возможность выбрать свой город, а администратору определить список этих городов и контент для них.<br/>
 		Для автоматического определения города используется <a href="http://sypexgeo.net/ru/api/" target="_blank">API SypexGeo</a><br/>
 		<br/>
@@ -24,8 +24,8 @@
 	<files>
 		<filename module="mod_mycityselector">mod_mycityselector.php</filename>
 		<filename>script.js</filename>
-		<filename>goroda-api.php</filename>
 		<filename>ext-params.php</filename>
+		<filename>ext-params.js</filename>
 		<filename>ext_mod_mini.png</filename>
 		<filename>mod_mycityselector.scriptfile.php</filename>
 		<folder>templates</folder>

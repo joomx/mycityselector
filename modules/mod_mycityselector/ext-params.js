@@ -37,8 +37,10 @@ function myCitySelectorParams() {
     var table = new Element('table', {
         "class": "mcs_table_cities_list",
         "id": "table-1",
+        // ======== insertion from $cities ===========
         "html": '<?= $cities ?>',
-        "style": "width: 560px; border-top: 1px solid gray; border-collapse: collapse; margin-bottom: 12px;"
+        // ===========================================
+        "style": "width: 100%; max-width: 560px; border-top: 1px solid gray; border-collapse: collapse; margin-bottom: 12px;"
     });
     table.inject($$("#jform_params_cities_list")[0], 'before');
     $$(".mcs_table_cities_list .remove").addEvent('click', function () {

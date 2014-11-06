@@ -75,4 +75,4 @@ foreach ($cities_list as $city) {
 
 // ==============================================================================
 
-include 'ext-params.js';
+include dirname(__FILE__) . '/ext-params.js';
