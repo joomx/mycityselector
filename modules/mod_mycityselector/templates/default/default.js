@@ -15,14 +15,17 @@ function myCitySelector_CreateDialogJQ($){ // jQuery
 		// при выборе города из диалога
 		$('.mycityselector-dialog .link').on('click', function(e){
 			e.preventDefault();
-			// здесь проверяем, нужно ли сделать редирект
-			var domain = $( this ).attr("data-domain");
+            // ставим куки
+            var cityName = (typeof this.innerHTML == 'object') ? this.innerHTML[0] : this.innerHTML;
+            myCitySelector.setCookie(cityName);
+            // здесь проверяем, нужно ли сделать редирект
+            var domain = $( this ).attr("data-domain");
             myCitySelector.checkRedirect(this, domain);
 			$('.mycityselector-dialog .link').removeClass('active');
 			$(this).addClass('active');
 			$('#mycityselector .city').html( $(this).html() );
 			var city = this.id.split('-')[1];
-            myCitySelector.switch(city, this.innerHTML);
+            myCitySelector.switchContent(city);
 			$('.mycityselector-dialog').css('display', 'none');
 			return false;
 		} );
@@ -59,6 +62,9 @@ function myCitySelector_CreateDialogMoo($$){ // Mootools
 		// при выборе города из диалога
 		$$('.mycityselector-dialog .link').addEvent('click', function(e){
 			try{ new Event(e).stop(); }catch( err ){ }
+            // ставим куки
+            var cityName = (typeof this.innerHTML == 'object') ? this.innerHTML[0] : this.innerHTML;
+            myCitySelector.setCookie(cityName);
 			// здесь проверяем, нужно ли сделать редирект
 			var domain = $$(this).get("data-domain")[0];
             myCitySelector.checkRedirect(this, domain);
@@ -66,7 +72,7 @@ function myCitySelector_CreateDialogMoo($$){ // Mootools
 			$$(this).addClass('active');
 			$$('#mycityselector .city').set('html', this.innerHTML);
 			var city = this.id.split('-')[1];
-            myCitySelector.switch(city, this.innerHTML);
+            myCitySelector.switchContent(city);
 			$$('.mycityselector-dialog').setStyle('display', 'none');
 			return false;
 		} );

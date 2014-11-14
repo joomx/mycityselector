@@ -105,10 +105,9 @@ window.myCitySelector = {
         }
     },
 
-    "switch": function(city, title){
+    "switchContent": function(city){
         city = city || 'false';
         var tmp, content;
-        title = (typeof title == 'object') ? title[0] : title;
         if (window.citySelectorContents) {
             if (myCitySelector.isMootools) {
                 $$('.cityContent').set( 'html', '' ); // прячем контент предыдущего города
@@ -137,12 +136,11 @@ window.myCitySelector = {
                 }
             }
         }
-        myCitySelector.setCookie(title);
     },
 
     "setCookie": function(city){
-        var name = 'mycity_selected_name';
         var domain = (window.msc_cookie_domain) ? window.msc_cookie_domain : "";
+        console.log(city, domain);
         if (domain != "") {
             var exdate = new Date();
             exdate.setDate(exdate.getDate() + 30);
