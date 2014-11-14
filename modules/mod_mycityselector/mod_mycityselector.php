@@ -36,7 +36,14 @@ function mod_mycityselector( &$params ){
 	global $MSC_CURRENT_CITY;
 	global $MSC_BASE_DOMAIN;
 	$city = $MSC_CURRENT_CITY;
-	$domain = $MSC_BASE_DOMAIN;	
+	$domain = $MSC_BASE_DOMAIN;
+
+    // здесь корректируем автоопределенный базовый домен, если он указан в настройках
+    $paramDomain = $params->get('main_domain', '');
+    if (!empty($paramDomain)) {
+        $domain = $paramDomain;
+    }
+
 	if( empty($city) && empty($domain) ){
 		echo 'MSC: Плагин не активирован или не установлен!';
 	}

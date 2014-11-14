@@ -33,6 +33,7 @@
 	<config>
 		<fields name="params">
 			<fieldset name="basic">
+                <field name="main_domain" type="text" default="" label="Основной домен" description="Например, если это домен третьего уровня site.com.ru"/>
 				<field name="let_select" type="radio" default="1" label="Предлагать выбрать город при входе" description="При входе на сайт, пользователю во всплывающем окне будет предложено выбрать свой город (если он не делал этого ранее)">
 					<option value="1">Да</option>
 					<option value="0">Нет</option>
