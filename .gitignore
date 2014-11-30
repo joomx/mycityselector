@@ -317,16 +317,7 @@
 /language/en-GB/install.xml
 /language/overrides/*
 /language/index.html
-/libraries/cms.php
-/libraries/cms/*
-/libraries/joomla/*
-/libraries/phpmailer/*
-/libraries/phputf8/*
-/libraries/simplepie/*
-/libraries/index.html
-/libraries/import.php
-/libraries/loader.php
-/libraries/platform.php
+/libraries
 /logs/*
 /media/cms/*
 /media/com_finder/*
@@ -439,3 +430,6 @@
 /index.php
 /joomla.xml
 /*.txt
+/NOTES.md
+/CONTRIBUTING.md
+/*.dist

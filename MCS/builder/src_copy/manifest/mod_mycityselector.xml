@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="module" version="2.5.0" method="upgrade">
 	<name>My City Selector MOD</name>
-	<creationDate>May 2014</creationDate>
+	<creationDate>{cdate}</creationDate>
 	<author>Konstantin Kutsevalov</author>
 	<authorEmail>konstantin@kutsevalov.name</authorEmail>
 	<authorUrl>http://www.kutsevalov.name/2013/08/12/modul-vibora-goroda-dlya-joomla/</authorUrl>
 	<copyright>All rights reserved</copyright>
 	<license>GNU/GPL</license>
-	<version>1.2.6</version>
+	<version>{version}</version>
 	<description>
 	<![CDATA[
 	<h3>My City Selector</h3>
@@ -20,15 +20,7 @@
 	</div>
 	]]>
 	</description>
-	<scriptfile>mod_mycityselector.scriptfile.php</scriptfile>
-	<files>
-		<filename module="mod_mycityselector">mod_mycityselector.php</filename>
-		<filename>script.js</filename>
-		<filename>ext-params.js</filename>
-		<filename>ext-params.php</filename>
-		<filename>ext_mod_mini.png</filename>
-		<folder>templates</folder>
-	</files>
+    {files}
 	<config>
 		<fields name="params">
 			<fieldset name="basic">
