@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module" version="2.5.0" method="upgrade">
+	<name>My City Selector MOD</name>
+	<creationDate>{cdate}</creationDate>
+	<author>Konstantin Kutsevalov</author>
+	<authorEmail>konstantin@kutsevalov.name</authorEmail>
+	<authorUrl>http://www.kutsevalov.name/2013/08/12/modul-vibora-goroda-dlya-joomla/</authorUrl>
+	<copyright>All rights reserved</copyright>
+	<license>GNU/GPL</license>
+	<version>{version}</version>
+	<description>
+	<![CDATA[
+	<h3>My City Selector</h3>
+	<div style="text-align:left;">
+		Модуль позволяет управлять отображением контента для разных городов.<br/>
+		Пользователю предоставляется возможность выбрать свой город, а администратору определить список этих городов и контент для них.<br/>
+		Для автоматического определения города используется <a href="http://sypexgeo.net/ru/api/" target="_blank">API SypexGeo</a><br/>
+		<br/>
+		Подобие документации можно прочитать <a href="http://www.kutsevalov.name/2013/08/13/modul-vibora-goroda-dlya-joomla/" title="перейти" target="_blank">здесь</a>.
+	</div>
+	]]>
+	</description>
+    {files}
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+                <field name="main_domain" type="text" default="" label="Основной домен" description="Например, если это домен третьего уровня site.com.ru"/>
+				<field name="let_select" type="radio" default="1" label="Предлагать выбрать город при входе" description="При входе на сайт, пользователю во всплывающем окне будет предложено выбрать свой город (если он не делал этого ранее)">
+					<option value="1">Да</option>
+					<option value="0">Нет</option>
+				</field>
+				<field name="baseip" type="radio" default="sypex" label="База geoIP" description="Укажите какую базу использовать для определения города">
+					<option value="none">Не использовать</option>
+					<option value="sypex">API SypexGeo</option>
+				</field>
+				<field name="cities_list" type="textarea" default="Москва&#13;&#10;Санкт-Петербург" label="Список городов" description=""/>
+				<field name="default_city" type="text" default="Москва" label="Город по умолчанию" description="Город, который будет выбран по умолчанию при входе на сайт"/>
+				<field name="template" type="text" label="Шаблон" description="Шаблон модуля" default="default" />
+				<field name="moduleclass_sfx" type="text" label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL" description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC" />
+				<field name="text_before" type="textarea" default="" label="Текст перед модулем" description="" rows="12" cols="50"/>
+				<field name="text_after" type="textarea" default="" label="Текст после модуля" description="" rows="12" cols="50"/>
+				<field name="cache" type="list"	default="0" label="COM_MODULES_FIELD_CACHING_LABEL" description="COM_MODULES_FIELD_CACHING_DESC">
+					<option	value="0">COM_MODULES_FIELD_VALUE_NOCACHING</option>
+					<option value="1">JGLOBAL_USE_GLOBAL</option>
+				</field>
+				<field name="cache_time" type="text" default="900" label="COM_MODULES_FIELD_CACHE_TIME_LABEL" description="COM_MODULES_FIELD_CACHE_TIME_DESC" />
+			</fieldset>
+		</fields>
+	</config>
+</extension>

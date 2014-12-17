@@ -1,0 +1,48 @@
+/**
+ *
+ * Fix Back-end for Russian or Ukrainian language
+ *
+ * @author Denys Nosov, Sergey Litvinov
+ * @copyright Copyright (C) 2011 Denys Nosov, Sergey Litvinov. All rights reserved.
+ * @license GNU General Public License version 2 or later; see LICENSE.txt
+ *
+ */
+
+/* Field label widths - short label */
+fieldset.adminform label,
+fieldset.panelform label,
+fieldset.adminform span.faux-label,
+div.current label, div.current span.faux-label {
+	min-width: 10%;
+	max-width: 30%;
+	width: 30%;
+	padding: 0 5px 0 0;
+}
+
+div.current fieldset.radio label {
+	width: 95px;
+	max-width: 40%;
+}
+
+div.current select {
+	margin-top: 10px;
+	margin-bottom: 5px;
+}
+
+#rules label, #rules span.faux-label {
+	min-width: 150px;
+}
+
+#module-sliders fieldset.radio label, #module-sliders fieldset.radio span.faux-label {
+	min-width: 70px;
+	max-width: 40%;
+	width: auto;
+}
+
+#jform_display_offline_message label {
+	min-width: 300px;
+}
+
+#jform_display_offline_message1, #jform_display_offline_message2{
+	clear: left;
+}
