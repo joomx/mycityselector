@@ -75,31 +75,70 @@ function copyDir($source, $dest)
 }
 
 
-// http://davidwalsh.name/create-zip-php
-function create_zip($files = array(), $destination = '', $overwrite = false)
-{
-    if (file_exists($destination) && !$overwrite) {
-        return false;
-    }
-    $valid_files = array();
-    if (is_array($files)) {
-        foreach ($files as $file) {
-            if (file_exists($file)) {
-                $valid_files[] = $file;
+function clearDir($dir){
+    $dir = str_replace('//', '/', $dir);
+    foreach (glob($dir . '/*') as $file) {
+        if(is_dir($file)) {
+            clearDir($file);
+            @rmdir($file);
+        } else {
+            if (strpos($file,'.gitignore') === false) {
+                unlink($file);
             }
         }
     }
-    if (count($valid_files)) {
-        $zip = new ZipArchive();
-        if ($zip->open($destination, $overwrite ? ZIPARCHIVE::OVERWRITE : ZIPARCHIVE::CREATE) !== true) {
-            return false;
-        }
-        foreach ($valid_files as $file) {
-            $zip->addFile($file, $file);
+}
+
+
+/**
+ * Zipping directory
+ *
+ * @param string $sourceDir The file for zipping
+ * @param string $destinationFile The Archive file name
+ * @param bool $overwrite By default is true
+ * @param string $arcRootPath path in archive as root for files
+ * @return bool true on success
+ */
+function zipping($sourceDir = '', $destinationFile = '', $overwrite = true, $arcRootPath = '/')
+{
+    if (file_exists($destinationFile) && !$overwrite) {
+        return false;
+    }
+    $sourceDir = rtrim($sourceDir, '/\\') . '/';
+    $files = glob($sourceDir . '*') + glob($sourceDir . '*.*'); // read files list BEFORE create arc file
+    $zip = new ZipArchive();
+    $ret = $zip->open($destinationFile, ($overwrite ? ZipArchive::OVERWRITE : ZipArchive::CREATE));
+    if ($ret !== TRUE) {
+        out('Error! Can\'t create zip file' . "\n", 'red');
+        exit;
+    } else {
+        $count = count($files);
+        for ($i=0; $i<$count; $i++) { // foreach work incorrect with array_merge
+            $file = $files[$i];
+            if (strpos($file,'.gitignore') !== false) {
+                continue;
+            }
+            if (is_dir($file)) {
+                $dir = str_replace($sourceDir, $arcRootPath, $file);
+                out(" add folder " . $dir . "...", 'light_blue');
+                if ($zip->addEmptyDir($dir)){
+                    out("ok\n", 'light_blue');
+                } else {
+                    out("error\n", 'red');
+                }
+                $subFiles = glob($file . '/*') + glob($file . '/*.*');
+                $files = array_merge($files, $subFiles);
+                $count = count($files);
+            } else {
+                $relPath = str_replace($sourceDir, $arcRootPath, $file);
+                out(" add file " . $relPath . "...", 'light_blue');
+                if ($zip->addFile($file, $relPath)){
+                    out("ok\n", 'light_blue');
+                } else {
+                    out("error\n", 'red');
+                }
+            }
         }
         $zip->close();
-        return file_exists($destination);
-    } else {
-        return false;
     }
 }

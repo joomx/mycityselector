@@ -13,7 +13,7 @@
 	<![CDATA[
 	<h3>My City Selector PKG</h3>
 	<div style="text-align:left;">
-		Этот замечательный, прекрасный распрекрасный модуль, позволяет управлять отображением контента для разных городов.<br/>
+		Данное расширение позволяет управлять отображением контента для разных городов.<br/>
 		Пользователю предоставляется возможность выбрать свой город, а администратору определить список этих городов и контент для них.<br/>
 		Для автоматического определения города используется <a href="http://sypexgeo.net/ru/api/" target="_blank">API SypexGeo</a><br/>
 		<br/>
@@ -25,8 +25,8 @@
 	</description>
     
     <files>
-		<file type="module" id="mod_mycityselector" client="site">{mod_zip}</file>
-        <file type="plugin" id="plg_mycityselector" group="system">{plg_zip}</file>
+		<file type="module" id="{mod_name}" client="site">{mod_zip}</file>
+        <file type="plugin" id="{plg_name}" group="system">{plg_zip}</file>
     </files>
 </extension>
 
