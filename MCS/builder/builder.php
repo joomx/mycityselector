@@ -3,7 +3,7 @@
  * MCS package builder
  */
 
-// +++ functions +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// +++ functions +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 require 'helper.php';
 
 
@@ -20,6 +20,10 @@ if (!extension_loaded('zip')) {
     out("The Zip php extension not installed!\n", 'red');
     exit;
 }
+if (!function_exists('simplexml_load_file')) {
+    out("The SimpleXml php extension not installed!\n", 'red');
+    exit;
+}
 
 // +++ defines +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 $version = $argv[1];
@@ -34,9 +38,9 @@ $copyModDir = $copyDir . '/mod';
 $copyPlgDir = $copyDir . '/plg';
 $destDir = $myDir . '/dest/';
 $packagesDir = $myDir . '/packages/';
-$zipModFile = 'mycityselector-mod-j2532-v' . $ver . '.zip';
-$zipPlgFile = 'mycityselector-plg-j2532-v' . $ver . '.zip';
-$zipPackageFile = 'mycityselector-j2533-v' . $ver . '.zip';
+$zipModFile = 'mcs-mod-v' . $ver . '-j25j3x.zip';
+$zipPlgFile = 'mcs-plg-v' . $ver . '-j25j3x.zip';
+$zipPackageFile = 'mcs-v' . $ver . '-j25j3x-pm.zip';
 
 
 
@@ -48,108 +52,104 @@ if (!createDir($copyDir) || !copyDir($modDir, $copyModDir) || !copyDir($plgDir, 
 clearDir($destDir);
 
 
-// +++ PACKING MODULE +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-out("Packing module...\n", 'green');
+// +++ PACKING MODULE +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+out("Packing module ...\n", 'green');
 
 // listing files
 $files = glob($copyModDir.'/*') + glob($copyModDir.'/*.*');
 $scriptFile = '';
-
 // prepare files list
 foreach ($files as $k => &$file) {
     $name = basename($file);
     if (is_dir($file)) {
-        // if directory
-        $file = '<folder>' . $name . '</folder>';
+        $file = ['tag' => 'folder', 'attr' => [], 'value' => $name]; // if directory
     } else {
         // if file
         if ($name == $modName . '.php') { // if it's main script of mod
-            $file = '<filename module="' . $modName . '">' . $name . '</filename>';
-        } elseif ($name == $modName . '.scriptfile.php') { // if it's main script of mod
-            $scriptFile = '<scriptfile>' . $name . '</scriptfile>';
+            $file = ['tag' => 'filename', 'attr' => ['module' => $modName], 'value' => $name];
+        } elseif ($name == 'installer.php') { // if it's main script of mod
+            $scriptFile = $name;
             unset($files[$k]); // remove script from files list
         } else {
-            $file = '<filename>' . $name . '</filename>';
+            $file = ['tag' => 'filename', 'attr' => [], 'value' => $name];
         }
     }
 }
-$files = $scriptFile . "\n\t<files>\n\t\t" . implode( "\n\t\t", $files) . "\n\t</files>\n";
 
-// get xml template of manifest file
-$xml = file_get_contents($myDir.'/src_copy/manifest/mod_mycityselector.xml');
-// replace marks
-$xml = str_replace(
-    ['{cdate}', '{version}', '{files}'],
-    [date('M Y'), $version, $files],
-    $xml
-);
-// save xml
-file_put_contents($copyModDir.'/mod_mycityselector.xml', $xml);
+// update the data in manifest file
+$upd = updateManifest($copyModDir . '/mod_mycityselector.xml', [
+    'creationDate' => date('M Y'),
+    'version' => $version,
+    'scriptfile' => $scriptFile,
+    'files' => $files
+]);
+
 // zip
-$zipFile = $destDir . $zipModFile;
-zipping($copyModDir, $zipFile);
-out("Done\n", 'green');
+zipping($copyModDir, $destDir . $zipModFile);
+out("Done ", 'green');
+out("({$zipModFile})\n", 'gray');
 
 
-// +++ PACKING PLUGIN +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-out("Packing plugin...\n", 'green');
+// +++ PACKING PLUGIN +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+out("Packing plugin ...\n", 'green');
 
 // listing files
 $files = glob($copyPlgDir.'/*') + glob($copyPlgDir.'/*.*');
 $scriptFile = '';
-
 // prepare files list
 foreach ($files as $k => &$file) {
     $name = basename($file);
     if (is_dir($file)) {
-        // if directory
-        $file = '<folder>' . $name . '</folder>';
+        $file = ['tag' => 'folder', 'attr' => [], 'value' => $name]; // if directory
     } else {
         // if file
-        if ($name == $plgName . '.php') { // if it's main script of mod
-            $file = '<filename plugin="' . $plgName . '">' . $name . '</filename>';
-        } elseif ($name == $plgName . '.scriptfile.php') { // if it's main script of mod
-            $scriptFile = '<scriptfile>' . $name . '</scriptfile>';
+        if ($name == $plgName . '.php') { // if it's main script of plugin
+            $file = ['tag' => 'filename', 'attr' => ['plugin' => $plgName], 'value' => $name];
+        } elseif ($name == 'installer.php') { // if it's main script of mod
+            $scriptFile = $name;
             unset($files[$k]); // remove script from files list
         } else {
-            $file = '<filename>' . $name . '</filename>';
+            $file = ['tag' => 'filename', 'attr' => [], 'value' => $name];
         }
     }
 }
-$files = $scriptFile . "\n\t<files>\n\t\t" . implode( "\n\t\t", $files) . "\n\t</files>\n";
 
-// get xml template of manifest file
-$xml = file_get_contents($myDir.'/src_copy/manifest/plg_mycityselector.xml');
-// replace marks
-$xml = str_replace(
-    ['{cdate}', '{version}', '{files}'],
-    [date('M Y'), $version, $files],
-    $xml
-);
-// save xml
-file_put_contents($copyPlgDir.'/plg_mycityselector.xml', $xml);
+// update the data in manifest file
+$upd = updateManifest($copyPlgDir.'/plg_mycityselector.xml', [
+    'creationDate' => date('M Y'),
+    'version' => $version,
+    'scriptfile' => $scriptFile,
+    'files' => $files
+]);
+
 // zip
-$zipFile = $destDir . $zipPlgFile;
-zipping($copyPlgDir, $zipFile);
-out("Done\n", 'green');
+zipping($copyPlgDir, $destDir . $zipPlgFile);
+out("Done ", 'green');
+out("({$zipPlgFile})\n", 'gray');
 
 
-// +++ PACKING TO PACKAGE +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-out("Packing package...\n", 'green');
-// get xml template of manifest file
-$xml = file_get_contents($myDir.'/src_copy/manifest/pkg_mycityselector.xml');
-// replace marks
-$xml = str_replace(
-    ['{cdate}', '{version}', '{mod_name}', '{mod_zip}', '{plg_name}', '{plg_zip}'],
-    [date('M Y'), $version, $modName, $zipModFile, $plgName, $zipPlgFile],
-    $xml
+// +++ PACKING TO PACKAGE +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+out("Packing package ...\n", 'green');
+
+// update the data in manifest file of package
+$upd = updateManifest(
+    $myDir.'/pkg_mycityselector.xml',
+    [
+        'creationDate' => date('M Y'),
+        'version' => $version,
+        'files' => [
+            ['tag' => 'file', 'attr' => ['type' => 'module', 'id' => $modName, 'client' => 'site'], 'value' => $zipModFile],
+            ['tag' => 'file', 'attr' => ['type' => 'plugin', 'id' => $plgName, 'group' => 'system'], 'value' => $zipPlgFile],
+        ]
+    ],
+    $destDir . 'pkg_mycityselector.xml'
 );
-// save xml
-file_put_contents($destDir . 'pkg_mycityselector.xml', $xml);
 
-$zipFile = $destDir . $zipPackageFile;
-zipping($destDir, $zipFile);
+
+zipping($destDir, $destDir . $zipPackageFile);
 unlink($destDir . $zipModFile);
 unlink($destDir . $zipPlgFile);
-unlink($destDir.'/pkg_mycityselector.xml');
-out("Done\n", 'green');
+unlink($destDir.'pkg_mycityselector.xml');
+out("Done ", 'green');
+out("({$zipPackageFile})\n", 'gray');
+out("Building complete.\n", 'green');

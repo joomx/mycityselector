@@ -1,6 +1,15 @@
 <?php
+/**
+ * Вспомогательные функции для builder
+ */
 
-// colored output
+
+/**
+ * Вывод в консоль с поддержкой цвета
+ * @param String $str Строка
+ * @param String $color Название цвета для текста
+ * @param String $background Название цвета для фона
+ */
 function out($str, $color = '', $background = '')
 {
     $colors = [
@@ -34,13 +43,18 @@ function out($str, $color = '', $background = '')
     if (!empty($color) && isset($colors[$color])) {
         $str = "\033[" . $colors[$color] . "m" . $str;
     }
-    if (!empty($color) && isset($colors[$color])) {
-        $str = "\033[" . $colors[$color] . "m" . $str;
+    if (!empty($background) && isset($backgrounds[$background])) {
+        $str = "\033[" . $backgrounds[$background] . "m" . $str;
     }
     echo $str . "\033[0m";
 }
 
 
+/**
+ * Создает директорию
+ * @param $dir
+ * @return bool
+ */
 function createDir($dir)
 {
     if (!file_exists($dir)) {
@@ -54,6 +68,12 @@ function createDir($dir)
 }
 
 
+/**
+ * Копирует директорию вместе с файлами
+ * @param String $source Путь до копируемой директории
+ * @param String $dest Путь для копирования
+ * @return bool
+ */
 function copyDir($source, $dest)
 {
     if (!createDir($dest)){
@@ -75,6 +95,10 @@ function copyDir($source, $dest)
 }
 
 
+/**
+ * Удаляет все файлы из указанной директории
+ * @param String $dir
+ */
 function clearDir($dir){
     $dir = str_replace('//', '/', $dir);
     foreach (glob($dir . '/*') as $file) {
@@ -85,6 +109,73 @@ function clearDir($dir){
             if (strpos($file,'.gitignore') === false) {
                 unlink($file);
             }
+        }
+    }
+}
+
+
+/**
+ * Загружает xml файл и заменяет в нем данные на указанные в массиве
+ * @param String $file Путь до файла
+ * @param Array $data Массив данных для замены. Например: ['license' => 'GNU/GPL'], где
+ *   ключ - это имя тега,
+ *   значение - содержимое для тега
+ * @param String $destFile Файл для записи результата. Если не указан, результат сохраняется в файл источник.
+ */
+function updateManifest($file, $data = [], $destFile=''){
+    if (is_file($file)) {
+        $xml = simplexml_load_file($file);
+        if (is_object($xml)) {
+            foreach ($data as $tag => $val) {
+                $element = $xml->xpath('/extension/' . $tag); // ищем требуемый элемент
+                if (empty($element)) {
+                    // элемент не найден, его нужно добавить
+                    $element = $xml->addChild($tag, '');
+                } else {
+                    $element = $element[0]; // берем первый из найденных элементов (корневые элементы уникальны)
+                }
+                $elementName = $element->getName();
+
+                // записываем в элемент новое значение или добавляем новые элементы
+                if (is_string($val)) {
+                    $xml->$elementName = $val; // присваиваем новое значение
+                } elseif (is_array($val)) {
+                    $xml->$elementName = ''; // очищаем элемент
+                    if (isset($val['tag'])) {
+                        // один элемент
+                        addXmlChild($xml->$elementName, $val['tag'], $val['value'], @$val['attr']);
+                    } elseif (isset($val[0]['tag'])) {
+                        // несколько элементов
+                        foreach ($val as $newTag) {
+                            addXmlChild($xml->$elementName, $newTag['tag'], $newTag['value'], @$newTag['attr']);
+                        }
+                    }
+                }
+            }
+            if (empty($destFile)) {
+                $destFile = $file;
+            }
+            if ($xml->asXML($destFile)) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+
+/**
+ * Обертка для добавления элемента одновременно с атрибутами
+ * @param SimpleXMLElement $elem
+ * @param String $name
+ * @param String $value
+ * @param Array $attributes ['attr' => 'value', 'attr2' => 'value2']
+ */
+function addXmlChild($elem, $name, $value, $attributes=[]) {
+    $new = $elem->addChild($name, $value);
+    if (!empty($attributes) && is_array($attributes)) {
+        foreach ($attributes as $attr => $val) {
+            $new->addAttribute($attr, $val);
         }
     }
 }
@@ -120,7 +211,7 @@ function zipping($sourceDir = '', $destinationFile = '', $overwrite = true, $arc
             }
             if (is_dir($file)) {
                 $dir = str_replace($sourceDir, $arcRootPath, $file);
-                out(" add folder " . $dir . "...", 'light_blue');
+                out(" add folder " . $dir . " ... ", 'light_blue');
                 if ($zip->addEmptyDir($dir)){
                     out("ok\n", 'light_blue');
                 } else {
@@ -131,7 +222,7 @@ function zipping($sourceDir = '', $destinationFile = '', $overwrite = true, $arc
                 $count = count($files);
             } else {
                 $relPath = str_replace($sourceDir, $arcRootPath, $file);
-                out(" add file " . $relPath . "...", 'light_blue');
+                out(" add file " . $relPath . " ... ", 'light_blue');
                 if ($zip->addFile($file, $relPath)){
                     out("ok\n", 'light_blue');
                 } else {
