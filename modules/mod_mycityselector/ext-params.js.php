@@ -139,7 +139,6 @@ jQuery(function($){
                 }
             });
             rows = $.trim(rows.join("\n"));
-            console.log(rows);
             $("#jform_params_cities_list").val(rows);
         },
         onCheckDefault = function(){
@@ -300,6 +299,11 @@ jQuery(function($){
                 + geolocation[i].label + '</option>');
     }
 
+    // для callback
+    $("#jform_params_js_callback")
+        .before('<div class="callback-fn">function mcs_callback() {</div>')
+        .after('<div class="callback-fn">}</div>');
+
     /**/
 
     // - специфичная стилизация
@@ -339,12 +343,16 @@ jQuery(function($){
         $("#jform_params_default_city").closest("li").css("display", "none");
     }
 
-
-
-
-
-
-
+    // для поля Callback делаем возможным ввод табуляции
+    $("#jform_params_js_callback").keydown(function(e) {
+        if(e.keyCode === 9) {
+            var start = this.selectionStart;
+            var end = this.selectionEnd;
+            this.value = this.value.substring(0, start) + "\t" + this.value.substring(end);
+            this.selectionStart = this.selectionEnd = start + 1;
+            e.preventDefault();
+        }
+    });
 
 });
 

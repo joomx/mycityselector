@@ -3,6 +3,25 @@
  * (Внедряются с помощью плагина)
  */
 
+/**
+ * General
+ */
+.callback-fn {
+    font-size: 14px;
+    color: #214EB0;
+    padding-bottom: 4px;
+}
+#mcs_cities_table .adr .domain {
+    display: none;
+}
+#mcs_cities_table .adr.sub  .domain {
+    display: inline;
+}
+#mcs_cities_table .operations .dnd {
+    cursor: move;
+}
+
+
 
 /**
  * Joomla 2.5
@@ -15,11 +34,13 @@
     font-size: 1.091em;
     padding-right: 5px;
     color: #9E9E9E;
+    padding: 5px 5px 5px 0;
 }
 #module-sliders #jform_params_let_select label {
     min-width: 10px;
 }
 #module-sliders #jform_params_baseip {
+    float: left;
     margin: 0;
     padding: 0;
 }
@@ -84,6 +105,17 @@
 }
 #module-sliders #jform_params_dialog_title {
     width: 170px;
+}
+#module-sliders #jform_params_js_callback {
+    display: block;
+    width: 90%;
+    height: 200px;
+    color: #214EB0;
+    margin-left: 10px;
+}
+#module-sliders .callback-fn {
+    float: left;
+    width: 100%;
 }
 
 
@@ -154,21 +186,19 @@
 .admin.com_modules #mcs_cities_table .operations {
     width: 75px;
 }
-.admin.com_modules #mcs_cities_table .operations .dnd {
-    cursor: move;
-}
 .admin.com_modules #mcs_cities_table .operations .icon-cancel:before {
     color: #bd362f;
 }
 .admin.com_modules #mcs_cities_table .operations .remove img {
     display: none;
 }
-.admin.com_modules #mcs_cities_table .adr .domain {
-    display: none;
-}
-.admin.com_modules #mcs_cities_table .adr.sub  .domain {
-    display: inline;
-}
 .admin.com_modules #mcs_cities_table .adr input {
     width: 160px;
+}
+.admin.com_modules #jform_params_js_callback {
+    width: 90%;
+    max-width: 800px;
+    height: 300px;
+    color: #214EB0;
+    margin-left: 20px;
 }

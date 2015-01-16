@@ -372,6 +372,7 @@ class plgSystemPlg_Mycityselector extends JPlugin
         } else {
             if (!$this->editMode) { // не делаем замену в режиме редактирования статьи
                 $body = $this->parsePage_ReplaceContent($this->getPageBody()); // парсим контент
+                $body = $this->injectJSCallbackFunction($body);
                 $this->setPageBody($body);
             }
         }
@@ -426,6 +427,19 @@ class plgSystemPlg_Mycityselector extends JPlugin
         } else {
             // joomla 2.5
             JResponse::setBody($body);
+        }
+    }
+
+
+    /**
+     * Добавляет на страницу js callback функцию
+     * @param $body
+     * @return mixed
+     */
+    private function injectJSCallbackFunction($body){
+        $callback = trim($this->params->get('js_callback'));
+        if (!empty($callback)) {
+            return str_replace('</head>', "<script>\nfunction mcs_callback(){\n" . $callback . "\n}\n</script>\n</head>", $body);
         }
     }
 

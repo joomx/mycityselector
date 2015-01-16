@@ -131,6 +131,9 @@
                 var cityCode = $link.attr("id").split('-')[1];
                 switchContent(cityCode);
                 closeDialog();
+                if (w.mcs_callback) {
+                    mcs_callback();
+                }
             }
         }
         return false;
