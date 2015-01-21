@@ -1,0 +1,119 @@
+/**
+Чтобы создать свои стили или шаблон, не нужно менять текущий файл.
+Более корректным будет создание копии файлов (script.js, style.css, template.php)
+в папке /templates/текущая_тема/html/mod_mycityselector/.
+Таким образом, все стили сохранятся, даже если модуль случайно будет удален.
+Кстати, чтобы ваши стили подхватились, необходимо в настройках
+модуля разрешить их использование.
+*/
+
+.mycityselector {
+	position: relative;
+	width: 200px;
+	text-align: left;
+}
+.mycityselector .city {
+	color: #333;
+	font-size: 16px;
+	text-decoration: none;
+	border-bottom: 1px dashed #333;
+}
+.mycityselector .mycityselector-question {
+	color: #333;
+	position: absolute;
+	top: 20px;
+	left: 0;
+	padding: 3px 6px;
+	font-size: 13px;
+	color: #222;
+	background-color: #fff;
+	border: 1px solid #FF8454;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	-khtml-border-radius: 3px;
+}
+.mycityselector .mycityselector-question .close-q {
+	position: relative;
+	top: -5px;
+	left: 1px;
+	color: #FF5D4F;
+}
+
+.mycityselector-dialog {
+	position: fixed;
+	z-index: 2000;
+	top: 20%;
+	left: 50%;
+	width: 400px;
+	margin-left: -200px;
+	height: auto;
+	background-color: #fff;
+	background-color: rgba(255, 255, 255, 0.92);
+	padding: 12px 12px 12px 16px;
+	border-radius: 2px;
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
+	-khtml-border-radius: 2px;
+	box-shadow: 0px 0px 10px #c7c7c7;
+	-moz-box-shadow: 0px 0px 10px #c7c7c7;
+	-webkit-box-shadow: 0px 0px 10px #c7c7c7;
+}
+.mycityselector-dialog .close {
+	position: absolute;
+	top: 8px;
+	right: 8px;
+	width: 16px;
+	height: 16px;
+	background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAadEVYdFNvZnR3YXJlAFBhaW50Lk5FVCB2My41LjEwMPRyoQAAAx9JREFUOE9lke1vU2UYxs//oCCyF7d13VlbqN2b1AHyEiSgET+Q+MUPom5t19Kdtd3IJs5EEPAF0eF/YFCjCYnxm6gdhACZQwYpzApZEGfTdTvt6dspIMOf9+mqieFOfrnPc+e6rvt5cpRSwOcvR0J6eSTMIwzvf4SSRUzQBvSCv8+vlIaCemXibSqfjVM5cRDzvZGVb4uTMj8ps4kax0cx3z+A+elbmB+PUhgM6EoxGqQyIYMjI5SGNMoR6WODmJ+MYZ4QQ43y4SjFgcCK5lBEwg6QHwqgFCIDlI8OU9Q07v80yYOr1yhGhim/K6KPZJvF0RgFv5+735yuaoqDsuBIFGPQj2JofspyyPl8mF+fhocPWZ6fx4hJ6Ji89R2NXDjMXzPXsOq+dEOLURoNkd3fj5INi/GYDMbDLPX3c++Xmf+EenQYPRSiIluteiDBS1qUvOaTG2rowT6UpVAf5uEhzEMapYNB0q/vo/Dtd1XDvcR17l5ZCTQvXCLt81OI9VMelz8iLAbeQMkMvCmHIMXQKxRe242+ZxNzvb0UJ89VjVaVxDy3bQeZnV4Kr+6k6NsrT/Cx4NuHMv/S8+T3bib/spf8ng2ktnhIbtlWNf1bBQmb7e5hYasHY3c3xq4ujBe9/LFrO8pch1MOPRgv9JAWQeK5reTjZ6tGQ7qFVYtffEWiq4clK2R7R5Vb61SUm+tVjB2d3Op0cPnZTZjJ36qG1KkvmfF0caV3M3otJCd9WnWQ6naR63WTVO0oSaed37udXNywUYST/L28TObMD0y5PaTkdrfXtzPl3Ujp12Q1ZO6D41xsbSPT4WLWZkO5YbeR6XRx3uXm9uenmD32IWebW8m4neRElPO4+NOpMtnlZeHHeFVz3uEm3a6SaGxGSTS3kHvaxZ32NuLt6zjT2MKdNjs5lwQ4HSs4HCQamvi+4xniqmhlQdaucrXuKZTLdY36kqqSE1I2O+kWO9lWlaytjWxLjWaZNdm5ubaJdIONbKOdxYZWplbV68q51XX+S2vq9ek1DUw/YVHPzxara6yyqPsfU8KFx9fq8cee9P8DENy3CiSSKx0AAAAASUVORK5CYII=');
+}
+.mycityselector-dialog .title {
+	font-size: 18px;
+	margin-bottom: 14px;
+}
+.mycityselector-dialog .groups {
+	width: auto;
+	float: left;
+	margin: 0 10px 0 0;
+	padding: 0 10px 0 0;
+	border-right: 1px solid #ddd;
+}
+.mycityselector-dialog .group {
+	margin: 0 0 6px 0;
+	padding: 0;
+}
+.mycityselector-dialog .group a.active {
+	font-weight: bold;
+	border-bottom: none;
+}
+.mycityselector-dialog .group a {
+	border-bottom: 1px dashed #333;
+	text-decoration: none;
+}
+.mycityselector-dialog .cities {
+	width: 180px;
+	float: left;
+	margin: 0;
+}
+.mycityselector-dialog .cities.hidden {
+	display: none;
+}
+.mycityselector-dialog .city {
+	width: 180px;
+	display: inline-block;
+	margin: 0 10px 6px 0;
+}
+.mycityselector-dialog .link {
+	text-decoration: none;
+	border-bottom: 1px dashed #333;
+	color: #333;
+	font-size: 14px;
+}
+.mycityselector-dialog .link.active {
+	font-weight: bold;
+	border-bottom: none;
+}
+.mycityselector-dialog  .link:hover, .mycityselector-dialog  .link:active, .mycityselector-dialog  .link:focus {
+	color: #000;
+	background: transparent;
+}

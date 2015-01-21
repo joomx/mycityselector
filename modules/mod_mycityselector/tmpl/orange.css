@@ -1,0 +1,140 @@
+/**
+ * Стили MyCitySelector шаблона Orange
+ *
+ * Чтобы создать свои стили или шаблон, не нужно менять текущий файл.
+ * Более корректным будет переопределить текущий шаблон, скопировав данные файлы
+ * в директорию "/templates/шаблон_сайта/html/mod_mycityselector".
+ * (В Joomla 3.x это делается из менеджера шаблонов)
+ * После создания копии шаблона, её необходимо выбрать в настройках модуля.
+ */
+
+.mcs-module {
+	position: relative;
+	width: 200px;
+	text-align: left;
+}
+.mcs-module .city {
+    color: #EC7D00;
+    font-size: 14px;
+    text-decoration: none;
+    border-bottom: 1px dashed #EC7D00;
+}
+.mcs-module .question {
+    position: absolute;
+    top: 20px;
+    left: 0;
+    padding: 3px 6px;
+    font-size: 13px;
+    color: #454545;
+    background-color: #ffa254;
+    border: 1px solid #9b9b9b;
+    border-radius: 2px;
+}
+.mcs-module .question .close {
+    position: relative;
+    top: -5px;
+    left: 1px;
+    color: #5B5B5B;
+    opacity: 1;
+    font-weight: normal;
+    font-size: 13px;
+    text-shadow: none;
+}
+
+.mcs-overlay {
+    position: fixed;
+    display: none;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: #000;
+    opacity: 0.4;
+    z-index: 8999;
+}
+
+.mcs-dialog {
+	position: fixed;
+	z-index: 9000;
+	top: 20%;
+	left: 50%;
+    width: 378px;
+	margin-left: -200px;
+	height: auto;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+	background-color: #fff;
+	background-color: rgba(255, 255, 255, 0.92);
+    box-shadow: 0px 0px 10px #353535;
+    -moz-box-shadow: 0px 0px 10px #353535;
+    -webkit-box-shadow: 0px 0px 10px #353535;
+}
+.mcs-dialog a {
+    color: #E0975A;
+    text-decoration: none;
+}
+.mcs-dialog .close {
+	position: absolute;
+	top: 8px;
+	right: 8px;
+	width: 20px;
+	height: 20px;
+	background: url(close.svg) left top no-repeat;
+    opacity: 0.8;
+}
+.mcs-dialog .close:hover {
+    opacity: 1;
+}
+.mcs-dialog .title {
+    font-size: 14px;
+    padding: 8px 18px;
+    margin: 0;
+    background-color: #FFAF45;
+}
+.mcs-dialog .groups {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border-bottom: 1px solid #FFAF45;
+}
+.mcs-dialog .group {
+    float: left;
+    margin: 0;
+    padding: 6px 18px;
+    font-size: 14px;
+}
+.mcs-dialog .group a.active {
+    color: #CA4D00;
+	border-bottom: none;
+}
+.mcs-dialog .group a {
+	border-bottom: 1px dashed #E0975A;
+}
+.mcs-dialog .cities {
+    min-height: 140px;
+    padding: 10px 0 10px 16px;
+}
+.mcs-dialog .cities.hidden {
+	display: none;
+}
+.mcs-dialog .city {
+    float: left;
+	width: 170px;
+	margin: 0 10px 8px 0;
+}
+.mcs-dialog .link {
+	border-bottom: 1px dashed #E0975A;
+	font-size: 14px;
+}
+.mcs-dialog .link.active {
+    color: #CA4D00;
+	border-bottom: none;
+}
+.mcs-dialog  .link:hover, .mcs-dialog  .link:active, .mcs-dialog  .link:focus {
+	color: #CA4D00;
+	background: none;
+}
+
+.mcs-clear {
+    clear: both;
+}

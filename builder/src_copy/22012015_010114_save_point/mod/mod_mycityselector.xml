@@ -25,11 +25,11 @@
 			<fieldset name="basic">
                 <field name="plugin_check" type="text" default="Внимание!" label="Проверьте корректность установки плагина 'System - My City Selector'." description=""/>
                 <field name="main_domain" type="text" default="" label="Основной домен" description="Например, если это домен третьего уровня site.com.ru"/>
-                <field name="let_select" type="radio" default="2" label="Выбор города при входе" description="При входе на сайт, пользователю во всплывающем окне будет предложено выбрать свой город (если он не делал этого ранее)">
+                <field name="let_select" type="radio" default="1" label="Выбор города при входе" description="При входе на сайт, пользователю во всплывающем окне будет предложено выбрать свой город (если он не делал этого ранее)">
                     <option value="1">Да</option>
                     <option value="2">Нет</option>
                 </field>
-                <field name="baseip" type="radio" default="none" label="Геолокация" description="Укажите какой способ использовать для определения города">
+                <field name="baseip" type="radio" default="sypex_yandexgeo" label="Геолокация" description="Укажите какую базу использовать для определения города">
                     <option value="none">Не использовать</option>
                     <option value="sypex">SypexGeo</option>
                     <option value="sypex_yandexgeo">SypexGeo + Yandex Geo</option>

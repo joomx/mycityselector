@@ -334,12 +334,10 @@ class plgSystemPlg_Mycityselector extends JPlugin
      * Определяет город с помощью сервиса sypexgeo.net
      */
     private function sypexGeoIP($ip, $defaultCity=''){
-        $userAgent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] :
-            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36';
         $ch = curl_init();
         // документация: http://sypexgeo.net/ru/api/
         curl_setopt($ch, CURLOPT_URL, 'http://api.sypexgeo.net/json/' . $ip);
-        curl_setopt($ch, CURLOPT_USERAGENT, $userAgent);
+        curl_setopt($ch, CURLOPT_USERAGENT, 'User-Agent:Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.137 Safari/537.36');
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 2); // устанавливаем минимальные временные рамки для связи с api
         curl_setopt($ch, CURLOPT_TIMEOUT, 2);
         curl_setopt($ch, CURLOPT_HEADER, 0);
