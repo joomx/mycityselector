@@ -1,6 +1,10 @@
 *
 !.gitignore
 !/builder
+!/builder/*
 !/modules/mod_mycityselector
+!/modules/mod_mycityselector/*
 !/doc_images
+!/doc_images/*
 !/plugins/system/plg_mycityselector
+!/plugins/system/plg_mycityselector/*

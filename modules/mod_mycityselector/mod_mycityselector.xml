@@ -43,7 +43,7 @@
             <fieldset name="advanced">
                 <field name="layout" type="modulelayout" label="Шаблон модуля" description="Шаблон который будет использован модулем"/>
                 <field name="js_callback" type="textarea" default="/* здесь можно прописать произвольный javascript, он будет срабатывать при переключении города, если при этом не происходит редирект на поддомен или страницу */" label="JS Callback" description="Javascript callback на событие переключения города (когда нет редиректа)" rows="8" cols="50"/>
-                <field name="moduleclass_sfx" type="textarea" rows="3" label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL" description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC"/>
+                <field name="moduleclass_sfx" type="text" label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL" description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC"/>
                 <field name="text_before" type="textarea" default="" label="Текст перед модулем" description="" rows="5" cols="50"/>
                 <field name="text_after" type="textarea" default="" label="Текст после модуля" description="" rows="5" cols="50"/>
                 <field name="cache" type="list" default="0" label="COM_MODULES_FIELD_CACHING_LABEL" description="COM_MODULES_FIELD_CACHING_DESC">
