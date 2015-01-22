@@ -135,11 +135,14 @@ $upd = updateManifest(
     $pkgDir . 'pkg_mycityselector.xml'
 );
 
+// license.txt
+copy($myDir . '/license.txt', $pkgDir);
 
 zipping($pkgDir, $pkgDir . $zipPackageFile);
 unlink($pkgDir . $zipModFile);
 unlink($pkgDir . $zipPlgFile);
-unlink($pkgDir.'pkg_mycityselector.xml');
+unlink($pkgDir . 'pkg_mycityselector.xml');
+unlink($pkgDir . '/license.txt');
 out("Done ", 'green');
 out("({$zipPackageFile})\n", 'gray');
 out("Building complete.\n", 'green');
