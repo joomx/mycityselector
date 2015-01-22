@@ -2,4 +2,5 @@
 !/.gitignore
 !/builder
 !/modules/mod_mycityselector
+!/doc_images
 !/plugins/system/plg_mycityselector
