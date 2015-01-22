@@ -1,5 +1,5 @@
 *
-!/.gitignore
+!.gitignore
 !/builder
 !/modules/mod_mycityselector
 !/doc_images
