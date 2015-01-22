@@ -7,7 +7,7 @@
 	<authorEmail>konstantin@kutsevalov.name</authorEmail>
 	<authorUrl>http://www.kutsevalov.name/2013/08/12/modul-vibora-goroda-dlya-joomla/</authorUrl>
 	<copyright>All rights reserved</copyright>
-	<license>GNU/GPL</license>
+    <license>GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html</license>
 	<version>{version}</version>
 	<description>
 	<![CDATA[
