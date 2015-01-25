@@ -1,10 +1,3 @@
-<style>
-.markdown-body.entry-content em {
-    display: block;
-    border-left: 3px solid rgb(255, 157, 157);
-    padding-left: 14px;
-}
-</style>
 Внимание!
 =========
 
