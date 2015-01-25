@@ -1,8 +1,15 @@
+<style>
+.markdown-body.entry-content em {
+    display: block;
+    border-left: 3px solid rgb(255, 157, 157);
+    padding-left: 14px;
+}
+</style>
 Внимание!
 =========
 
 Этот документ не закончен, поэтому если вам кажется, что некоторые моменты можно бы было описать лучше или где-то закралась неточность, то можете написать мне об этом на почту или сделать pull request.
-<link href="https://raw.githubusercontent.com/adamasantares/mycityselector/doc128/doc_images/docs.css" ref="stylesheet" />
+
 
 My City Selector Joomla Extension
 =================================
