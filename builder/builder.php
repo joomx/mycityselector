@@ -136,7 +136,7 @@ $upd = updateManifest(
 );
 
 // license.txt
-copy($myDir . '/license.txt', $pkgDir);
+copy($myDir . '/license.txt', $pkgDir . '/license.txt');
 
 zipping($pkgDir, $pkgDir . $zipPackageFile);
 unlink($pkgDir . $zipModFile);
