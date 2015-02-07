@@ -10,7 +10,7 @@ My City Selector Joomla Extension
 
 Расширение для Joomla позволяющее администратору сайта назначать разную информацию для разных городов.
 
-Более подробное (но слегка устаревшее) описание можно прочитать здесь http://www.kutsevalov.name/2013/08/13/modul-vibora-goroda-dlya-joomla/
+Более подробное (но еще не законченное) описание можно прочитать здесь https://github.com/adamasantares/mycityselector/blob/doc128/README.md
 
 Установка
 =========
