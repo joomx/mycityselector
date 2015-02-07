@@ -275,6 +275,10 @@ class plgSystemPlg_Mycityselector extends JPlugin
         $doc = JFactory::getDocument();
         $defaultCity = $this->params->get('default_city', 'Москва');
         $baseIP = $this->params->get('baseip', 'none');
+        if (isset($_GET['mcs']) && $_GET['mcs'] == 'clscookie') {
+            unset($_COOKIE['mycity_selected_name']);
+            unset($_COOKIE['MCS_CITY_NAME']);
+        }
         // берем название текущего города из кукисов (город может быть любым, не обязательно из настроек)
         $city = isset($_COOKIE['MCS_CITY_NAME']) ? $_COOKIE['MCS_CITY_NAME'] : '';
         if (empty($city)) {
@@ -351,7 +355,10 @@ class plgSystemPlg_Mycityselector extends JPlugin
             && isset($resp['city']['name_ru'])
             && !empty($resp['city']['name_ru'])) {
                 // город успешно определен
-                return $resp['city']['name_ru'];
+                $city = $resp['city']['name_ru'];
+                if (isset($this->citiesList['__all__'][$city])) {
+                    return $city;
+                }
         }
         return $defaultCity;
     }
@@ -399,7 +406,7 @@ class plgSystemPlg_Mycityselector extends JPlugin
         }
         $script .= '<script'
             . ' src="/modules/mod_mycityselector/jquery.tablednd.min.js">'
-            . "</script>\n<script"
+            . "</script>\n<script charset=\"utf-8\""
             . ' src="/modules/mod_mycityselector/ext-params.js.php?vpb8t9s23hx09g80hj56i345hiasdtf6q2">'
             . "</script>\n</head>";
         return str_replace('</head>', $css . $script, $body);

@@ -133,6 +133,20 @@
         $(".question", $module).css('display', 'none');
         $overlay.css('display', 'block');
         $dialog.css('display', 'block');
+        // проверяем видима ли хоть одна группа городов (fix)
+        if ($(".cities.active", $dialog).length == 0) {
+            // делаем активной первую группу
+            var $cities = $(".cities", $dialog),
+                $groups = $(".groups .group", $dialog);
+            if ($groups.length == 0) {
+                $cities.removeClass("hidden").addClass("active");
+            } else {
+                $groups.removeClass("hidden");
+                $cities.removeClass("hidden");
+                $($groups[0]).addClass("active");
+                $($cities[0]).addClass("active");
+            }
+        }
         return false;
     }
 

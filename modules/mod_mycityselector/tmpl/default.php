@@ -53,7 +53,7 @@ $this->addStyle($myUrl . 'default.css');
                 foreach ($citiesList as $group => $cities) {
                     if ($group == '__all__') continue;
                     ?>
-                    <div class="group">
+                    <div class="group group-<?= $this->translit($group) ?>">
                         <a class="<?= isset($cities[$currentCity]) ? ' active' : '' ?>"
                            href="#" data-group="<?= $this->translit($group) ?>"><?= $group ?></a>
                     </div>
