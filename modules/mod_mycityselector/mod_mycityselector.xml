@@ -2,7 +2,7 @@
 <!-- https://docs.joomla.org/Manifest_files -->
 <extension type="module" version="2.5.0" method="upgrade" client="site">
 	<name>My City Selector MOD</name>
-	<creationDate>Jan 2015</creationDate>
+	<creationDate>Mar 2015</creationDate>
 	<author>Konstantin Kutsevalov</author>
 	<authorEmail>konstantin@kutsevalov.name</authorEmail>
 	<authorUrl>http://www.kutsevalov.name/2013/08/12/modul-vibora-goroda-dlya-joomla/</authorUrl>

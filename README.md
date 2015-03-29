@@ -4,7 +4,7 @@ My City Selector Joomla Extension
 |       Joomla | 2.5 - 3.x       |
 |--------------|-----------------|
 | Package      | module & plugin |
-| Version      | 1.2.8 beta      |
+| Version      | 1.2.8           |
 
 ## Общие сведения
 
