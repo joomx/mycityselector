@@ -2,7 +2,7 @@
 <!-- https://docs.joomla.org/Manifest_files -->
 <extension version="2.5" type="plugin" group="system">
 	<name>System - My City Selector</name>
-	<creationDate>Jan 2015</creationDate>
+	<creationDate>Mar 2015</creationDate>
 	<author>Konstantin Kutsevalov</author>
 	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
 	<authorEmail>konstantin@kutsevalov.name</authorEmail>
