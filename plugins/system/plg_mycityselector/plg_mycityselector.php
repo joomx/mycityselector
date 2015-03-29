@@ -480,6 +480,8 @@ class plgSystemPlg_Mycityselector extends JPlugin
                 // поэтому заменяем это дело внутри блока на <br/>
                 $content = $res[2][$i];
                 $content = preg_replace('/<\/p>\s*<p>/smU', '<br/>', $content);
+                // проверяем какие теги внутри контента, если есть блочные элементы, то оборачиваем в DIV, иначе в SPAN
+                $tag = $this->isHasBlockTag($content) ? 'div' : 'span';
                 // один из плагинов, работающий выше по порядку, почему-то конвертирует русские буквы в html последовательности (вот гад)
                 // пришлось сделать проверку названия города
                 if (strpos($city, '&#x') !== false) {
@@ -530,11 +532,11 @@ class plgSystemPlg_Mycityselector extends JPlugin
                             $finded = true;
                         }
                     }
-                    $html = '<span class="cityContent' . $class . '">';
+                    $html = '<' . $tag . ' class="cityContent' . $class . '">';
                     if ($findedInGroup == true) {
                         $html .= $content;
                     }
-                    $html .= '</span>';
+                    $html .= '</' . $tag . '>';
                 } else {
                     // иначе одиночный блок
                     $cval = trim($cities[0]);
@@ -550,21 +552,22 @@ class plgSystemPlg_Mycityselector extends JPlugin
                     // $json[ город ][номер блока с текстом ]
                     $json[$trcity][$index] = $content;
                     $class = ' city-' . $trcity . '-' . $index;
-                    $html = '<span class="cityContent' . $class . '">';
+                    $html = '<' . $tag . ' class="cityContent' . $class . '">';
                     if ($cval == $this->city) {
                         $finded = true; // этот блок для текущего выбранного города, ставим флаг, чтобы не отображался блок [city *]
                         $html .= $content;
                     }
-                    $html .= '</span>';
+                    $html .= '</' . $tag . '>';
                 }
                 $body = str_replace($res[0][$i], $html, $body);
             }
             if ($finded == false && isset($json['other'])) {
                 // если город не был найден, то при наличии блока "прочие", подставляем текст обратно в страницу
                 foreach ($json['other'] as $index => $content) {
+                    $tag = $this->isHasBlockTag($content) ? 'div' : 'span';
                     $body = str_replace(
-                        '<span class="cityContent city-other-' . $index . '"></span>',
-                        '<span class="cityContent city-other-' . $index . '">' . $content . '</span>',
+                        '<' . $tag . ' class="cityContent city-other-' . $index . '"></' . $tag . '>',
+                        '<' . $tag . ' class="cityContent city-other-' . $index . '">' . $content . '</' . $tag . '>',
                         $body
                     );
                 }
@@ -575,6 +578,33 @@ class plgSystemPlg_Mycityselector extends JPlugin
         }
 
         return $body;
+    }
+
+
+    /**
+     * Проверяет наличие в контенте блочных элементов
+     * @param $content
+     * @return bool
+     */
+    private function isHasBlockTag($content) {
+        if (stripos($content, '<div') === false
+            && stripos($content, '<h1') === false
+            && stripos($content, '<h2') === false
+            && stripos($content, '<h3') === false
+            && stripos($content, '<h4') === false
+            && stripos($content, '<h5') === false
+            && stripos($content, '<p') === false
+            && stripos($content, '<hr') === false
+            && stripos($content, '<ul') === false
+            && stripos($content, '<ol') === false
+            && stripos($content, '<blockquote') === false
+            && stripos($content, '<form') === false
+            && stripos($content, '<pre') === false
+            && stripos($content, '<table') === false
+            && stripos($content, '<address') === false) {
+                return false;
+        }
+        return true;
     }
 
 
