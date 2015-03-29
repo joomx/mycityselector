@@ -163,7 +163,8 @@ My City Selector - это расширение для CMS Joomla, позволя
 ### Текст перед модулем/после модуля
 
 Позволяет добавить текст перед названием текущего города. Наример, можно вписать: "Ваш город: ". И это будет выглядеть как на скрине ниже.
-<img src="https://raw.githubusercontent.com/adamasantares/mycityselector/develop/doc_images/before_after.png" alt="" />
+
+<img align="center" src="https://raw.githubusercontent.com/adamasantares/mycityselector/develop/doc_images/before_after.png" alt="" />
 
 ## Кастомизация
 
