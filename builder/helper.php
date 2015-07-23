@@ -156,20 +156,18 @@ function updateManifest($file, $data = [], $destFile=''){
                 } else {
                     $element = $element[0]; // берем первый из найденных элементов (корневые элементы уникальны)
                 }
-                $elementName = $element->getName();
-
                 // записываем в элемент новое значение или добавляем новые элементы
                 if (is_string($val)) {
-                    $xml->$elementName = $val; // присваиваем новое значение
+                    $element->{0} = $val; // присваиваем новое значение
                 } elseif (is_array($val)) {
-                    $xml->$elementName = ''; // очищаем элемент
+                    $element->{0} = ''; // очищаем элемент
                     if (isset($val['tag'])) {
                         // один элемент
-                        addXmlChild($xml->$elementName, $val['tag'], $val['value'], @$val['attr']);
+                        addXmlChild($element, $val['tag'], $val['value'], @$val['attr']);
                     } elseif (isset($val[0]['tag'])) {
                         // несколько элементов
                         foreach ($val as $newTag) {
-                            addXmlChild($xml->$elementName, $newTag['tag'], $newTag['value'], @$newTag['attr']);
+                            addXmlChild($element, $newTag['tag'], $newTag['value'], @$newTag['attr']);
                         }
                     }
                 }
