@@ -1,0 +1,42 @@
+{
+    "name": "MyCitySelector",
+    "id": "pkg_mycityselector",
+    "siteRoot": "@builder/../",
+    "version": "1.3.0",
+    "type": "package",
+    "manifest": "@builder/project/pkg_mycityselector.xml",
+    "license": "@builder/license.txt",
+    "copy": "@builder/src_copy",
+    "destination": "@builder/extension",
+    "updateServers": [
+        {"type": "extension", "name": "MCS Update Server", "url": "http://..."}
+    ],
+    "packageItems": [
+        {
+            "name": "MyCitySelector",
+            "id": "plgmycityselector",
+            "type": "plugin/system",
+            "installer": "install.php",
+            "version": "1.3.0",
+            "excludes": []
+        },
+        {
+            "name": "MyCitySelector",
+            "id": "mod_mycityselector",
+            "type": "module/site",
+            "installer": "install.php",
+            "version": "1.3.0",
+            "excludes": [
+                "jquery.tablednd.js"
+            ]
+        },
+        {
+            "name": "MyCitySelector",
+            "id": "com_mycityselector",
+            "script": "mycityselector.php",
+            "type": "component",
+            "version": "1.0.0",
+            "excludes": []
+        }
+    ]
+}

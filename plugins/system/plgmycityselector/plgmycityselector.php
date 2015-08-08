@@ -1,72 +1,81 @@
 <?php
+/**
+ * Plugin of MyCitySelector extension
+ */
+
 defined('_JEXEC') or exit(header("HTTP/1.0 404 Not Found") . '404 Not Found');
-/*
-* Плагин дополняющий модуль MyCitySelector
-*/
 
+JLoader::import('joomla.plugin.plugin');
+JLoader::import('plugins.system.plgmycityselector.helpers.CitiesTagsHelper', JPATH_ROOT);
 
-jimport('joomla.plugin.plugin');
-
-class plgSystemPlg_Mycityselector extends JPlugin
+class plgSystemPlgMycityselector extends JPlugin
 {
-
     /**
      * @var int Идентификатор модуля
      */
-    private $modID = 0;
+    private $modID = 0; // stay OK
 
     /**
      * @var JDatabaseDriver Ссылка на объект базы данных
      */
-    private $db = null;
+    private $db = null; // stay OK
+
+    // todo все параметры свести к одному объекту (одному свойству)
+    private $options = null;
+
+    private $stat = null;
+
 
     /**
      * @var string Название текущего города
      */
-    private $city = 'Москва';
+    private $city = 'Москва'; // todo move to options object
 
     /**
      * @var bool Флаг указывающий на режим редактирования материала на frontend'е
      */
-    private $editMode = false;
+    private $editMode = false; // todo move to flags object
 
     /**
      * @var JRegistry Объект параметров модуля
      */
-    public $params = null;
+    public $params = null; // todo move to options object
 
     /**
      * @var string Основной домен сайта
      */
-    private $baseDomain = '';
+    private $baseDomain = ''; // todo move to options object
 
     /**
      * @var string Имя домена, для которого будут устанавливаться cookie
      */
-    private $cookieDomain = '';
+    private $cookieDomain = ''; // todo move to options object
 
     /**
      * @var array Список городов из настроек модуля
      */
-    private $citiesList = array('__all__' => array());
+    private $citiesList = ['__all__' => []]; // todo move to options object
 
     /**
      * @var bool Если в списке городов указаны поддомены, то равен true.
      */
-    private $hasSubdomains = false;
+    private $hasSubdomains = false; // todo move to options object
 
     /**
      * @var bool Если в списке городов указаны поддомены, то равен true.
      */
-    private $http = 'http://';
+    private $http = 'http://'; // todo move to options object
 
 
     /**
-     * Инициализация плагина
+     * Initialization
      */
     function __construct(&$subject, $params)
     {
         parent::__construct($subject, $params);
+
+        // todo move methods to PlgOptionsHelper
+
         $this->db = JFactory::getDbo();
         $this->params = new JRegistry();
         // определяем ID текущего модуля
@@ -80,6 +89,13 @@ class plgSystemPlg_Mycityselector extends JPlugin
                 'https://' : 'http://';
             // определяем базовый домен сайта
             $this->defineBaseDomain();
+
+            // передаем в браузер параметры о домене
+            JFactory::getDocument()->addScriptDeclaration(
+                'window.mcs_base_domain="' . $this->baseDomain . '";' . // основной домен сайта, если есть еще и субдомены
+                'window.mcs_cookie_domain="' . $this->cookieDomain . '";' // домен для которого нужно устанавливать кукисы
+            );
+
             // формируем массив городов и определяем наличие поддоменов
             $this->parseCitiesList();
             // определяем текущий город
@@ -93,9 +109,56 @@ class plgSystemPlg_Mycityselector extends JPlugin
 
 
     /**
+     * Event listener for content edit form
+     * Adding our tab in form
+     * @param $form
+     * @param $data
+     * @return bool
+     */
+    function onContentPrepareForm($form, $data) {
+
+        // TODO move code to ArticleFormHelper
+
+        $app = JFactory::getApplication();
+        switch ($app->input->get('option')) {
+            case 'com_content':
+                if ($app->isAdmin() && JFactory::getApplication()->getName() == 'administrator') {
+                    $string = <<<XML
+<?xml version="1.0" encoding="UTF-8"?>
+<form>
+	<fields name="params" label="MyCitySelector">
+	    <fieldset name="params" label="&#9733; MyCitySelector &#9733;">
+			<field
+				name="field1"
+				type="text"
+				label="Bla bla bla"
+				/>
+			<field
+				name="field2"
+				type="text"
+				label="tututu"
+			/>
+        </fieldset>
+	</fields>
+</form>
+XML;
+
+                    $xml = simplexml_load_string($string);
+                    $form->load($xml, true, false);
+                }
+                return true;
+        }
+        return true;
+    }
+
+
+
+
+
+    /**
      * Загружает все данные текущего модуля (ID и params)
      */
-    private function loadModuleData()
+    private function loadModuleData()// todo move methods to PlgOptionsHelper
     {
         // сначала пытаемся получить ID из строки запроса (для админки)
         $jInput = JFactory::getApplication()->input;
@@ -134,6 +197,8 @@ class plgSystemPlg_Mycityselector extends JPlugin
     }
 
 
+    // todo здесь будет просто чтение из базы (из компонента)
+    // todo move methods to PlgOptionsHelper
     /**
      * Подготавливает список городов, преобразуя его из строки в массив требуемого формата
      */
@@ -196,7 +261,7 @@ class plgSystemPlg_Mycityselector extends JPlugin
     /**
      * Определение базового домена
      */
-    private function defineBaseDomain()
+    private function defineBaseDomain()// todo move methods to PlgOptionsHelper
     {
         $host = $_SERVER['HTTP_HOST'];
         // проверяем параметр модуля main_domain, если основной домен указан, то автоматическое определение пропускаем
@@ -220,11 +285,6 @@ class plgSystemPlg_Mycityselector extends JPlugin
                 $this->cookieDomain = '.' . $this->baseDomain;
             }
         }
-        // передаем в браузер параметры о домене
-        JFactory::getDocument()->addScriptDeclaration(
-            'window.mcs_base_domain="' . $this->baseDomain . '";' . // основной домен сайта, если есть еще и субдомены
-            'window.mcs_cookie_domain="' . $this->cookieDomain . '";' // домен для которого нужно устанавливать кукисы
-        );
     }
 
 
@@ -272,7 +332,7 @@ class plgSystemPlg_Mycityselector extends JPlugin
 
 
     // определение текущего города
-    private function defineCity()
+    private function defineCity()// todo move methods to PlgOptionsHelper
     {
         $doc = JFactory::getDocument();
         $defaultCity = $this->params->get('default_city', 'Москва');
@@ -302,7 +362,7 @@ class plgSystemPlg_Mycityselector extends JPlugin
                 $city = $this->sypexGeoIP($_SERVER['REMOTE_ADDR'], $defaultCity);
                 $doc->addScriptDeclaration('window.mcs_yandexgeo=true;');
             } elseif ($baseIP == 'yandexgeo') {
-                // делаем запрос на API Sypex Geo + корректируем город через Яндекс geolocation
+                // делаем запрос на Яндекс geolocation
                 $city = $this->sypexGeoIP($_SERVER['REMOTE_ADDR'], $defaultCity);
                 $doc->addScriptDeclaration('window.mcs_yandexgeo=true;');
             }
@@ -339,7 +399,7 @@ class plgSystemPlg_Mycityselector extends JPlugin
     /**
      * Определяет город с помощью сервиса sypexgeo.net
      */
-    private function sypexGeoIP($ip, $defaultCity=''){
+    private function sypexGeoIP($ip, $defaultCity=''){  // todo move methods to PlgGeolocationHelper
         $userAgent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] :
             'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36';
         $ch = curl_init();
@@ -372,6 +432,9 @@ class plgSystemPlg_Mycityselector extends JPlugin
      */
     public function onAfterRender()
     {
+
+        // todo move to PlgContentParserHelper ?? need to think
+
         $jInput = JFactory::getApplication()->input;
         $option = $jInput->get('option');
         $id = $jInput->get('id');
@@ -383,7 +446,7 @@ class plgSystemPlg_Mycityselector extends JPlugin
         } else {
             if (!$this->editMode) { // не делаем замену в режиме редактирования статьи
                 $body = $this->getPageBody();
-                $body = $this->parseCitiesTags($body); // парсим контент
+                $body = CitiesTagsHelper::parseCitiesTags($body, $this->city, $this->citiesList); // парсим контент
                 $body = $this->injectJSCallbackFunction($body);
                 $this->setPageBody($body);
             }
@@ -422,7 +485,7 @@ class plgSystemPlg_Mycityselector extends JPlugin
     private function getPageBody(){
         $app = JFactory::getApplication();
         if (method_exists($app, 'getBody')) {
-            return $app->getBody();
+            return $app->getBody(); // Joomla 3.x
         }
         // joomla 2.5
         return JResponse::getBody();
@@ -435,7 +498,7 @@ class plgSystemPlg_Mycityselector extends JPlugin
     private function setPageBody($body){
         $app = JFactory::getApplication();
         if (method_exists($app, 'setBody')) {
-            $app->setBody($body);
+            $app->setBody($body); // Joomla 3.x
         } else {
             // joomla 2.5
             JResponse::setBody($body);
@@ -457,170 +520,6 @@ class plgSystemPlg_Mycityselector extends JPlugin
     }
 
 
-    private function parseCitiesTags($body)
-    {
-        // сложность в том, что в визуальном редакторе метки обрамляются тегами
-        for ($i = 3; $i--;) { // надеюсь, что больше трех оберточных тегов не будет
-            $body = preg_replace('/<span[^>]+>(\[city\s+[^\]]+\])<\/span>/usU', '$1', $body);
-            $body = preg_replace('/<span>(\[\/city\s*\])<\/span>/sU', '$1', $body);
-            $body = preg_replace('/<p[^>]+>(\[city\s+[^\]]+\])<\/p>/usU', '$1', $body);
-            $body = preg_replace('/<p>(\[\/city\s*\])<\/p>/sU', '$1', $body);
-        }
-        // теперь, когда лищнее почистили, ищем блоки
-        $reg = '/\[city\s+([^\]]+)\](.+)\[\/city\s*\]/usU';
-        $cnt = preg_match_all($reg, $body, $res);
-        if ($cnt > 0) {
-            $json = array();
-            // в цикле перебираем найденные куски, прячем все в js массив, кроме совпадающего с текущим городом
-            $finded = false;
-            // echo '<pre>'; print_r($res); echo '</pre>';
-            foreach ($res[1] as $i => $city) { // цикл по названиям городов из результата regexp
-                // $res[0][$i] - весь найденный блок
-                // $res[1][$i] - название города
-                // $res[2][$i] - контент блока
-                // иногда бывает внутри блока перенос параграфа, например так: <p><span.cityContent>ляляля</p><p>тополя</span></p> браузер это не переваривает и давится
-                // поэтому заменяем это дело внутри блока на <br/>
-                $content = $res[2][$i];
-                $content = preg_replace('/<\/p>\s*<p>/smU', '<br/>', $content);
-                // проверяем какие теги внутри контента, если есть блочные элементы, то оборачиваем в DIV, иначе в SPAN
-                $tag = $this->isHasBlockTag($content) ? 'div' : 'span';
-                // один из плагинов, работающий выше по порядку, почему-то конвертирует русские буквы в html последовательности (вот гад)
-                // пришлось сделать проверку названия города
-                if (strpos($city, '&#x') !== false) {
-                    $city = html_entity_decode($city, ENT_COMPAT, 'UTF-8');
-                }
-                // разделяем по ","
-                $cities = explode(',', $city);
-                // проверяем первый символ первого города, если он равен "!", значит это условие исключения
-                if (mb_substr(trim($cities[0]), 0, 1, 'UTF-8') == '!') {
-                    // условие исключения
-                    $cities[0] = str_replace('!', '', $cities[0]);
-                    // теперь нужно составить новый список городов, за исключением тех, которые перечислены в теге
-                    $newCities = $this->citiesList['__all__']; // копируем список всех городов
-                    foreach ($cities as $cityName => $data) {
-                        if (isset($newCities[$cityName])) {
-                            unset($newCities[$cityName]); // исключаем города, которые перечислены в теге
-                        }
-                    }
-                    $cities = array_keys($newCities); // получаем список нужных городов
-                    unset($newCities);
-                }
-                if (count($cities) > 1) {
-                    // формируем групповой блок, если городов > 1
-                    $trcity = 'cities-group'; // группа
-                    if (!isset($json[$trcity])) {
-                        $json[$trcity] = array();
-                    }
-                    $index = count($json[$trcity]);
-                    $json[$trcity][$index] = $content;
-                    // для всех городов в группе, создаем блоки со ссылкой на групповой
-                    $class = '';
-                    $findedInGroup = false;
-                    foreach ($cities as $cval) {
-                        $cval = trim($cval);
-                        if ($cval == '*') {
-                            continue;
-                        } else {
-                            $trcityG = $this->translit($cval);
-                        }
-                        if (!isset($json[$trcityG])) {
-                            $json[$trcityG] = array();
-                        }
-                        $indexG = count($json[$trcityG]);
-                        $json[$trcityG][$indexG] = '{{$cities-group}}=' . $index; // ссылка на групповой блок с общим контентом
-                        $class .= ' city-' . $trcityG . '-' . $indexG;
-                        if ($cval == $this->city) {
-                            $findedInGroup = true; // этот блок для текущего выбранного города, ставим флаг, чтобы не отображался блок [city *]
-                            $finded = true;
-                        }
-                    }
-                    $html = '<' . $tag . ' class="cityContent' . $class . '">';
-                    if ($findedInGroup == true) {
-                        $html .= $content;
-                    }
-                    $html .= '</' . $tag . '>';
-                } else {
-                    // иначе одиночный блок
-                    $cval = trim($cities[0]);
-                    if ($cval == '*') {
-                        $trcity = 'other';
-                    } else {
-                        $trcity = $this->translit($cval);
-                    }
-                    if (!isset($json[$trcity])) {
-                        $json[$trcity] = array();
-                    }
-                    $index = count($json[$trcity]);
-                    // $json[ город ][номер блока с текстом ]
-                    $json[$trcity][$index] = $content;
-                    $class = ' city-' . $trcity . '-' . $index;
-                    $html = '<' . $tag . ' class="cityContent' . $class . '">';
-                    if ($cval == $this->city) {
-                        $finded = true; // этот блок для текущего выбранного города, ставим флаг, чтобы не отображался блок [city *]
-                        $html .= $content;
-                    }
-                    $html .= '</' . $tag . '>';
-                }
-                $body = str_replace($res[0][$i], $html, $body);
-            }
-            if ($finded == false && isset($json['other'])) {
-                // если город не был найден, то при наличии блока "прочие", подставляем текст обратно в страницу
-                foreach ($json['other'] as $index => $content) {
-                    $tag = $this->isHasBlockTag($content) ? 'div' : 'span';
-                    $body = str_replace(
-                        '<' . $tag . ' class="cityContent city-other-' . $index . '"></' . $tag . '>',
-                        '<' . $tag . ' class="cityContent city-other-' . $index . '">' . $content . '</' . $tag . '>',
-                        $body
-                    );
-                }
-            }
-            // формируем json
-            $json = '<script type="text/javascript">var citySelectorContents = ' . json_encode($json) . ';</script>';
-            $body = str_replace('</head>', $json . "\n</head>", $body);
-        }
 
-        return $body;
-    }
-
-
-    /**
-     * Проверяет наличие в контенте блочных элементов
-     * @param $content
-     * @return bool
-     */
-    private function isHasBlockTag($content) {
-        if (stripos($content, '<div') === false
-            && stripos($content, '<h1') === false
-            && stripos($content, '<h2') === false
-            && stripos($content, '<h3') === false
-            && stripos($content, '<h4') === false
-            && stripos($content, '<h5') === false
-            && stripos($content, '<p') === false
-            && stripos($content, '<hr') === false
-            && stripos($content, '<ul') === false
-            && stripos($content, '<ol') === false
-            && stripos($content, '<blockquote') === false
-            && stripos($content, '<form') === false
-            && stripos($content, '<pre') === false
-            && stripos($content, '<table') === false
-            && stripos($content, '<address') === false) {
-                return false;
-        }
-        return true;
-    }
-
-
-    /**
-     * Переводит названия городов в транслит, чтобы формировать идентификаторы для js
-     * @param String $str Строка для транслитерации
-     * @return String
-     */
-    private function translit($str)
-    {
-        if (!class_exists('MCSTranslit')) {
-            require_once JPATH_ROOT . '/modules/mod_mycityselector/MCSTranslit.php';
-        }
-        return MCSTranslit::convert($str);
-    }
 
 }

@@ -1,3 +1,7 @@
+
+TODO удалить этот сборщик, использовать /jexter/jexter.php
+
+
 Builder
 =======
 

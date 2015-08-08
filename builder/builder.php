@@ -1,6 +1,6 @@
 <?php
 /**
- * MCS package builder
+ * Joomla package builder
  */
 
 // +++ functions +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -21,7 +21,7 @@ $version = getVersion();
 $ver = str_replace('.', '', $version);
 $myDir = dirname(__FILE__);
 $modName = 'mod_mycityselector';
-$plgName = 'plg_mycityselector';
+$plgName = 'plgmycityselector';
 $modDir = $myDir . '/../modules/' . $modName;
 $plgDir = $myDir . '/../plugins/system/' . $plgName;
 $copyDir = $myDir . '/src_copy/' . date('dmY_His') . (isset($argv[1]) ? '_' . $argv[1] : '');
@@ -105,7 +105,7 @@ foreach ($files as $k => &$file) {
 }
 
 // update the data in manifest file
-$upd = updateManifest($copyPlgDir.'/plg_mycityselector.xml', [
+$upd = updateManifest($copyPlgDir.'/plgmycityselector.xml', [
     'creationDate' => date('M Y'),
     'version' => $version,
     'scriptfile' => $scriptFile,
