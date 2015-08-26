@@ -1,15 +1,39 @@
 <?php
-/**
- * Jexter builder
+/*
+ * JEXTER
+ * Joomla console package builder
+ * @author Konstantin Kutsevalov (AdamasAntares) <mail@art-prog.ru>
+ * @version 1.0.0 alpha
+ * @license GPL v3 (license.txt)
  */
 
+
+/**
+ * Class JexterBuilder
+ */
 class JexterBuilder {
 
-    public static function make($args)
+    private static $lastError = null;
+
+    private static $lastErrorCode = null;
+
+
+    /**
+     * Build extension package
+     * @param $args <p>
+     * should have 3 keys:<br/>
+     *   "myDir" - path to root folder of Jexter [require]
+     *   "config" - local path to project config file ("project/project.json") [optional]
+     *   "copysfx" - Suffix for directory of source copy (copy of extensions) [optional]
+     * </p>
+     * @return null|string
+     */
+    public static function run($args)
     {
-        // load project.json
+        $package = null;
+        // load {project}.json
         $config = [];
-        if (!self::loadProjectJson($args['myDir'], $config)) {
+        if (!self::loadProjectJson($args, $config)) {
             exit(1);
         }
         $config = self::preparePath($config, $args);
@@ -21,35 +45,40 @@ class JexterBuilder {
         foreach ($extensions as &$ext) {
             switch ($ext['type'][0]) {
                 case 'component':
-                    $ext['pkg'] = self::buildComponent($ext, $config); break;
+                    $package = $ext['pkg'] = self::buildComponent($ext, $config); break;
                 case 'plugin':
-                    $ext['pkg'] = self::buildPlugin($ext, $config); break;
+                    $package = $ext['pkg'] = self::buildPlugin($ext, $config); break;
                 case 'module':
-                    $ext['pkg'] = self::buildModule($ext, $config); break;
+                    $package = $ext['pkg'] = self::buildModule($ext, $config); break;
             }
             if (empty($ext['pkg'])) {
-                out("-break-\n", 'red');
-                //exit; // todo only while developing
+                out("-break-   package of extension {$ext['id']} not found...\n", 'red');
+                self::$lastError = "package of extension {$ext['id']} not found...";
+                self::$lastErrorCode = 4041;
+                return null;
             }
         }
 
         // if package
         if ($config['type'] === 'package') {
-            self::buildPackage($extensions, $config);
+            $package = self::buildPackage($extensions, $config);
         }
+
+        return $package;
     }
 
 
     /**
      * Load and parse project.json
-     * @param string $myDir Path of builder directory
+     * @param string $args Arguments
      * @param array &$config Configuration array (return)
      * @return bool Result of loading
      */
-    private static function loadProjectJson($myDir, &$config)
+    private static function loadProjectJson($args, &$config)
     {
         out(" read config ... ", 'yellow');
-        $jsonFile = $myDir . '/project/project.json';
+        $configFile = empty($args['config']) ? 'project/project.json' : $args['config'];
+        $jsonFile = $args['myDir'] . '/' . $configFile;
         if (!is_file($jsonFile)) {
             out(" not found project configuration file: {$jsonFile}\n", 'red');
             return false;
@@ -60,7 +89,7 @@ class JexterBuilder {
             return false;
         }
         // check required options
-        foreach (['name', 'siteRoot', 'id', 'type', 'version', 'manifest'] as $option) {
+        foreach (['name', 'siteRoot', 'id', 'type', 'version'] as $option) {
             if (empty($config[$option])) {
                 out(" not found '{$option}' option!\n", 'red');
                 return false;
@@ -71,7 +100,7 @@ class JexterBuilder {
             out(" for 'package' extension must be 'package_items' option with list of extensions.\n", 'red');
             return false;
         }
-        $config['siteRoot'] = realpath(str_replace('@builder', $myDir, $config['siteRoot']));
+        $config['siteRoot'] = realpath(str_replace('@builder', $args['myDir'], $config['siteRoot']));
         out("ok\n", 'green');
         return true;
     }
@@ -85,9 +114,9 @@ class JexterBuilder {
         // create directory for copies of source files of extensions
         if (!empty($config['copy'])) {
             $config['copy'] = normalizePath(str_replace('@builder', $args['myDir'], $config['copy']));
-            $config['copy'] .= '/' . $args['copyprefix'] . date('dmY_His');
+            $config['copy'] .= '/' . $args['copysfx'] . date('dmY_His');
         } else {
-            $config['copy'] = normalizePath($args['myDir'] . '/src_copy/' . $args['copyprefix'] . date('dmY_His'));
+            $config['copy'] = normalizePath($args['myDir'] . '/src_copy/' . basename($args['config'], '.json') . $args['copysfx'] . date('dmY_His'));
         }
         createDir($config['copy']);
         // directory for resulting extension package
@@ -112,24 +141,26 @@ class JexterBuilder {
         $extensions = [];
         if ($config['type'] === 'package') {
             foreach ($config['packageItems'] as $item) {
-                $item['type'] = strtolower($item['type']);
-                $item['type'] = explode('/', $item['type']);
+                $item['type'] = explode('/', strtolower($item['type']));
                 $item['type'][] = '';
                 $extensions[] = [
                     'name' => $item['name'],
                     'id' => $item['id'],
                     'type' => $item['type'],
                     'version' => $item['version'],
+                    'script' => empty($item['script']) ? $item['id'] . '.php' : $item['script'],
                     'excludes' => empty($item['excludes']) ? [] : $item['excludes']
                 ];
             }
         } else {
-            $extensions[] = [
+            $type = explode('/', strtolower($config['type']));
+            $type[] = '';
+            $extensions[0] = [
                 'name' => $config['name'],
                 'id' => $config['id'],
-                'type' => $config['type'],
+                'type' => $type,
                 'version' => $config['version'],
-                'manifest' => $config['manifest'],
+                'script' => empty($config['script']) ? $config['id'] . '.php' : $config['script'],
                 'excludes' => empty($config['excludes']) ? [] : $config['excludes']
             ];
         }
@@ -144,10 +175,109 @@ class JexterBuilder {
      * @return string|null Path of result package (zip)
      */
     private static function buildComponent($ext, $config) {
+        out(" creating component ({$ext['id']})\n", 'yellow');
 
-        out(" creating {$ext['id']} ... bla bla bla\n", 'yellow');
+        $pathSite = $config['siteRoot'] . '/components/' . $ext['id'];
+        $pathAdmin = $config['siteRoot'] . '/administrator/components/' . $ext['id'];
+        $copySitePath = $config['copy'] . '/site';
+        $copyAdminPath = $config['copy'] . '/admin';
+        $mainfest = $ext['id'] . '.xml';
+        $scriptSite = $pathSite . '/' . $ext['script'];
+        $scriptAdmin = $pathAdmin . '/' . $ext['script'];
+        $zipFile = $config['destination'] . '/' . $ext['id'] . '_v' . str_replace('.', '', $ext['version']) . '.zip';
 
-        return '';
+        out("  - checking frontend component ... ", 'yellow');
+        if (is_dir($pathSite) && is_file($scriptSite)) {
+            out("ok\n", "green");
+            out("  - create frontend source copy ... ", 'yellow');
+            if (!copyDir($pathSite, $copySitePath)) {
+                out("fail\n", 'red');
+                return null;
+            } else {
+                out("done\n", "green");
+            }
+            out("  - scan files ... ", 'yellow');
+            $filesSite = glob($copySitePath . '/*') + glob($copySitePath . '/*.*');
+            // prepare files list
+            foreach ($filesSite as $k => &$file) {
+                $name = basename($file);
+                if (is_dir($file)) {
+                    $file = ['tag' => 'folder', 'attr' => [], 'value' => $name]; // if directory
+                } else {
+                    // if file
+                    if (substr($name, -4, 4) == '.xml') {
+                        $mainfest = $name;
+                    }
+                    $file = ['tag' => 'filename', 'attr' => [], 'value' => $name];
+                }
+            }
+            out("done\n", "green");
+        } else {
+            out("not found {$scriptSite}\n", "red");
+            return null;
+        }
+
+        out("  - checking backend component ... ", 'yellow');
+        if (is_dir($pathAdmin) && is_file($scriptAdmin)) {
+            out("ok\n", "green");
+            out("  - create frontend source copy ... ", 'yellow');
+            if (!copyDir($pathAdmin, $copyAdminPath)) {
+                out("fail\n", 'red');
+                return null;
+            } else {
+                out("done\n", "green");
+            }
+            out("  - scan files ... ", 'yellow');
+            $filesAdmin = glob($copyAdminPath . '/*') + glob($copyAdminPath . '/*.*');
+            // prepare files list
+            foreach ($filesAdmin as $k => &$file) {
+                $name = basename($file);
+                if (is_dir($file)) {
+                    $file = ['tag' => 'folder', 'attr' => [], 'value' => $name]; // if directory
+                } else {
+                    // if file
+                    if (substr($name, -4, 4) == '.xml') {
+                        $mainfest = $name;
+                    }
+                    $file = ['tag' => 'filename', 'attr' => [], 'value' => $name];
+                }
+            }
+            out("done\n", "green");
+        } else {
+            out("not found {$scriptAdmin}\n", "red");
+            return null;
+        }
+
+        out("  - generate manifest file ... ", 'yellow');
+        $data = [
+            'creationDate' => date('M Y'),
+            'version' => $config['version'],
+            '{marks}' => [
+                '{version}' => ''
+            ]
+        ];
+        if (!empty($filesSite)) {
+            $data['files'] = $filesSite;
+        }
+        if (!empty($filesAdmin)) {
+            $data['administration/files'] = $filesAdmin;
+        }
+        $res = updateManifest($copyAdminPath . '/' . $mainfest, $data, $config['copy'] . '/' . $mainfest);
+        if (!$res) {
+            out("error\n", 'red');
+            return null;
+        } else {
+            out("ok\n", 'green');
+        }
+        out("  - packing ...\n", 'yellow');
+        if (zipping($config['copy'], $zipFile)) {
+            out("    done ", 'green');
+            out("({$zipFile})\n", 'light_cyan');
+        } else {
+            out("    fail saving {$zipFile}\n", 'red');
+            return null;
+        }
+        return $zipFile;
     }
 
 
@@ -162,10 +292,8 @@ class JexterBuilder {
 
         $path = $config['siteRoot'] . '/plugins/' . $ext['type'][1] . '/' . $ext['id'];
         $copyPath = $config['copy'] . '/' . $ext['id'];
-        $mainfest = $ext['id'] . '.xml';
-        $scriptName = empty($ext['script']) ? $ext['id'] . '.php' : $ext['script'];
-        $script = $path . '/' . $scriptName;
-        $installerName = empty($ext['installer']) ? 'installer.php' : basename($ext['installer']);
+        $mainfest = $ext['id'] . '.xml'; // default manifest file name
+        $script = $path . '/' . $ext['script'];
         $zipFile = $config['destination'] . '/' . $ext['id'] . '_v' . str_replace('.', '', $ext['version']) . '.zip';
 
         out("  - checking plugin exists ... ", 'yellow');
@@ -187,24 +315,19 @@ class JexterBuilder {
                     $file = ['tag' => 'folder', 'attr' => [], 'value' => $name]; // if directory
                 } else {
                     // if file
-                    if ($name == $scriptName) { // if it's main script of plugin
+                    if ($name == $ext['script']) { // if it's main script of plugin
                         $file = ['tag' => 'filename', 'attr' => ['plugin' => $ext['id']], 'value' => $name];
-                    } elseif ($name == $installerName) { // if it's script for install
-                        unset($files[$k]);
                     } else {
                         if (substr($name, -4, 4) == '.xml') {
-                            unset($files[$k]);
                             $mainfest = $name;
-                        } else {
-                            $file = ['tag' => 'filename', 'attr' => [], 'value' => $name];
                         }
+                        $file = ['tag' => 'filename', 'attr' => [], 'value' => $name];
                     }
                 }
             }
             $res = updateManifest($copyPath . '/' . $mainfest, [
                 'creationDate' => date('M Y'),
                 'version' => $config['version'],
-                'scriptfile' => $installerName,
                 'files' => $files
             ]);
             if (!$res) {
@@ -239,10 +362,8 @@ class JexterBuilder {
 
         $path = $config['siteRoot'] . '/modules/' . $ext['id']; // path of module source
         $copyPath = $config['copy'] . '/' . $ext['id']; // path for copy of module
-        $mainfest = $ext['id'] . '.xml'; // manifest file name
-        $scriptName = empty($ext['script']) ? $ext['id'] . '.php' : $ext['script']; // main script name
-        $script = $path . '/' . $scriptName;
-        $installerName = empty($ext['installer']) ? 'installer.php' : basename($ext['installer']); // installer script name
+        $mainfest = $ext['id'] . '.xml'; // default manifest file name
+        $script = $path . '/' . $ext['script'];
         $zipFile = $config['destination'] . '/' . $ext['id'] . '_v' . str_replace('.', '', $ext['version']) . '.zip';
 
         out("  - checking module exists ... ", 'yellow');
@@ -264,24 +385,19 @@ class JexterBuilder {
                     $file = ['tag' => 'folder', 'attr' => [], 'value' => $name]; // if directory
                 } else {
                     // if file
-                    if ($name == $scriptName) { // if it's main script of plugin
+                    if ($name == $ext['script']) { // if it's main script of plugin
                         $file = ['tag' => 'filename', 'attr' => ['plugin' => $ext['id']], 'value' => $name];
-                    } elseif ($name == $installerName) { // if it's script for install
-                        unset($files[$k]);
                     } else {
                         if (substr($name, -4, 4) == '.xml') {
-                            unset($files[$k]);
                             $mainfest = $name;
-                        } else {
-                            $file = ['tag' => 'filename', 'attr' => [], 'value' => $name];
                         }
+                        $file = ['tag' => 'filename', 'attr' => [], 'value' => $name];
                     }
                 }
             }
             $res = updateManifest($copyPath . '/' . $mainfest, [
                 'creationDate' => date('M Y'),
                 'version' => $config['version'],
-                'scriptfile' => $installerName,
                 'files' => $files
             ]);
             if (!$res) {
@@ -336,7 +452,7 @@ class JexterBuilder {
                     $files[] = $file;
                 } else {
                     out("  Error: not found {$ext['pkg']}\n", 'red');
-                    return;
+                    return null;
                 }
             }
         }
@@ -354,7 +470,7 @@ class JexterBuilder {
         );
         if (!$res) {
             out("error\n", 'red');
-            return;
+            return null;
         } else {
             out("ok\n", 'green');
         }
@@ -370,7 +486,7 @@ class JexterBuilder {
             out("     done", 'green');
         } else {
             out("     error\n", 'red');
-            return;
+            return null;
         }
 
         $forDelete = glob($config['destination'] . '/*.*');
@@ -381,6 +497,7 @@ class JexterBuilder {
         }
         out("({$zipPackageFile})\n", 'gray');
         out(" Building complete.\n", 'green');
+        return $zipPackageFile;
     }
 
 } 

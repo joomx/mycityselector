@@ -1,2 +1,42 @@
-#!/bin/bash
-php jexter.php build
+#!/usr/bin/env php
+<?php
+/*
+ * JEXTER
+ * Joomla console package builder
+ * @author Konstantin Kutsevalov (AdamasAntares) <mail@art-prog.ru>
+ * @version 1.0.0 alpha
+ * @license GPL v3 (license.txt)
+ *
+ * Use: ./jexter/build
+ * Use: ./jexter/build  my_project
+ * Use: ./jexter/build  my_project  _copy_suffix
+ *
+ * where is
+ * the first argument is name of project config (base dir is Jexter directory)
+ * the second argument is suffix for directory of source copy (that will be created before package building)
+ */
+
+require 'lib/helper.php';
+require 'lib/JexterBuilder.php';
+
+// check extensions
+if (!extension_loaded('zip')) {
+    out("The Zip php extension not installed!\n", 'red');
+    exit;
+} elseif (!function_exists('simplexml_load_file')) {
+    out("The SimpleXml php extension not installed!\n", 'red');
+    exit;
+}
+
+// parsing console arguments
+$args = prepareArguments($argv, [
+    '0' => ['name' => 'config', 'default' => 'project'],
+    '1' => ['name' => 'copysfx', 'default' => ''],
+    'myDir' => ['name' => 'myDir', 'default' => __DIR__],
+]);
+
+print_r($args); exit;
+
+JexterBuilder::run($args);
+
+out("Finish\n", 'cyan');

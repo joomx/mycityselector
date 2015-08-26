@@ -70,19 +70,43 @@ function getOutput()
 /**
  * Parsing CLI arguments
  * @param array $argv $ARGV
+ * @param array $default Default values with rules of conversion. For example "command arg1 arg2 arg3=val3"
+ *      will be returned as $args[ 0 => arg1, 1 => arg2, arg3 => val3 ]. But with this argument value
+ *      [ 0 => [name => file, default => val1], 1 => [name => line] ]
+ *      we can convert it to $args[ file => arg1, line => arg2, arg3 => val3 ].
+ *      If there is no any arguments in $argv, then will be returned values from "default" keys.
  * @return array
  */
-function parseCliArguments($argv)
+
+// TODO Debug Not working default arguments!
+
+function prepareArguments($argv, $default = [])
 {
-    $arguments = [
-        'copyprefix' => '',
-    ];
-    if (!empty($argv)) {
-        foreach ($argv as $arg) {
-            list($param, $value) = explode('=', $arg . '=');
-            $arguments[$param] = empty($value) ? true : $value;
+    $arguments = [];
+    foreach ($default as $key => $data) {
+        if (!empty($default[$key])) {
+            $value = empty($default[$key]['default']) ? '' : $default[$key]['default'];
+            $arguments[$data['name']] = $value;
         }
     }
+    if (!empty($argv)) {
+        foreach ($argv as $key => $arg) {
+            list($param, $value) = explode('=', $arg . '=');
+            if (empty($value)) {
+                if (!empty($default[$key]) && !empty($default[$key]['name'])) {
+                    $value = empty($default[$key]['default']) ? '' : $default[$key]['default'];
+                    $arguments[ $default[$key]['name'] ] = $value;
+                } else {
+                    $arguments[$key] = $arg;
+                }
+            } else {
+                $arguments[$param] = $value;
+            }
+        }
+    }
+    // project config path
+    $arguments['config'] = empty($arguments['config']) ? 'project/project.json' : 'project/' . $arguments['config'] . '.json';
+
     return $arguments;
 }
 
@@ -193,49 +217,79 @@ function clearDir($dir)
 
 
 /**
- * Загружает xml файл и заменяет в нем данные на указанные в массиве
- * @param String $file Путь до файла
- * @param Array $data Массив данных для замены. Например: ['license' => 'GNU/GPL'], где
- *   ключ - это имя тега,
- *   значение - содержимое для тега
- * @param String $destFile Файл для записи результата. Если не указан, результат сохраняется в файл источник.
+ * Updates manifest file by passed values
+ * @param String $file Path to original manifest file
+ * @param Array $data <p>
+ * Data for update. All keys is xpath of xml elements except '{marks}' key.
+ * Example:
+ * [
+ *      'license' => 'GNU/GPL',  // key => value
+ *      'install/sql' => [       // key => child_tag_details
+ *          'tag' => 'file',
+ *          'attr' => [
+ *              'driver' => 'mysql',
+ *              'charset' => 'utf8'
+ *          ],
+ *          'value' => 'install.sql'
+ *      ],
+ *      'files' => [            // key => child_tags_details_list
+ *          ['tag' => 'filename', 'value' => 'index.html'],
+ *          ['tag' => 'filename', 'value' => 'sitemapjen.php'],
+ *      ],
+ *      ...etc...
+ * ]
+ * </p>
+ * @param String $destinationFile [optional] If argument passed, then changes will saved in this file. By default will be updated original file.
+ * @return bool
  */
-function updateManifest($file, $data = [], $destFile = '')
+function updateManifest($file, $data = [], $destinationFile = '')
 {
+    $marks = [];
+    if (!empty($data['{marks}'])) {
+        $marks = $data['{marks}'];
+        unset($data['{marks}']);
+    }
     if (is_file($file)) {
         $xml = simplexml_load_file($file);
         if (is_object($xml)) {
             foreach ($data as $tag => $val) {
-                $element = $xml->xpath('/extension/' . $tag); // ищем требуемый элемент
+                $element = $xml->xpath('/extension/' . $tag);
                 if (empty($element)) {
-                    // элемент не найден, его нужно добавить
                     $element = $xml->addChild($tag, '');
                 } else {
-                    $element = $element[0]; // берем первый из найденных элементов (корневые элементы уникальны)
+                    $element = $element[0];
                 }
-                $elementName = $element->getName();
-
-                // записываем в элемент новое значение или добавляем новые элементы
                 if (is_string($val)) {
-                    $xml->$elementName = $val; // присваиваем новое значение
+                    $element->{0} = $val;
                 } elseif (is_array($val)) {
-                    $xml->$elementName = ''; // очищаем элемент
+                    $element->{0} = '';
                     if (isset($val['tag'])) {
-                        // один элемент
-                        addXmlChild($xml->$elementName, $val['tag'], $val['value'], @$val['attr']);
+                        $attr = isset($val['attr']) ? $val['attr'] : [];
+                        addXmlChild($element, $val['tag'], $val['value'], $attr);
                     } elseif (isset($val[0]['tag'])) {
-                        // несколько элементов
                         foreach ($val as $newTag) {
-                            addXmlChild($xml->$elementName, $newTag['tag'], $newTag['value'], @$newTag['attr']);
+                            $attr = isset($newTag['attr']) ? $newTag['attr'] : [];
+                            addXmlChild($element, $newTag['tag'], $newTag['value'], $attr);
                         }
                     }
                 }
             }
-            if (empty($destFile)) {
-                $destFile = $file;
+            if (empty($destinationFile)) {
+                $destinationFile = $file;
             }
-            if ($xml->asXML($destFile)) {
-                return true;
+            // replace {marks}
+            if (!empty($marks)) {
+                $xml = $xml->asXML();
+                foreach ($marks as $_mark => $_value) {
+                    $xml = str_replace($_mark, $_value, $xml);
+                }
+                if (file_put_contents($destinationFile, $xml) !== false) {
+                    return true;
+                }
+            } else {
+                if ($xml->asXML($destinationFile) !== false) {
+                    return true;
+                }
             }
         }
     }

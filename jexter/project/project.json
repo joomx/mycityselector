@@ -16,7 +16,6 @@
             "name": "MyCitySelector",
             "id": "plgmycityselector",
             "type": "plugin/system",
-            "installer": "install.php",
             "version": "1.3.0",
             "excludes": []
         },
@@ -24,7 +23,6 @@
             "name": "MyCitySelector",
             "id": "mod_mycityselector",
             "type": "module/site",
-            "installer": "install.php",
             "version": "1.3.0",
             "excludes": [
                 "jquery.tablednd.js"

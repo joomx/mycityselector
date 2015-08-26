@@ -1,2 +1,29 @@
-#!/bin/bash
-php jexter.php create
+#!/usr/bin/env php
+<?php
+/*
+ * JEXTER
+ * Joomla console package builder
+ * @author Konstantin Kutsevalov (AdamasAntares) <mail@art-prog.ru>
+ * @version 1.0.0 alpha
+ * @license GPL v3 (license.txt)
+ */
+
+require 'lib/helper.php';
+//require 'lib/JexterBuilder.php';
+require 'lib/JexterCreator.php';
+
+// check extensions
+if (!extension_loaded('zip')) {
+    out("The Zip php extension not installed!\n", 'red');
+    exit;
+} elseif (!function_exists('simplexml_load_file')) {
+    out("The SimpleXml php extension not installed!\n", 'red');
+    exit;
+}
+
+$args = prepareArguments($argv, __DIR__);
+
+JexterCreator::createComponent();
+
+out("Finish\n", 'cyan');
+
