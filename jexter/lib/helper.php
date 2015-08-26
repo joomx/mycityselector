@@ -77,36 +77,35 @@ function getOutput()
  *      If there is no any arguments in $argv, then will be returned values from "default" keys.
  * @return array
  */
-
-// TODO Debug Not working default arguments!
-
 function prepareArguments($argv, $default = [])
 {
     $arguments = [];
     foreach ($default as $key => $data) {
-        if (!empty($default[$key])) {
+        if (!empty($data)) {
             $value = empty($default[$key]['default']) ? '' : $default[$key]['default'];
             $arguments[$data['name']] = $value;
         }
     }
     if (!empty($argv)) {
         foreach ($argv as $key => $arg) {
-            list($param, $value) = explode('=', $arg . '=');
-            if (empty($value)) {
-                if (!empty($default[$key]) && !empty($default[$key]['name'])) {
-                    $value = empty($default[$key]['default']) ? '' : $default[$key]['default'];
-                    $arguments[ $default[$key]['name'] ] = $value;
+            list($param, $value) = explode('=', $arg . '=', 2);
+            $value = trim($value, '"');
+            if (empty($value)) { // if passed simple argument ["./command arg_value"]
+                if (isset($default[$key])) {
+                    // if exists default param-value for this index(key)
+                    $param = $default[$key]['name'];
+                    $arguments[$param] = $arg;
                 } else {
+                    // no default value
                     $arguments[$key] = $arg;
                 }
-            } else {
+            } else { // if passed key-value pair ["./command arg=value"]
                 $arguments[$param] = $value;
             }
         }
     }
     // project config path
     $arguments['config'] = empty($arguments['config']) ? 'project/project.json' : 'project/' . $arguments['config'] . '.json';
-
     return $arguments;
 }
 

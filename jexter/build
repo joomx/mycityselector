@@ -30,12 +30,10 @@ if (!extension_loaded('zip')) {
 
 // parsing console arguments
 $args = prepareArguments($argv, [
-    '0' => ['name' => 'config', 'default' => 'project'],
-    '1' => ['name' => 'copysfx', 'default' => ''],
+    '1' => ['name' => 'config', 'default' => 'project'],
+    '2' => ['name' => 'copysfx', 'default' => ''],
     'myDir' => ['name' => 'myDir', 'default' => __DIR__],
 ]);
-
-print_r($args); exit;
 
 JexterBuilder::run($args);
 
