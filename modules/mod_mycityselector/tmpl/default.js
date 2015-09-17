@@ -89,7 +89,7 @@
                         console.log("MCS: latitude " + position.coords.latitude + ", longitude " + position.coords.longitude);
                         // отправляем запрос на определение города по координатам
                         $.ajax({
-                            "url": "/modules/mod_mycityselector/yandex-geo.php",
+                            "url": window.mcs_site_root + "/modules/mod_mycityselector/yandex-geo.php",
                             "dataType": "json",
                             "type": "post",
                             "data": {

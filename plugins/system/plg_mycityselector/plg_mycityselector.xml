@@ -2,12 +2,12 @@
 <!-- https://docs.joomla.org/Manifest_files -->
 <extension version="2.5" type="plugin" group="system">
 	<name>System - My City Selector</name>
-	<creationDate>Mar 2015</creationDate>
+	<creationDate>Sep 2015</creationDate>
 	<author>Konstantin Kutsevalov</author>
 	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
 	<authorEmail>konstantin@kutsevalov.name</authorEmail>
 	<authorUrl>www.kutsevalov.name</authorUrl>
-	<version>1.2.8</version>
+	<version>1.2.84</version>
 	<description>
 	<![CDATA[
 	<h3>My City Selector (Content plugin)</h3>

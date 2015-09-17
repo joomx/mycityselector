@@ -222,6 +222,7 @@ class plgSystemPlg_Mycityselector extends JPlugin
         }
         // передаем в браузер параметры о домене
         JFactory::getDocument()->addScriptDeclaration(
+            'window.mcs_site_root = "' . JURI::root(true) . '";' .
             'window.mcs_base_domain="' . $this->baseDomain . '";' . // основной домен сайта, если есть еще и субдомены
             'window.mcs_cookie_domain="' . $this->cookieDomain . '";' // домен для которого нужно устанавливать кукисы
         );
@@ -399,7 +400,8 @@ class plgSystemPlg_Mycityselector extends JPlugin
      */
     private function addBackendAssets($body)
     {
-        $css = '<link rel="stylesheet" href="/modules/mod_mycityselector/ext-params.css" type="text/css"/>' . "\n";
+        $root = JURI::root(true);
+        $css = '<link rel="stylesheet" href="' . $root . '/modules/mod_mycityselector/ext-params.css" type="text/css"/>' . "\n";
         $script = '';
         if (strpos($body, '/jquery.js') === false && strpos($body, '/jquery.min.js') === false) {
             // нужно подключить jQuery
@@ -407,9 +409,10 @@ class plgSystemPlg_Mycityselector extends JPlugin
                 . "</script>\n" . '<script>jQuery.noConflict();</script>' . "\n";
         }
         $script .= '<script'
-            . ' src="/modules/mod_mycityselector/jquery.tablednd.min.js">'
+            . ' src="' . $root . '/modules/mod_mycityselector/jquery.tablednd.min.js">'
             . "</script>\n<script charset=\"utf-8\""
-            . ' src="/modules/mod_mycityselector/ext-params.js.php?vpb8t9s23hx09g80hj56i345hiasdtf6q2">'
+            . ' src="' . $root . '/modules/mod_mycityselector/ext-params.js.php?vpb8t9s23hx09g80hj56i345hiasdtf6q2=&root='
+            . urlencode($root) . '">'
             . "</script>\n</head>";
         return str_replace('</head>', $css . $script, $body);
     }

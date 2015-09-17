@@ -3,18 +3,18 @@
  * Расширенные параметры для модуля
  * (внедряется в страницу настроек модуля посредством плагина)
  */
-if (!isset($_GET['vpb8t9s23hx09g80hj56i345hiasdtf6q2'])) {
+if (!isset($_GET['vpb8t9s23hx09g80hj56i345hiasdtf6q2']) || !isset($_GET['root'])) {
     exit(header("HTTP/1.0 404 Not Found") . '404 Not Found');
 }
-
+$root = $_GET['root'];
 header("Content-type: text/javascript");
 
 // => изображения
-$imgAdd = '/administrator/templates/hathor/images/menu/icon-16-new.png';
-$imgDel = '/administrator/templates/hathor/images/menu/icon-16-delete.png';
-$imgMove = '/modules/mod_mycityselector/tmpl/icon-16-move-3x.png';
-$imgDefault = '/administrator/templates/hathor/images/menu/icon-16-default.png';
-$imgArrow = '/administrator/templates/hathor/images/menu/icon-16-download.png';
+$imgAdd = $root . '/administrator/templates/hathor/images/menu/icon-16-new.png';
+$imgDel = $root . '/administrator/templates/hathor/images/menu/icon-16-delete.png';
+$imgMove = $root . '/modules/mod_mycityselector/tmpl/icon-16-move-3x.png';
+$imgDefault = $root . '/administrator/templates/hathor/images/menu/icon-16-default.png';
+$imgArrow = $root . '/administrator/templates/hathor/images/menu/icon-16-download.png';
 
 
 // => шаблоны

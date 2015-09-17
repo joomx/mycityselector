@@ -23,8 +23,8 @@
             <script>var mcsf=function(id){return document.getElementById(id)},modPng=new Image(),plgPng=new Image();
             modPng.onload=function(){mcsf("module_status").innerHTML="Success";mcsf("module_png").src=modPng.src;};
             plgPng.onload=function(){mcsf("plugin_status").innerHTML="Success";mcsf("plugin_png").src=plgPng.src;};
-            modPng.src="/modules/mod_mycityselector/ext_mod_mini.png";
-            plgPng.src="/plugins/system/plg_mycityselector/ext_plugin_mini.png";</script>
+            modPng.src="../modules/mod_mycityselector/ext_mod_mini.png";
+            plgPng.src="../plugins/system/plg_mycityselector/ext_plugin_mini.png";</script>
 		</div>
 	</div>
 	]]>
