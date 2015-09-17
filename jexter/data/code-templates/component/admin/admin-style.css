@@ -1,0 +1,78 @@
+/** стили отображения компонента в админке */
+
+.pagetitle.icon-48-big-ico {
+	background: url('images/big-ico.png') no-repeat left top;
+}
+
+.jenForm .jenToolbar {
+	margin: 3px 0 10px 5px;
+}
+.jen-start, .jen-stop {
+	position: relative;
+	top: -5px;
+}
+.jenLog {
+	background-color: #000;
+	color: #1DE61D;
+	font-size: 14px;
+	overflow: auto;
+	height: 400px;
+	min-width: 900px;
+	border: 1px solid gray;
+}
+.jenForm .pagination {
+	margin: 10px;
+	text-align: center;
+}
+.jenForm .info {
+	
+}
+.jenForm .info .alert {
+	font-size: 14px;
+	color: #B30000;
+	border: 1px solid #B30000;
+	padding: 5px;
+	border-radius: 4px;
+}
+.jenForm .info .mess {
+	font-size: 14px;
+	color: #238C00;
+	border: 1px solid #238C00;
+	padding: 5px;
+	border-radius: 4px;
+}
+.jenOptions code {
+	color: #000;
+	font-size: 12px;
+}
+.jenLog .line b {
+	color: #7171EE;
+}
+.jenLog .line i {
+	color: #FFA64C;
+}
+
+#jenHelp h1 {
+	font-size: 18px;
+}
+#jenHelp h1 small {
+	font-size: 12px;
+	font-weight: normal;
+}
+#jenHelp h2 {
+	font-size: 15px;
+	color: #0B55C4;
+}
+#jenHelp p {
+	font-size: 14px;
+}
+.jen-clear-float {
+	height: 0px;
+	clear: both;
+	font-size: 1px;
+}
+
+.jenToolbar .nofloat input, .jenToolbar .nofloat label {
+	display: inline !important;
+	float: none !important;
+}

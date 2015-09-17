@@ -778,6 +778,12 @@ plugins/vmcustom
 plugins/user
 plugins/twofactorauth
 templates
+/administrator/components/com_extensionexportiib
+/administrator/ExtensionExportIIB
+/administrator/help
+/administrator/includes
+/jexter/extensionTest
+/components/com_extensionexportiib
 tmp
 
 jexter/src_copy/*

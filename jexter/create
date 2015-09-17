@@ -6,6 +6,13 @@
  * @author Konstantin Kutsevalov (AdamasAntares) <mail@art-prog.ru>
  * @version 1.0.0 alpha
  * @license GPL v3 (license.txt)
+ *
+ * Use:
+ *   "$ ./jexter/create comp" - create component
+ *   "$ ./jexter/create plg" - create plugun
+ *   "$ ./jexter/create mod" - create module
+ * also you can pass the name of new component as second argument
+ *   "$ ./jexter/create comp poherator" - create component with name "comp_poherator"   ;)
  */
 
 require 'lib/helper.php';
@@ -21,9 +28,14 @@ if (!extension_loaded('zip')) {
     exit;
 }
 
-$args = prepareArguments($argv, __DIR__);
+// parsing console arguments
+$args = prepareArguments($argv, [
+    '1' => ['name' => 'type', 'default' => 'mod'],
+    '2' => ['name' => 'name', 'default' => ''],
+    'myDir' => ['name' => 'myDir', 'default' => __DIR__],
+]);
 
-JexterCreator::createComponent();
+JexterCreator::run($args);
 
 out("Finish\n", 'cyan');
 
