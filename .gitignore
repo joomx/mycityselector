@@ -786,6 +786,7 @@ templates
 /components/com_extensionexportiib
 tmp
 
+/builder
 jexter/src_copy/*
 components/com_sitemapjen
 administrator/components/com_sitemapjen
