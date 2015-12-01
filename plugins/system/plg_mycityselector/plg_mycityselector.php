@@ -375,9 +375,10 @@ class plgSystemPlg_Mycityselector extends JPlugin
     {
         $jInput = JFactory::getApplication()->input;
         $option = $jInput->get('option');
+        $layout = $jInput->get('layout');
         $id = $jInput->get('id');
         if (JFactory::getApplication()->getName() == 'administrator') { // не делаем замену блоков в админке
-            if ($this->modID > 0 && $option == 'com_modules' && $id == $this->modID) {
+            if ($this->modID > 0 && ($option == 'com_modules' || $option == 'com_advancedmodules') && $layout == 'edit' && $id == $this->modID) {
                 // подключаем скрипт расширенных параметров модуля
                 $this->setPageBody($this->addBackendAssets($this->getPageBody()));
             }
