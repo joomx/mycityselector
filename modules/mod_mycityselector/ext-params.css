@@ -125,77 +125,100 @@
 
 .admin.com_modules { }
 .admin.com_modules .description-module-header,
-.admin.com_modules .description-module {
+.admin.com_modules .description-module,
+.admin.com_advancedmodules .description-module-header,
+.admin.com_advancedmodules .description-module {
     display: none;
 }
-.admin.com_modules #jform_params_default_city {
+.admin.com_modules #jform_params_default_city,
+.admin.com_advancedmodules #jform_params_default_city {
     width: 140px;
 }
-.admin.com_modules #jform_params_dialog_title {
+.admin.com_modules #jform_params_dialog_title,
+.admin.com_advancedmodules #jform_params_dialog_title {
     width: 250px;
 }
 .admin.com_modules .b-info,
-.admin.com_modules .a-info {
+.admin.com_modules .a-info,
+.admin.com_advancedmodules .b-info,
+.admin.com_advancedmodules .a-info {
     font-size: 14px;
     padding-right: 5px;
     color: #9E9E9E;
 }
-.admin.com_modules .a-info {
+.admin.com_modules .a-info,
+.admin.com_advancedmodules .a-info {
     padding-left: 5px;
 }
-.admin.com_modules #mcs_cities_list {
+.admin.com_modules #mcs_cities_list,
+.admin.com_advancedmodules #mcs_cities_list {
     width: auto;
 }
-.admin.com_modules #mcs_cities_table {
+.admin.com_modules #mcs_cities_table,
+.admin.com_advancedmodules #mcs_cities_table {
     width: 100%;
     max-width: 600px;
 }
-.admin.com_modules #mcs_cities_table .hidden {
+.admin.com_modules #mcs_cities_table .hidden,
+.admin.com_advancedmodules #mcs_cities_table .hidden {
     display: none;
 }
-.admin.com_modules #mcs_cities_table .tDnD_whileDrag {
+.admin.com_modules #mcs_cities_table .tDnD_whileDrag,
+.admin.com_advancedmodules #mcs_cities_table .tDnD_whileDrag {
     background-color: rgba(33, 160, 225, 0.45);
 }
-.admin.com_modules #mcs_cities_table .table-header {
+.admin.com_modules #mcs_cities_table .table-header,
+.admin.com_advancedmodules #mcs_cities_table .table-header {
     background: -webkit-linear-gradient(top,#ffffff 0%,#ededed 100%);
 }
-.admin.com_modules #mcs_cities_table .table-header .add {
+.admin.com_modules #mcs_cities_table .table-header .add,
+.admin.com_advancedmodules #mcs_cities_table .table-header .add {
     position: relative;
     font-weight: normal;
 }
-.admin.com_modules #mcs_cities_table .table-header .add img {
+.admin.com_modules #mcs_cities_table .table-header .add img,
+.admin.com_advancedmodules #mcs_cities_table .table-header .add img {
     display: none;
 }
-.admin.com_modules #mcs_cities_table .table-header .add a.action {
+.admin.com_modules #mcs_cities_table .table-header .add a.action,
+.admin.com_advancedmodules #mcs_cities_table .table-header .add a.action {
     width: 16px;
     min-width: 16px;
 }
-.admin.com_modules #mcs_cities_table .table-header .add a.drop {
+.admin.com_modules #mcs_cities_table .table-header .add a.drop,
+.admin.com_advancedmodules #mcs_cities_table .table-header .add a.drop {
     width: 12px;
     min-width: 12px;
 }
-.admin.com_modules #mcs_cities_table .name.city {
+.admin.com_modules #mcs_cities_table .name.city,
+.admin.com_advancedmodules #mcs_cities_table .name.city {
     width: 140px;
 }
 .admin.com_modules #mcs_cities_table .name.city input {
     width: 120px;
 }
-.admin.com_modules #mcs_cities_table .name.group input {
+.admin.com_modules #mcs_cities_table .name.group input,
+.admin.com_advancedmodules #mcs_cities_table .name.group input {
     width: 156px;
 }
-.admin.com_modules #mcs_cities_table .operations {
+.admin.com_modules #mcs_cities_table .operations,
+.admin.com_advancedmodules #mcs_cities_table .operations {
     width: 75px;
 }
-.admin.com_modules #mcs_cities_table .operations .icon-cancel:before {
+.admin.com_modules #mcs_cities_table .operations .icon-cancel:before,
+.admin.com_advancedmodules #mcs_cities_table .operations .icon-cancel:before {
     color: #bd362f;
 }
-.admin.com_modules #mcs_cities_table .operations .remove img {
+.admin.com_modules #mcs_cities_table .operations .remove img,
+.admin.com_advancedmodules #mcs_cities_table .operations .remove img {
     display: none;
 }
-.admin.com_modules #mcs_cities_table .adr input {
+.admin.com_modules #mcs_cities_table .adr input,
+.admin.com_advancedmodules #mcs_cities_table .adr input {
     width: 160px;
 }
-.admin.com_modules #jform_params_js_callback {
+.admin.com_modules #jform_params_js_callback,
+.admin.com_advancedmodules #jform_params_js_callback {
     width: 90%;
     max-width: 800px;
     height: 300px;
