@@ -1,11 +1,18 @@
 <?php
 /*
  * JEXTER
- * Joomla console package builder
- * @author Konstantin Kutsevalov (AdamasAntares) <mail@art-prog.ru>
+ * Joomla extensions creator
+ * @author Konstantin Kutsevalov (AdamasAntares) <konstantin@kutsevalov.name>
  * @version 1.0.0 alpha
  * @license GPL v3 (license.txt)
  */
+
+namespace adamasantares\jexter;
+
+
+if (!defined('JEXTER_DIR')) {
+    define('JEXTER_DIR', realpath(__DIR__ . '/../'));
+}
 
 
 /**
@@ -19,52 +26,66 @@ class JexterBuilder {
 
 
     /**
-     * Build extension package
+     * Build extension's installer
      * @param $args <p>
-     * should have 3 keys:<br/>
-     *   "myDir" - path to root folder of Jexter [require]
-     *   "config" - local path to project config file ("project/project.json") [optional]
-     *   "copysfx" - Suffix for directory of source copy (copy of extensions) [optional]
+     * should have 2 keys:<br/>
+     *   "config" - local path to project config file ("config/project.json")
      * </p>
-     * @return null|string
+     * @return array Array of result installers path
      */
     public static function run($args)
     {
-        $package = null;
+        // TODO I thin it need to merger $args and $projectConfig...
+        $packages = [];
+        $jexterConfig = loadMyConfig();
         // load {project}.json
-        $config = [];
-        if (!self::loadProjectJson($args, $config)) {
-            exit(1);
+        $projectConfig = [];
+        if (!self::loadProjectJson($args, $projectConfig)) {
+            out("-break-   configuration file not found\n", 'red');
+            self::$lastError = "configuration file not found";
+            self::$lastErrorCode = 4041;
+            return [];
         }
-        $config = self::preparePath($config, $args);
+        $projectConfig = array_merge($projectConfig, $jexterConfig);
+        $projectConfig = self::preparePath($projectConfig, $args);
 
         // read extension items
-        $extensions = self::getExtensionsData($config);
+        $extensions = self::getExtensionsData($projectConfig);
 
         // create extensions packages (zip)
-        foreach ($extensions as &$ext) {
+        foreach ($extensions as $i => $ext) {
             switch ($ext['type'][0]) {
                 case 'component':
-                    $package = $ext['pkg'] = self::buildComponent($ext, $config); break;
+                    $pkg = self::buildComponent($ext, $projectConfig); break;
                 case 'plugin':
-                    $package = $ext['pkg'] = self::buildPlugin($ext, $config); break;
+                    $pkg = self::buildPlugin($ext, $projectConfig); break;
                 case 'module':
-                    $package = $ext['pkg'] = self::buildModule($ext, $config); break;
+                    $pkg = self::buildModule($ext, $projectConfig); break;
+                case 'library':
+                    $pkg = self::buildLibrary($ext, $projectConfig); break;
             }
-            if (empty($ext['pkg'])) {
+            if (empty($pkg)) {
                 out("-break-   package of extension {$ext['id']} not found...\n", 'red');
                 self::$lastError = "package of extension {$ext['id']} not found...";
-                self::$lastErrorCode = 4041;
-                return null;
+                self::$lastErrorCode = 4042;
+                return []; // !
             }
+            $packages[] = $extensions[$i]['pkg'] = $pkg;
         }
 
         // if package
-        if ($config['type'] === 'package') {
-            $package = self::buildPackage($extensions, $config);
+        if ($projectConfig['type'] === 'package') {
+            $pkg = self::buildPackage($extensions, $projectConfig);
+            if (empty($pkg)) {
+                out("-break-   error on creating package installer\n", 'red');
+                self::$lastError = "error on creating package installer";
+                self::$lastErrorCode = 4043;
+                return []; // !
+            }
+            $packages = [ $pkg ];
         }
 
-        return $package;
+        return $packages;
     }
 
 
@@ -78,7 +99,7 @@ class JexterBuilder {
     {
         out(" read config ... ", 'yellow');
         $configFile = empty($args['config']) ? 'project/project.json' : $args['config'];
-        $jsonFile = $args['myDir'] . '/' . $configFile;
+        $jsonFile = JEXTER_DIR . '/' . $configFile;
         if (!is_file($jsonFile)) {
             out(" not found project configuration file: {$jsonFile}\n", 'red');
             return false;
@@ -89,7 +110,7 @@ class JexterBuilder {
             return false;
         }
         // check required options
-        foreach (['name', 'siteRoot', 'id', 'type', 'version'] as $option) {
+        foreach (['name', 'id', 'type', 'version'] as $option) {
             if (empty($config[$option])) {
                 out(" not found '{$option}' option!\n", 'red');
                 return false;
@@ -100,7 +121,6 @@ class JexterBuilder {
             out(" for 'package' extension must be 'package_items' option with list of extensions.\n", 'red');
             return false;
         }
-        $config['siteRoot'] = realpath(str_replace('@builder', $args['myDir'], $config['siteRoot']));
         out("ok\n", 'green');
         return true;
     }
@@ -113,29 +133,34 @@ class JexterBuilder {
     {
         // create directory for copies of source files of extensions
         if (!empty($config['copy'])) {
-            $config['copy'] = normalizePath(str_replace('@builder', $args['myDir'], $config['copy']));
-            $config['copy'] .= '/' . $args['copysfx'] . date('dmY_His');
+            $config['copy'] = normalizePath(str_replace('@builder', JEXTER_DIR, $config['copy']));
+            $config['copy'] .= '/' . basename($args['config'], '.json') . date('_dmY_His');
         } else {
-            $config['copy'] = normalizePath($args['myDir'] . '/src_copy/' . basename($args['config'], '.json') . $args['copysfx'] . date('dmY_His'));
+            $config['copy'] = normalizePath(JEXTER_DIR . '/src_copy/' . basename($args['config'], '.json') . date('_dmY_His'));
         }
         createDir($config['copy']);
-        // directory for resulting extension package
+        // directory for result extension's installer
         if (!empty($config['destination'])) {
-            $config['destination'] = normalizePath(str_replace('@builder', $args['myDir'], $config['destination']));
+            $config['destination'] = normalizePath(str_replace('@builder', JEXTER_DIR, $config['destination']));
         } else {
-            $config['destination'] = normalizePath($args['myDir'] . '/extension/');
+            $config['destination'] = normalizePath(JEXTER_DIR . '/extensions/' . basename($args['config'], '.json'));
         }
         createDir($config['destination']);
         // other
         foreach (['manifest', 'siteRoot', 'license', 'installer'] as $key) {
             if (!empty($config[$key])) {
-                $config[$key] = normalizePath(str_replace('@builder', $args['myDir'], $config[$key]));
+                $config[$key] = normalizePath(str_replace('@builder', JEXTER_DIR, $config[$key]));
             }
         }
         return $config;
     }
 
 
+    /**
+     * Returns extensions data (items and parameters) from project configuration file (json)
+     * @param $config
+     * @return array
+     */
     private static function getExtensionsData($config)
     {
         $extensions = [];
@@ -421,6 +446,11 @@ class JexterBuilder {
     }
 
 
+    // TODO library
+    private static function buildLibrary($ext, $config) {
+
+    }
+
     /**
      * Build extensions package by project config
      * @param array $extensions configuration of all extensions from project.json
@@ -429,7 +459,7 @@ class JexterBuilder {
      */
     private static function buildPackage($extensions, $config)
     {
-        out(" packing to package ...\n", 'yellow');
+        out(" packing extensions to package ...\n", 'yellow');
 
         $files = [];
         foreach ($extensions as $ext) {

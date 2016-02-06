@@ -1,175 +1,263 @@
 <?php
 /**
- * Sitemap Jen
- * @author Konstantin@Kutsevalov.name
- * @version 1.3.0 beta
+ * {jex_name}
+ * @author {jex_author}
+ * @version 1.0.0
  */
 
-defined('_JEXEC') or die('Restricted access');
+defined('_JEXEC') or die(header('HTTP/1.0 403 Forbidden') . 'Restricted access');
 
 jimport('joomla.application.component.controller');
+require_once __DIR__ . '/helpers/form/formHelper.php';
 
 
-class SitemapjenController extends JControllerLegacy {
-	
-	protected $input = null;
+class _JEX_CLASSNAME_Controller extends JControllerLegacy {
 
+    /**
+     * @var string Sidebar html code
+     */
     private $sidebar = '';
-	
-    function __construct()
+
+
+    public function __construct()
     {
         parent::__construct();
-        // $this->registerTask(operation, controllers_method)
-		// прим.: если название метода и task совпадают, то регистрировать не нужно, метод вызывается автоматически
-		// кроме того этим же способом можно переопределить методы, вызываемые стандартными кнопками, например
-		// $this->registerTask( 'apply', 'save' );	после чего стандартная кнопка Применить(apply), будет вызывать метод ::save() вместо ::apply()
-		// но ИМХО правильнее переопределять саму кнопку, так: JToolBarHelper::save( 'save_options' );
-        $this->registerTask('default', 'display');
-        $this->registerTask('save_options', 'saveOptions');
-        $this->registerTask('to_ignore', 'addIgnore');
-        $this->registerTask('clear_links', 'clearLinks');
-        $this->registerTask('update_session', 'updateSession');
-		// стили и скрипты
+        // registering actions
+        $this->registerTask('default', 'actionIndex');
+        foreach(get_class_methods($this) as $method) {
+            if (substr($method, 0, 6) == 'action') {
+                $task = strtolower(str_replace('action', '', $method));
+                $this->registerTask($task, $method);
+            }
+        }
+        // assets
 		$document = JFactory::getDocument();
-		$document->addStyleSheet( JURI::base().'components/com_sitemapjen/admin-style.css' );
-		$document->addScript( JURI::base().'components/com_sitemapjen/admin-scripts.js' );
-		// подпункты в горизонтальной панели
-		$this->input = JFactory::getApplication()->input;
-		$current = $this->input->getCmd('task', 'default');
-		$links = array('default' => 'Ссылки', 'generate'=>'Сканер и генератор', 'options' => 'Настройки', 'help' => 'Справка' );
+		$document->addStyleSheet(JURI::base().'components/{jex_sysname}/admin-style.css');
+		$document->addScript(JURI::base().'components/{jex_sysname}/admin-scripts.js', 'text/javascript', true);
+        // menu items for left sidebar
+		$links = array(
+            'default' => JText::_('T_JEX_ITEMS'),
+            // 'other_item' => 'Title',
+            // ...
+        );
 		foreach ($links as $task => $name) {
-            JHtmlSidebar::addEntry($name, 'index.php?option=com_sitemapjen&task=' . $task, ($current==$task));
+            JHtmlSidebar::addEntry($name, 'index.php?option={jex_sysname}&task=' . $task, ($this->task==$task));
 		}
         $this->sidebar = JHtmlSidebar::render();
     }
 
 
     /**
-     * List of parsed links
-     * @param bool $cachable
-     * @param array $urlparams
-     * @return JControllerLegacy|void
+     * List of items
+     * @param   boolean  $cache   If true, the view output will be cached
+     * @param   array    $urlParams  An array of safe url parameters and their variable types, for valid values see {@link JFilterInput::clean()}.
      */
-    function display($cachable = false, $urlparams = Array())
+    public function actionIndex($cache = false, $urlParams = [])
     {
-		$model	= $this->getModel('default');	// (./models/[$modelName].php)
-        $view = $this->getView('default', 'html');	// view logic (./views/[$viewName]/view.html.php)
-		$view->setModel($model, true);
-		$view->setLayout('default');	// view template (./views/[$viewName]/tmpl/[$tmplName].php)
-        $view->sidebar = $this->sidebar;
-		$view->display();
-	}
-	
-
-	// Страница генерации sitemap
-	function generate()
-    {
-		$view = $this->getView( 'generate', 'html' );
-		$model = $this->getModel( 'generate' );
-		$view->setModel( $model, true );
-		$view->setLayout( 'generate' );
-		$opt = $this->getModel( 'options' );
-		$options = $opt->getOptions();
-		$url = 'http://'.$_SERVER['SERVER_NAME'].'/';
-		$inWork = 0;
-		$mode = 0;
-		$log = '';
-		// пытаемся прочитать статус текущей задачи, если она есть
-		if( $options['task_status'] == 'in_work' && $options['task_action'] == 'scan' ){ // если идет процесс, устанавливаем спец параметр для запуска ajax запросов
-			// сканирование
-			$inWork = 1;
-			if( stripos($options['task_url'],$_SERVER['SERVER_NAME']) !== false ){
-				$url = $options['task_url'];
-			}
-			$mode = $options['task_action']=='scan' ? 1 : 2;
-			if( is_file(JPATH_COMPONENT.'/'.'cron-log.txt') ){
-				$log = file_get_contents( JPATH_COMPONENT.'/'.'cron-log.txt' );
-				file_put_contents( JPATH_COMPONENT.'/'.'cron-log.txt', '' ); // очищаем старые логи, более они не актуальны
-			}
-		}elseif( $options['task_status'] == 'in_work' && $options['task_action'] == 'generate' ){
-			// генерация...как бэ
-		}else{
-			$log = '<div class="line">Последний запуск: '.str_replace( ' ', ' в ', @$options['last_starttime'] ).'</div>';
-		}
-		$noLinks = true;
-		if( $model->getLinksCount() > 0 ){
-			$noLinks = false;
-		}
-		$view->inWork = $inWork;
-		$view->noLinks = $noLinks;
-		$view->url = $url;
-		$view->mode = $mode;
-		$view->log = $log;
-        $view->sidebar = $this->sidebar;
-		$view->display();
-	}
-	
-	
-	// настройки
-	function options()
-    {
-		$view = $this->getView( 'options', 'html' );
-		$model = $this->getModel( 'options' );
-		$view->setModel( $model, true );
-		$view->setLayout( 'options' );
-        $view->sidebar = $this->sidebar;
-		$view->display();
-	}
-	
-	
-	// сохранить настройки
-	function saveOptions()
-    {
-		// проверка токена (вставляется в форму из view)
-        JSession::checkToken() or jexit( 'Invalid Token' );
-		// получаем объект модели для работы с данными
-		$model	= $this->getModel( 'options' );
-		$result = $model->saveOptions();
-		// редирект
-		if( $result == true ){
-			$this->setRedirect( 'index.php?option=com_sitemapjen&task=options', 'Настройки сохранены' );
-		}else{
-			$this->setRedirect( 'index.php?option=com_sitemapjen&task=options', 'Ошибка сохранения!', 'error' );
-		}
-	}
-	
-	
-	function help()
-    {
-		$view = $this->getView( 'help', 'html' );
-		$view->setLayout( 'help' );
+        JToolBarHelper::title(JText::_('T_JEX_NAME'), 'big-ico');
+        JToolBarHelper::addNew();
+        JToolBarHelper::publishList();
+        JToolBarHelper::unpublishList();
+        JToolBarHelper::deleteList();
+        JToolBarHelper::custom('drop', 'delete', 'delete', JText::_('T_JEX_ITEM_DELETE'));
+		$model	= $this->getModel('{jex_item_model}');	// (./models/[$modelName].php)
+        $view = $this->getView('{jex_items_view}', 'html');	// view logic (./views/[$viewName]/view.html.php)
+        $view->setModel($model, true);
+        $view->items = $model->getItems();
+        $view->pagination = $model->getPagination();
+		$view->setLayout('list');	// view template (./views/[$viewName]/tmpl/[$tmplName].php)
         $view->sidebar = $this->sidebar;
 		$view->display();
 	}
 
-	
-	function addIgnore()
+
+    /**
+     * Add new item
+     * @param   boolean  $cache   If true, the view output will be cached
+     * @param   array    $urlParams  An array of safe url parameters and their variable types, for valid values see {@link JFilterInput::clean()}.
+     */
+    public function actionAdd($cache = false, $urlParams = [])
     {
-		//JRequest::checkToken() or jexit( 'Invalid Token' );
-        JSession::checkToken() or jexit( 'Invalid Token' );
-		$optMod = $this->getModel( 'options' );
-		$options = $optMod->getOptions();
-		$model = $this->getModel( 'default' );
-		$ids = $this->input->get( 'cid', array(), 'array' );
-		$options['ignore_list'] = $model->addIgnore( $ids, $options['ignore_list'] );
-		$optMod->setOption( 'ignore_list', $options['ignore_list'] );
-		$page = $this->input->get( 'page', 0 );
-		$this->setRedirect( 'index.php?option=com_sitemapjen&task=default&page='.$page, 'Добавлено в исключения', '' );
-	}
-	
-	
-	// удалить все ссылки
-	function clearLinks()
-    {
-		$model = &$this->getModel( 'default' );
-		$model->removeLinks();
-		$this->setRedirect( 'index.php?option=com_sitemapjen&task=default', 'Ссылки удалены', '' );
+        JToolBarHelper::title(JText::_('T_JEX_NAME') . ' - ' . JText::_('T_JEX_ITEM_ADDING'), 'big-ico');
+		$model = $this->getModel('{jex_item_model}');
+        $view = $this->getView('{jex_items_view}', 'html');
+        $view->setModel($model, true);
+        $view->sidebar = $this->sidebar;
+        JToolBarHelper::apply('save');
+        JToolBarHelper::save('saveandclose');
+        JToolBarHelper::save2new('saveandnew');
+        JToolBarHelper::cancel('default');
+        $view->setLayout('edit');
+        $view->data = [];
+        foreach ($model->getFields() as $name => $coloumn) {
+            $view->data[$name] = '';
+            if (!empty($coloumn['default'])) {
+                $view->data[$name] = $coloumn['default'];
+            } else {
+                if (in_array($coloumn['type'], ['int', 'bigint', 'tinyint', 'float', 'double'])) {
+                    $view->data[$name] = '0';
+                }
+            }
+        }
+        $view->display();
 	}
 
 
-    function updateSession()
+    /**
+     * Edit form for item
+     * @param   boolean  $cache   If true, the view output will be cached
+     * @param   array    $urlParams  An array of safe url parameters and their variable types, for valid values see {@link JFilterInput::clean()}.
+     */
+    public function actionUpdate($cache = false, $urlParams = [])
     {
-        exit("pong");
+		$model = $this->getModel('{jex_item_model}');
+        $view = $this->getView('{jex_items_view}', 'html');
+        $view->setModel($model, true);
+        $view->sidebar = $this->sidebar;
+        $id = intval($this->input->getCmd('id'));
+        if (!empty($_POST['cid'])) {
+            $id = intval($_POST['cid'][0]);
+        }
+        $data = $model->getItem($id);
+        JToolBarHelper::title(JText::_('T_JEX_NAME') . ' - ' . JText::_('T_JEX_ITEM_EDITING') . ': ' . $data['name'], 'big-ico');
+        if (!empty($data)) {
+            JToolBarHelper::apply('save');
+            JToolBarHelper::save('saveandclose');
+            JToolBarHelper::save2new('saveandnew');
+            JToolBarHelper::cancel('default');
+            $view->setLayout('edit');
+            $view->data = $data;
+
+            // todo create form
+
+        } else {
+            JToolBarHelper::addNew();
+            $view->setLayout('not_found');
+        }
+        $view->display();
+	}
+
+
+    /**
+     * Save an item and return to form
+     * @param   boolean  $cache   If true, the view output will be cached
+     * @param   array    $urlParams  An array of safe url parameters and their variable types, for valid values see {@link JFilterInput::clean()}.
+     */
+    public function actionSave($cache = false, $urlParams = [])
+    {
+        $this->save($urlParams, 'update');
     }
+
+
+    /**
+     * Save an item and return to list items
+     * @param   boolean  $cache   If true, the view output will be cached
+     * @param   array    $urlParams  An array of safe url parameters and their variable types, for valid values see {@link JFilterInput::clean()}.
+     */
+    public function actionSaveAndClose($cache = false, $urlParams = [])
+    {
+        $this->save($urlParams);
+    }
+
+
+    /**
+     * Save an item and create new item (redirect)
+     * @param   boolean  $cache   If true, the view output will be cached
+     * @param   array    $urlParams  An array of safe url parameters and their variable types, for valid values see {@link JFilterInput::clean()}.
+     */
+    public function actionSaveAndNew($cache = false, $urlParams = [])
+    {
+        $this->save($urlParams, 'add');
+    }
+
+
+    /**
+     * Save item
+     */
+    private function save($urlParams, $redirectTo='default')
+    {
+        $page = 0; // TODO store current page in session
+        $url = '';
+        $model = $this->getModel('{jex_item_model}');
+        $id = $model->saveItem($_POST);
+        if (!$id) {
+            // error
+            JFactory::getApplication()->enqueueMessage(JText::_('T_JEX_HELLO_SAVE_ERROR'), 'error');
+        } else {
+            switch ($redirectTo) {
+                case 'add':
+                    $url .= '&taks=' . $redirectTo;
+                    break;
+                case 'update':
+                    $url .= '&taks=' . $redirectTo . '&id=' . $id;
+                    break;
+                default:
+                    $url .= '&page=' . $page;
+            }
+        }
+        $this->setRedirect('index.php?option={jex_sysname}' . $url)->redirect();
+    }
+
+
+    /**
+     * Drop items
+     * @param   boolean  $cache   If true, the view output will be cached
+     * @param   array    $urlParams  An array of safe url parameters and their variable types, for valid values see {@link JFilterInput::clean()}.
+     */
+    public function actionDrop($cache = false, $urlParams = [])
+    {
+        $page = $this->input->getCmd('page', 0);
+		$model	= $this->getModel('{jex_item_model}');
+        if (!empty($_POST['cid'])) {
+            $model->dropItems($_POST['cid']);
+        }
+        $this->setRedirect('index.php?option={jex_sysname}&page=' . $page)->redirect();
+	}
+
+
+    /**
+     * Publish items
+     * @param   boolean  $cache   If true, the view output will be cached
+     * @param   array    $urlParams  An array of safe url parameters and their variable types, for valid values see {@link JFilterInput::clean()}.
+     */
+    public function actionPublish($cache = false, $urlParams = [])
+    {
+        $page = $this->input->getCmd('page', 0);
+		$model	= $this->getModel('{jex_item_model}');
+        if (!empty($_POST['cid'])) {
+            $model->publishItems($_POST['cid'], 1);
+        }
+        $this->setRedirect('index.php?option={jex_sysname}&page=' . $page)->redirect();
+	}
+
+
+    /**
+     * UnPublish items
+     * @param   boolean  $cache   If true, the view output will be cached
+     * @param   array    $urlParams  An array of safe url parameters and their variable types, for valid values see {@link JFilterInput::clean()}.
+     */
+    public function actionUnPublish($cache = false, $urlParams = [])
+    {
+        $page = $this->input->getCmd('page', 0);
+		$model	= $this->getModel('{jex_item_model}');
+        if (!empty($_POST['cid'])) {
+            $model->publishItems($_POST['cid'], 0);
+        }
+        $this->setRedirect('index.php?option={jex_sysname}&page=' . $page)->redirect();
+	}
+
+
+    /**
+     * Save new order of items
+     * @param   boolean  $cache   If true, the view output will be cached
+     * @param   array    $urlParams  An array of safe url parameters and their variable types, for valid values see {@link JFilterInput::clean()}.
+     */
+    public function actionSaveOrder($cache = false, $urlParams = [])
+    {
+
+        // todo
+
+	}
+
 	
 }

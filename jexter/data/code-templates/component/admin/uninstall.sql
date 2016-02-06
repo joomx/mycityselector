@@ -1,2 +1,1 @@
-DROP TABLE IF EXISTS `#__sitemapjen_links`;
-DROP TABLE IF EXISTS `#__sitemapjen_options`;
+DROP TABLE IF EXISTS `#__{jex_table_name}`;

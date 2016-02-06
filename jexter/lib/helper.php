@@ -1,7 +1,17 @@
 <?php
 /**
- * Вспомогательные функции для builder
+ * Helpers functions of Jextor
+ * @author Konstantin Kutsevalov (AdamasAntares) <konstantin@kutsevalov.name>
+ * @version 1.0.0 alpha
+ * @license GPL v3 (license.txt)
  */
+
+namespace adamasantares\jexter;
+
+
+if (!defined('JEXTER_DIR')) {
+    define('JEXTER_DIR', realpath(__DIR__ . '/../'));
+}
 
 
 /**
@@ -12,7 +22,7 @@
  */
 function out($str, $color = '', $background = '')
 {
-    if (php_sapi_name() == "cli") {
+    if (php_sapi_name() == 'cli') {
         $colors = [
             'black' => '0;30',
             'dark_gray' => '1;30',
@@ -54,6 +64,18 @@ function out($str, $color = '', $background = '')
 }
 
 
+function input($prompt)
+{
+    if (PHP_OS == 'WINNT') {
+        echo $prompt;
+        $line = stream_get_line(STDIN, 1024, PHP_EOL);
+    } else {
+        $line = readline($prompt);
+    }
+    return $line;
+}
+
+
 /**
  * Returns output of out
  * @return array
@@ -64,6 +86,22 @@ function getOutput()
         return $GLOBALS['jexter_web_global_output'];
     }
     return [];
+}
+
+
+function loadMyConfig()
+{
+    $config = [
+        'siteRoot' => realpath(__DIR__ . '/../../'),  // by default
+    ];
+    $file = __DIR__ . '/../config/jexter.ini';
+    if (is_file($file)) {
+        $lines = parse_ini_file($file);
+    } else {
+        $lines = [];
+    }
+    $config = array_merge($config, $lines);
+    return $config;
 }
 
 
@@ -105,7 +143,7 @@ function prepareArguments($argv, $default = [])
         }
     }
     // project config path
-    $arguments['config'] = empty($arguments['config']) ? 'project/project.json' : 'project/' . $arguments['config'] . '.json';
+    $arguments['config'] = empty($arguments['config']) ? 'config/project.json' : 'config/' . $arguments['config'] . '.json';
     return $arguments;
 }
 
@@ -139,6 +177,7 @@ function normalizePath($path)
 
 
 /**
+ * Create directory
  * @param $dir
  * @return bool
  */
@@ -173,9 +212,9 @@ function copyDir($source, $dest)
         return false;
     }
     foreach (
-        $iterator = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($source, RecursiveDirectoryIterator::SKIP_DOTS),
-            RecursiveIteratorIterator::SELF_FIRST) as $item
+        $iterator = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($source, \RecursiveDirectoryIterator::SKIP_DOTS),
+            \RecursiveIteratorIterator::SELF_FIRST) as $item
     ) {
         if ($item->isDir()) {
             mkdir($dest . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
@@ -189,7 +228,8 @@ function copyDir($source, $dest)
 
 /**
  * Delete files in some directory
- * @param String $dir
+ * @param string $dir
+ * @return boolean
  */
 function clearDir($dir)
 {
@@ -212,6 +252,183 @@ function clearDir($dir)
             }
         }
     }
+    return true;
+}
+
+
+/**
+ * Delete directory (with files)
+ */
+function dropDir($dir)
+{
+    if (clearDir($dir)) {
+        rmdir($dir);
+        return true;
+    }
+    return false;
+}
+
+
+/**
+ * Scan directory and return all sub-folders and files
+ */
+function scanDir($path)
+{
+    $i = 0;
+    $files = glob($path . '/*') + glob($path . '/*');
+    while (isset($files[$i])) {
+        $file = $files[$i];
+        if (is_dir($file)) {
+            $files = array_merge($files, glob($file.'/*') + glob($file.'/*.*'));
+        }
+        $i++;
+    }
+    return $files;
+}
+
+
+/**
+ * Convert any name like "Hello camel" or "salut_janne" to "HelloCamel" and "SalutJanne"
+ * @param string $name
+ * @return string
+ */
+function getCamel($name)
+{
+    $name = str_replace(['  ', '-', '_', '$', '.', ',', ':'], [' ', ' ', ' ', '', ' ', ' ', ' '], $name);
+    $name = explode(' ', trim($name));
+    foreach ($name as &$part) {
+        $part = ucfirst($part);
+    }
+    $name = implode('', $name);
+    return $name;
+}
+
+
+/**
+ * Returns array with configurations files of projects
+ * @param bool $fullPath
+ * @param bool $onlyNames
+ * @return array
+ */
+function getProjectsConfig($fullPath = false, $onlyNames = false)
+{
+    $path = realpath(__DIR__ . '/../config') . '/*.json';
+    $files = glob($path);
+    if (!$fullPath) {
+        foreach ($files as &$file) {
+            $file = basename($file);
+        }
+    }
+    if ($onlyNames) {
+        foreach ($files as &$file) {
+            $file = basename($file, '.json');
+        }
+    }
+    return $files;
+}
+
+
+/**
+ * Returns icons list from icons folder
+ */
+function getIconsList($default = null)
+{
+    $path = realpath(__DIR__ . '/../data/icons/component/') . '/*.png';
+    $files = glob($path);
+    foreach ($files as &$file) {
+        $file = basename($file, '.json');
+    }
+    if (!empty($default)) {
+        $files = array_merge([$default], $files);
+    }
+    return $files;
+}
+
+
+/**
+ * Asks user about parameters by scenario
+ * @param $args
+ * @param $scenario
+ * @return array
+ * @see scenario.php
+ */
+function readCliParameters($args, $scenario)
+{
+    $params = [];
+    $steps = ['common_start', $args['type'], 'common_finish'];
+    if (!isset($scenario[$args['type']])) {
+        out("Wrong type name '{$args['type']}! Please, enter one of correct types: plugin, module, component, library.' \n", 'red');
+        return [];
+    }
+    $pref = ['plugin' => 'plg_', 'module' => 'mod_', 'component' => 'com_', 'library' => 'lib_'];
+    $pref = $pref[$args['type']];
+
+    // asking parameters
+    foreach ($steps as $step) {
+        if (empty($scenario[$step])) {
+            continue;
+        }
+        foreach ($scenario[$step] as $param) {
+            if (!empty($param['condition']) && is_array($param['condition'])) {
+                // if step has condition
+                $todo = true;
+                foreach ($param['condition'] as $paramName => $paramCondition) {
+                    if (!isset($params[$paramName]) || !preg_match($paramCondition, $params[$paramName])) {
+                        $todo = false;
+                    } else {
+                    }
+                }
+                if ($todo === false) {
+                    continue; // skip current parameter, because condition isn't met
+                }
+            }
+            // check options for select
+            $options = null;
+            if (!empty($param['options'])) {
+                if (!empty($param['options_title'])) {
+                    out($param['options_title'] . "\n", 'cyan');
+                }
+                if (is_callable($param['options'])) {
+                    $options = $param['options'](); // call function
+                } else{
+                    $options = $param['options'];
+                }
+                $count = count($options);
+                foreach ($options as $n => $option) {
+                    out("[{$n}] {$option}\t\t");
+                    if ($count > 4 && $n % 2 > 0) out("\n");
+                    if ($count <= 4) out("\n");
+                }
+                out("\n");
+            }
+            // ask user
+            $prompt = str_replace(['{ext}', '{pref}'], [$args['type'], $pref], $param['prompt']);
+            out($prompt, 'cyan');
+            do {
+                $error = false;
+                $value = trim(input(": "));
+                // validation
+                if (!empty($param['filter'])) {
+                    if (!empty($value) && !preg_match($param['filter'], $value)) {
+                        out("wrong value, try again\n", 'red');
+                        $error = true;
+                    } elseif (empty($value)) {
+                        $value = $param['default'];
+                    }
+                }
+                if (!empty($options) && !empty($param['value_as_option']) && $param['value_as_option'] === true) {
+                    $value = intval($value);
+                    if (isset($options[$value])) {
+                        $value = $options[$value];
+                    }
+                }
+            } while($error);
+            $value = str_replace(['{ext}', '{pref}'], [$args['type'], $pref], $value);
+            $params[$param['name']] = $value;
+        }
+    }
+    $params = array_merge($args, $params);
+    return $params;
 }
 
 
@@ -298,7 +515,7 @@ function updateManifest($file, $data = [], $destinationFile = '')
 
 /**
  * Обертка для добавления элемента одновременно с атрибутами
- * @param SimpleXMLElement $elem
+ * @param \SimpleXMLElement $elem
  * @param String $name
  * @param String $value
  * @param Array $attributes ['attr' => 'value', 'attr2' => 'value2']
@@ -330,8 +547,8 @@ function zipping($sourceDir = '', $destinationFile = '', $overwrite = true, $arc
     }
     $sourceDir = rtrim($sourceDir, '/\\') . '/';
     $files = glob($sourceDir . '*') + glob($sourceDir . '*.*'); // read files list BEFORE create arc file
-    $zip = new ZipArchive();
-    $ret = $zip->open($destinationFile, ($overwrite ? ZipArchive::OVERWRITE : ZipArchive::CREATE));
+    $zip = new \ZipArchive();
+    $ret = $zip->open($destinationFile, ($overwrite ? \ZipArchive::OVERWRITE : \ZipArchive::CREATE));
     if ($ret !== TRUE) {
         out('  Error! Can\'t create zip file ' . $destinationFile . "\n", 'red');
         return false;

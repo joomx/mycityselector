@@ -9,15 +9,20 @@
  *
  * Use:
  *   "$ ./jexter/create comp" - create component
- *   "$ ./jexter/create plg" - create plugun
+ *   "$ ./jexter/create plg" - create plugin
  *   "$ ./jexter/create mod" - create module
+ *   "$ ./jexter/create lib" - create library
  * also you can pass the name of new component as second argument
  *   "$ ./jexter/create comp poherator" - create component with name "comp_poherator"   ;)
+ *
+ * @var $argv array
  */
 
+ namespace adamasantares\jexter;
+
 require 'lib/helper.php';
-//require 'lib/JexterBuilder.php';
 require 'lib/JexterCreator.php';
+require 'lib/JexterBuilder.php';
 
 // check extensions
 if (!extension_loaded('zip')) {
@@ -31,11 +36,20 @@ if (!extension_loaded('zip')) {
 // parsing console arguments
 $args = prepareArguments($argv, [
     '1' => ['name' => 'type', 'default' => 'mod'],
-    '2' => ['name' => 'name', 'default' => ''],
     'myDir' => ['name' => 'myDir', 'default' => __DIR__],
 ]);
 
-JexterCreator::run($args);
+// correcting type name
+$convertType = ['plg' => 'plugin', 'com' => 'component', 'comp' => 'component', 'mod' => 'module', 'lib' => 'library'];
+if (isset($convertType[$args['type']])) {
+    $args['type'] = $convertType[$args['type']];
+}
 
-out("Finish\n", 'cyan');
+out("Creating a {$args['type']} (for break use Ctrl+C)\n", 'green');
+
+// requesting additional parameters
+$scenario = require 'lib/scenario.php';
+$params = readCliParameters($args, $scenario);
+
+JexterCreator::run($params);
 
