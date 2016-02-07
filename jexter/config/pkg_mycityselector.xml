@@ -17,13 +17,17 @@
 		<br/>
 		Описание можно прочитать <a href="http://www.kutsevalov.name/2013/08/13/modul-vibora-goroda-dlya-joomla/" title="перейти" target="_blank">здесь</a>.
 		<div style="margin-top:20px;line-height: 20px;">
+			// TODO переместить в скрипт установки
 		    Результат установки:
             <div><img id="module_png" title="Module"/> <span id="module_status" style="color:green;"><b style="color:red;">Module installation fail!</b></span></div>
             <div><img id="plugin_png" title="Plugin"/> <span id="plugin_status" style="color:green;"><b style="color:red;">Plugin installation fail!</b></span></div>
-            <script>var mcsf=function(id){return document.getElementById(id)},modPng=new Image(),plgPng=new Image();
+            <div><img id="comp_png" title="Component"/> <span id="comp_status" style="color:green;"><b style="color:red;">Component installation fail!</b></span></div>
+            <script>var mcsf=function(id){return document.getElementById(id)},modPng=new Image(),plgPng=new Image(),compPng=new Image();
             modPng.onload=function(){mcsf("module_status").innerHTML="Success";mcsf("module_png").src=modPng.src;};
             plgPng.onload=function(){mcsf("plugin_status").innerHTML="Success";mcsf("plugin_png").src=plgPng.src;};
+            compPng.onload=function(){mcsf("comp_status").innerHTML="Success";mcsf("comp_png").src=compPng.src;};
             modPng.src="/modules/mod_mycityselector/ext_mod_mini.png";
+            compPng.src="/administartor/components/com_mycityselector/ext_comp_mini.png";
             plgPng.src="/plugins/system/plg_mycityselector/ext_plugin_mini.png";</script>
 		</div>
 	</div>
@@ -31,8 +35,7 @@
 	</description>
     
     <files>
-		<file type="module" id="{mod_name}" client="site">{mod_zip}</file>
-        <file type="plugin" id="{plg_name}" group="system">{plg_zip}</file>
+		<!-- генерируется автоматически -->
     </files>
 </extension>
 

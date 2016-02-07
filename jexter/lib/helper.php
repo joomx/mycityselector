@@ -501,13 +501,19 @@ function updateManifest($file, $data = [], $destinationFile = '')
                 }
                 if (file_put_contents($destinationFile, $xml) !== false) {
                     return true;
+                } else {
+                    out('(put) Can not write to file ' . $destinationFile . "\n", 'red');
                 }
             } else {
                 if ($xml->asXML($destinationFile) !== false) {
                     return true;
+                } else {
+                    out('(asXML) Can not write to file ' . $destinationFile . "\n", 'red');
                 }
             }
         }
+    } else {
+        out('File not found ' . $file . "\n", 'red');
     }
     return false;
 }

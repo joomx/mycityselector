@@ -1,20 +1,20 @@
 <?php
 /**
- * {jex_name}
- * @author {jex_author}
+ * MyCitySelector
+ * @author Konstantin Kutsevalov
  * @version 1.0.0
  */
 
 defined('_JEXEC') or die(header('HTTP/1.0 403 Forbidden') . 'Restricted access');
 
-jimport('joomla.application.component.controller');
 require_once __DIR__ . '/helpers/form/formHelper.php';
 require_once __DIR__ . '/helpers/mvc/JxController.php';
 
 use adamasantares\JxMVC\JxController;
 
 
-class _JEX_CLASSNAME_Controller extends JxController {
+class MycityselectorController extends JxController {
+
 
     /**
      * @inheritdoc
@@ -22,8 +22,8 @@ class _JEX_CLASSNAME_Controller extends JxController {
     public function assets()
     {
         return [
-            ['css', 'url' => 'components/{jex_sysname}/admin-style.css'],
-            ['js', 'url' => 'components/{jex_sysname}/admin-scripts.js', 'defer' => true],
+            ['css', 'url' => 'components/com_mycityselector/admin-style.css'],
+            ['js', 'url' => 'components/com_mycityselector/admin-scripts.js', 'defer' => true],
         ];
     }
 
@@ -34,7 +34,7 @@ class _JEX_CLASSNAME_Controller extends JxController {
     public function sidebarMenuItems()
     {
         return [
-            'default' => JText::_('T_JEX_ITEMS'),
+            'default' => JText::_('COM_MYCITYSELECTOR_ITEMS'),
             // 'other_item' => 'Title',
         ];
     }
@@ -47,14 +47,14 @@ class _JEX_CLASSNAME_Controller extends JxController {
      */
     public function actionIndex($cache = false, $urlParams = [])
     {
-        JToolBarHelper::title(JText::_('T_JEX_NAME'), 'big-ico');
+        JToolBarHelper::title(JText::_('COM_MYCITYSELECTOR_NAME'), 'big-ico');
         JToolBarHelper::addNew();
         JToolBarHelper::publishList();
         JToolBarHelper::unpublishList();
         JToolBarHelper::deleteList();
-        JToolBarHelper::custom('drop', 'delete', 'delete', JText::_('T_JEX_ITEM_DELETE'));
-		$model	= $this->getModel('{jex_item_model}');	// (./models/[$modelName].php)
-        $view = $this->getView('{jex_items_view}', 'html');	// view logic (./views/[$viewName]/view.html.php)
+        JToolBarHelper::custom('drop', 'delete', 'delete', JText::_('COM_MYCITYSELECTOR_ITEM_DELETE'));
+		$model	= $this->getModel('city');	// (./models/[$modelName].php)
+        $view = $this->getView('cities', 'html');	// view logic (./views/[$viewName]/view.html.php)
         $view->setModel($model, true);
         $view->items = $model->getItems();
         $view->pagination = $model->getPagination();
@@ -71,11 +71,11 @@ class _JEX_CLASSNAME_Controller extends JxController {
      */
     public function actionAdd($cache = false, $urlParams = [])
     {
-        JToolBarHelper::title(JText::_('T_JEX_NAME') . ' - ' . JText::_('T_JEX_ITEM_ADDING'), 'big-ico');
-		$model = $this->getModel('{jex_item_model}');
-        $view = $this->getView('{jex_items_view}', 'html');
+        JToolBarHelper::title(JText::_('COM_MYCITYSELECTOR_NAME') . ' - ' . JText::_('COM_MYCITYSELECTOR_ITEM_ADDING'), 'big-ico');
+		$model = $this->getModel('city');
+        $view = $this->getView('cities', 'html');
         $view->setModel($model, true);
-        $view->sidebar = $this->sidebarMenu;
+        $view->sidebar = $this->sidebar;
         JToolBarHelper::apply('save');
         JToolBarHelper::save('saveandclose');
         JToolBarHelper::save2new('saveandnew');
@@ -103,16 +103,16 @@ class _JEX_CLASSNAME_Controller extends JxController {
      */
     public function actionUpdate($cache = false, $urlParams = [])
     {
-		$model = $this->getModel('{jex_item_model}');
-        $view = $this->getView('{jex_items_view}', 'html');
+		$model = $this->getModel('city');
+        $view = $this->getView('cities', 'html');
         $view->setModel($model, true);
-        $view->sidebar = $this->sidebarMenu;
+        $view->sidebar = $this->sidebar;
         $id = intval($this->input->getCmd('id'));
         if (!empty($_POST['cid'])) {
             $id = intval($_POST['cid'][0]);
         }
         $data = $model->getItem($id);
-        JToolBarHelper::title(JText::_('T_JEX_NAME') . ' - ' . JText::_('T_JEX_ITEM_EDITING') . ': ' . $data['name'], 'big-ico');
+        JToolBarHelper::title(JText::_('COM_MYCITYSELECTOR_NAME') . ' - ' . JText::_('COM_MYCITYSELECTOR_ITEM_EDITING') . ': ' . $data['name'], 'big-ico');
         if (!empty($data)) {
             JToolBarHelper::apply('save');
             JToolBarHelper::save('saveandclose');
@@ -171,11 +171,11 @@ class _JEX_CLASSNAME_Controller extends JxController {
     {
         $page = 0; // TODO store current page in session
         $url = '';
-        $model = $this->getModel('{jex_item_model}');
+        $model = $this->getModel('city');
         $id = $model->saveItem($_POST);
         if (!$id) {
             // error
-            JFactory::getApplication()->enqueueMessage(JText::_('T_JEX_HELLO_SAVE_ERROR'), 'error');
+            JFactory::getApplication()->enqueueMessage(JText::_('COM_MYCITYSELECTOR_HELLO_SAVE_ERROR'), 'error');
         } else {
             switch ($redirectTo) {
                 case 'add':
@@ -188,7 +188,7 @@ class _JEX_CLASSNAME_Controller extends JxController {
                     $url .= '&page=' . $page;
             }
         }
-        $this->setRedirect('index.php?option={jex_sysname}' . $url)->redirect();
+        $this->setRedirect('index.php?option=com_mycityselector' . $url)->redirect();
     }
 
 
@@ -200,11 +200,11 @@ class _JEX_CLASSNAME_Controller extends JxController {
     public function actionDrop($cache = false, $urlParams = [])
     {
         $page = $this->input->getCmd('page', 0);
-		$model	= $this->getModel('{jex_item_model}');
+		$model	= $this->getModel('city');
         if (!empty($_POST['cid'])) {
             $model->dropItems($_POST['cid']);
         }
-        $this->setRedirect('index.php?option={jex_sysname}&page=' . $page)->redirect();
+        $this->setRedirect('index.php?option=com_mycityselector&page=' . $page)->redirect();
 	}
 
 
@@ -216,11 +216,11 @@ class _JEX_CLASSNAME_Controller extends JxController {
     public function actionPublish($cache = false, $urlParams = [])
     {
         $page = $this->input->getCmd('page', 0);
-		$model	= $this->getModel('{jex_item_model}');
+		$model	= $this->getModel('city');
         if (!empty($_POST['cid'])) {
             $model->publishItems($_POST['cid'], 1);
         }
-        $this->setRedirect('index.php?option={jex_sysname}&page=' . $page)->redirect();
+        $this->setRedirect('index.php?option=com_mycityselector&page=' . $page)->redirect();
 	}
 
 
@@ -232,11 +232,11 @@ class _JEX_CLASSNAME_Controller extends JxController {
     public function actionUnPublish($cache = false, $urlParams = [])
     {
         $page = $this->input->getCmd('page', 0);
-		$model	= $this->getModel('{jex_item_model}');
+		$model	= $this->getModel('city');
         if (!empty($_POST['cid'])) {
             $model->publishItems($_POST['cid'], 0);
         }
-        $this->setRedirect('index.php?option={jex_sysname}&page=' . $page)->redirect();
+        $this->setRedirect('index.php?option=com_mycityselector&page=' . $page)->redirect();
 	}
 
 

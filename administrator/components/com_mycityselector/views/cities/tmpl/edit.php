@@ -1,7 +1,7 @@
 <?php
 /**
- * {jex_name}
- * @author {jex_author}
+ * MyCitySelector
+ * @author Konstantin Kutsevalov
  * @version 1.0.0
  *
  * @formatter:off
@@ -19,10 +19,10 @@ use adamasantares\JxForms\JxField;
 
     <div id="system-message-container"></div>
 
-    <form action="index.php?option={jex_sysname}" method="post" name="adminForm" id="adminForm">
+    <form action="index.php?option=com_mycityselector" method="post" name="adminForm" id="adminForm">
 
-        <?= JxField::text('_JEX_ITEM_MODEL_[name]', JText::_('T_JEX_FORM_TITLE_NAME'), $this->data['name'], [
-            'id' => '{jex_sysname}_name',
+        <?= JxField::text('Item[name]', JText::_('COM_MYCITYSELECTOR_FORM_TITLE_NAME'), $this->data['name'], [
+            'id' => 'com_mycityselector_name',
             'required' => true,
             'inline' => true,
             'size' => 40,
@@ -31,23 +31,23 @@ use adamasantares\JxForms\JxField;
         <div class="form">
             <div class="row-fluid">
                 <div class="span9">
-                    <?= JxField::editor('_JEX_ITEM_MODEL_[content]', JText::_('T_JEX_FORM_TITLE_CONTENT'), $this->data['content'], [
-                        'id' => '{jex_sysname}_content',
+                    <?= JxField::editor('Item[content]', JText::_('COM_MYCITYSELECTOR_FORM_TITLE_CONTENT'), $this->data['content'], [
+                        'id' => 'com_mycityselector_content',
                         'required' => false
                     ]) ?>
                 </div>
                 <div class="span3">
-                    <?= JxField::radio('_JEX_ITEM_MODEL_[status]', JText::_('T_JEX_FORM_TITLE_STATUS'), $this->data['status'], [
+                    <?= JxField::radio('Item[status]', JText::_('COM_MYCITYSELECTOR_FORM_TITLE_STATUS'), $this->data['status'], [
                         'options' => [
-                            '0' => JText::_('T_JEX_ITEM_UNPUBLISHED'),
-                            '1' => JText::_('T_JEX_ITEM_PUBLISHED'),
+                            '0' => JText::_('COM_MYCITYSELECTOR_ITEM_UNPUBLISHED'),
+                            '1' => JText::_('COM_MYCITYSELECTOR_ITEM_PUBLISHED'),
                         ]
                     ]) ?>
                 </div>
             </div>
         </div>
 
-        <input type="hidden" name="option" value="{jex_sysname}" />
+        <input type="hidden" name="option" value="com_hello" />
         <input type="hidden" name="task" value="">
         <?php echo JHtml::_('form.token'); ?>
     </form>

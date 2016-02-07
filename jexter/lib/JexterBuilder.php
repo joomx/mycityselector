@@ -28,7 +28,7 @@ class JexterBuilder {
     /**
      * Build extension's installer
      * @param $args <p>
-     * should have 2 keys:<br/>
+     * should have 1 key:<br/>
      *   "config" - local path to project config file ("config/project.json")
      * </p>
      * @return array Array of result installers path
@@ -462,6 +462,7 @@ class JexterBuilder {
         out(" packing extensions to package ...\n", 'yellow');
 
         $files = [];
+        // generate extensions list (of current package)
         foreach ($extensions as $ext) {
             if (!empty($ext['pkg'])) {
                 if (is_file($ext['pkg'])) {
@@ -499,7 +500,7 @@ class JexterBuilder {
             $config['destination'] . '/' . $manifest
         );
         if (!$res) {
-            out("error\n", 'red');
+            out("error on Manifest file updating\n", 'red');
             return null;
         } else {
             out("ok\n", 'green');

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="component" version="3.2" method="upgrade">
+    <name>Mycityselector</name>
+    <creationDate>02-2016</creationDate>
+    <author>Konstantin Kutsevalov</author>
+    <authorEmail>konstantin@kutsevalov.name</authorEmail>
+    <authorUrl>http://kutsevalov.name</authorUrl>
+    <copyright>All rights reserved</copyright>
+    <license>GNU/GPL v3</license>
+    <version>1.0.0</version>
+    <description>COM_MYCITYSELECTOR_DESCRIPTION</description>
+
+    <install>
+        <sql>
+            <file driver="mysql" charset="utf8">install.sql</file>
+        </sql>
+    </install>
+    <uninstall>
+        <sql>
+            <file driver="mysql" charset="utf8">uninstall.sql</file>
+        </sql>
+    </uninstall>
+
+    <files folder="site">
+        <folder>language</folder>
+        <filename>mycityselector.php</filename>
+        <filename>index.html</filename>
+    </files>
+
+    <languages folder="site">
+        <language tag="en-GB">language/en-GB/en-GB.com_mycityselector.sys.ini</language>
+        <language tag="ru-RU">language/ru-RU/ru-RU.com_mycityselector.sys.ini</language>
+    </languages>
+
+    <administration>
+        <menu img="/administrator/components/com_mycityselector/images/bubble-comment.png">COM_MYCITYSELECTOR_NAME</menu>
+        <submenu>
+            <menu link="option=com_mycityselector" img="class:module">COM_MYCITYSELECTOR_ITEMS</menu>
+        </submenu>
+
+        <files folder="admin">
+            <folder>images</folder>
+            <folder>language</folder>
+            <folder>models</folder>
+            <folder>helpers</folder>
+            <folder>views</folder>
+            <filename>admin-scripts.js</filename>
+            <filename>admin-style.css</filename>
+            <filename>mycityselector.php</filename>
+            <filename>controller.php</filename>
+            <filename>install.sql</filename>
+            <filename>uninstall.sql</filename>
+            <filename>index.html</filename>
+        </files>
+
+        <languages folder="admin">
+            <language tag="en-GB">language/en-GB/en-GB.com_mycityselector.sys.ini</language>
+            <language tag="en-GB">language/en-GB/en-GB.com_mycityselector.ini</language>
+            <language tag="ru-RU">language/ru-RU/ru-RU.com_mycityselector.sys.ini</language>
+            <language tag="ru-RU">language/ru-RU/ru-RU.com_mycityselector.ini</language>
+        </languages>
+    </administration>
+
+    <!--updateservers>
+        <server type="extension" priority="1" name="MyCitySelector Update server">{update_url}</server>
+    </updateservers-->
+
+</extension>
