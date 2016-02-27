@@ -4,11 +4,11 @@
  * @email <mail@art-prog.ru>
  */
 
-namespace adamasantares\JxForms;
+namespace adamasantares\jxforms;
 
 /**
  * Class ChosenInput
- * @package adamasantares\JxForms
+ * @package adamasantares\jxforms
  */
 class ChosenInput {
 

@@ -204,8 +204,8 @@ class JexterBuilder {
 
         $pathSite = $config['siteRoot'] . '/components/' . $ext['id'];
         $pathAdmin = $config['siteRoot'] . '/administrator/components/' . $ext['id'];
-        $copySitePath = $config['copy'] . '/site';
-        $copyAdminPath = $config['copy'] . '/admin';
+        $copySitePath = $config['copy'] . '/' . $ext['id'] . '/site';
+        $copyAdminPath = $config['copy'] . '/' . $ext['id'] . '/admin';
         $mainfest = $ext['id'] . '.xml';
         $scriptSite = $pathSite . '/' . $ext['script'];
         $scriptAdmin = $pathAdmin . '/' . $ext['script'];
@@ -287,7 +287,7 @@ class JexterBuilder {
         if (!empty($filesAdmin)) {
             $data['administration/files'] = $filesAdmin;
         }
-        $res = updateManifest($copyAdminPath . '/' . $mainfest, $data, $config['copy'] . '/' . $mainfest);
+        $res = updateManifest($copyAdminPath . '/' . $mainfest, $data, $config['copy'] . '/' . $ext['id'] . '/' . $mainfest);
         if (!$res) {
             out("error\n", 'red');
             return null;
@@ -295,7 +295,7 @@ class JexterBuilder {
             out("ok\n", 'green');
         }
         out("  - packing ...\n", 'yellow');
-        if (zipping($config['copy'], $zipFile)) {
+        if (zipping($config['copy'] . '/' . $ext['id'], $zipFile)) {
             out("    done ", 'green');
             out("({$zipFile})\n", 'light_cyan');
         } else {
@@ -411,7 +411,7 @@ class JexterBuilder {
                 } else {
                     // if file
                     if ($name == $ext['script']) { // if it's main script of plugin
-                        $file = ['tag' => 'filename', 'attr' => ['plugin' => $ext['id']], 'value' => $name];
+                        $file = ['tag' => 'filename', 'attr' => ['module' => $ext['id']], 'value' => $name];
                     } else {
                         if (substr($name, -4, 4) == '.xml') {
                             $mainfest = $name;
@@ -469,10 +469,10 @@ class JexterBuilder {
                     $file = [
                         'tag' => 'file',
                         'attr' => [
-                            'type' => 'module',
-                            'id' => $ext['type'][0],
+                            'type' => $ext['type'][0],
+                            'id' => $ext['id'],
                         ],
-                        'value' => $ext['pkg']
+                        'value' => basename($ext['pkg'])
                     ];
                     switch ($ext['type'][0]) {
                         case 'plugin':
@@ -513,6 +513,7 @@ class JexterBuilder {
 
         out("  - packing ...\n", 'yellow');
         $zipPackageFile = $config['id'] . '.zip';
+        @unlink($config['destination'] . '/' . $zipPackageFile);
         if (zipping($config['destination'], $config['destination'] . '/' . $zipPackageFile)) {
             out("     done", 'green');
         } else {

@@ -4,7 +4,7 @@
  * @email <mail@art-prog.ru>
  */
 
-namespace adamasantares\JxForms;
+namespace adamasantares\jxforms;
 
 // extended classes
 require_once __DIR__ . '/TextInput.php';
@@ -16,13 +16,13 @@ require_once __DIR__ . '/RadioInput.php';
 
 /**
  * Class Field
- * @package adamasantares\JxForms
+ * @package adamasantares\jxforms
  */
 class JxField {
 
 
     /**
-     * @see \adamasantares\JxForms\CheckboxInput::__construct()
+     * @see \adamasantares\jxforms\CheckboxInput::__construct()
      * @param $name
      * @param $label
      * @param string $value
@@ -37,7 +37,7 @@ class JxField {
 
 
     /**
-     * @see \adamasantares\JxForms\EditorInput::__construct()
+     * @see \adamasantares\jxforms\EditorInput::__construct()
      * @param string $name
      * @param string $label
      * @param string $value
@@ -52,7 +52,7 @@ class JxField {
 
 
     /**
-     * @see \adamasantares\JxForms\CheckboxInput::__construct()
+     * @see \adamasantares\jxforms\CheckboxInput::__construct()
      * @param string $name
      * @param string $label
      * @param boolean $status Checked/unchecked
@@ -67,7 +67,7 @@ class JxField {
 
 
     /**
-     * @see \adamasantares\JxForms\RadioInput::__construct()
+     * @see \adamasantares\jxforms\RadioInput::__construct()
      * @param string $name
      * @param string $label
      * @param string $value
@@ -82,7 +82,7 @@ class JxField {
 
 
     /**
-     * @see \adamasantares\JxForms\ChosenInput::__construct()
+     * @see \adamasantares\jxforms\ChosenInput::__construct()
      * @param $name
      * @param $label
      * @param string $value

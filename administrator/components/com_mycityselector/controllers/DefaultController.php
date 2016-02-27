@@ -10,10 +10,10 @@ defined('_JEXEC') or die(header('HTTP/1.0 403 Forbidden') . 'Restricted access')
 require_once __DIR__ . '/helpers/form/formHelper.php';
 require_once __DIR__ . '/helpers/mvc/JxController.php';
 
-use adamasantares\JxMVC\JxController;
+use adamasantares\jxmvc\JxController;
 
 
-class MycityselectorController extends JxController {
+class DefaultController extends JxController {
 
 
     /**
@@ -34,8 +34,10 @@ class MycityselectorController extends JxController {
     public function sidebarMenuItems()
     {
         return [
-            'default' => JText::_('COM_MYCITYSELECTOR_ITEMS'),
-            // 'other_item' => 'Title',
+            'default' => JText::_('COM_MYCITYSELECTOR_COUNTRIES'),
+            //'country' => JText::_('COM_MYCITYSELECTOR_COUNTRIES'),
+            'region' => JText::_('COM_MYCITYSELECTOR_REGIONS'),
+            'city' => JText::_('COM_MYCITYSELECTOR_CITIES'),
         ];
     }
 
@@ -53,14 +55,14 @@ class MycityselectorController extends JxController {
         JToolBarHelper::unpublishList();
         JToolBarHelper::deleteList();
         JToolBarHelper::custom('drop', 'delete', 'delete', JText::_('COM_MYCITYSELECTOR_ITEM_DELETE'));
-		$model	= $this->getModel('city');	// (./models/[$modelName].php)
-        $view = $this->getView('cities', 'html');	// view logic (./views/[$viewName]/view.html.php)
-        $view->setModel($model, true);
-        $view->items = $model->getItems();
-        $view->pagination = $model->getPagination();
-		$view->setLayout('list');	// view template (./views/[$viewName]/tmpl/[$tmplName].php)
-        $view->sidebar = $this->sidebarMenu;
-		$view->display();
+
+        $model	= $this->getModel('city');	// (./models/[$modelName].php)
+        $this->render('list', [
+            'items' => $model->getItems(),
+            'pagination' => $model->getPagination(),
+            'listOrder' => $this->escape($model->get('State')->get('list.ordering')),
+            'listDirection' => $this->escape($model->get('State')->get('list.direction'))
+        ]);
 	}
 
 

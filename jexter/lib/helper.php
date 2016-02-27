@@ -17,8 +17,9 @@ if (!defined('JEXTER_DIR')) {
 /**
  * Вывод в консоль с поддержкой цвета
  * @param String $str Строка
- * @param String $color Название цвета для текста
- * @param String $background Название цвета для фона
+ * @param String $color Название цвета для текста:  'black', 'dark_gray', 'blue', 'light_blue', 'green', 'light_green',
+ *      'cyan', 'light_cyan', 'red', 'light_red', 'purple', 'light_purple', 'brown', 'yellow', 'light_gray', 'white'
+ * @param String $background Название цвета для фона: 'black', 'red', 'green', 'yellow', 'blue', 'magenta', 'cyan', 'light_gray'
  */
 function out($str, $color = '', $background = '')
 {

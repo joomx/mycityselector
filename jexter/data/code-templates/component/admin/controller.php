@@ -11,7 +11,7 @@ jimport('joomla.application.component.controller');
 require_once __DIR__ . '/helpers/form/formHelper.php';
 require_once __DIR__ . '/helpers/mvc/JxController.php';
 
-use adamasantares\JxMVC\JxController;
+use adamasantares\jxmvc\JxController;
 
 
 class _JEX_CLASSNAME_Controller extends JxController {

@@ -4,7 +4,7 @@
  * @email <mail@art-prog.ru>
  */
 
-namespace adamasantares\JxMVC;
+namespace adamasantares\jxmvc;
 
 jimport('joomla.application.component.controller');
 

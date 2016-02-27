@@ -4,7 +4,7 @@
  * @email <mail@art-prog.ru>
  */
 
-namespace adamasantares\JxForms;
+namespace adamasantares\jxforms;
 
 // TODO form generator ...
 /*
@@ -60,8 +60,8 @@ class JxForm {
      * @var array
      */
     public $inputs = [
-        'text' => '\adamasantares\JxForms\TextInput',
-        'editor' => '\adamasantares\JxForms\TextEditor',
+        'text' => '\adamasantares\jxforms\TextInput',
+        'editor' => '\adamasantares\jxforms\TextEditor',
         // todo ...
     ];
 

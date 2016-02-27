@@ -4,19 +4,25 @@
  * @email <mail@art-prog.ru>
  */
 
-namespace adamasantares\JxMVC;
+namespace adamasantares\jxmvc;
 
-jimport('joomla.application.component.controller');
+if (class_exists('\adamasantares\jxmvc\JxController')) return;
 
 /**
- * Wrapper for Joomla Controller of Component
+ * Controller of Component
  */
-class JxController extends \JControllerLegacy {
+class JxController {
 
     /**
      * @var string Sidebar menu html
      */
     protected $sidebarMenu = null;
+
+
+    /**
+     * @var string Component's root path
+     */
+    private $root = '';
 
 
     /**
@@ -45,9 +51,9 @@ class JxController extends \JControllerLegacy {
     }
 
 
-    public function __construct()
+    public function __construct($root)
     {
-        parent::__construct();
+        $this->root = $root;
         // registering actions
         $this->registerTask('default', 'actionIndex');
         foreach(get_class_methods($this) as $method) {
@@ -77,10 +83,47 @@ class JxController extends \JControllerLegacy {
         }
         // menu items for left sidebar
         foreach ($this->sidebarMenuItems() as $task => $name) {
+
+            // TODO fix option parameter!
+
             \JHtmlSidebar::addEntry($name, 'index.php?option=com_mycityselector&task=' . $task, ($this->task==$task));
         }
         $this->sidebarMenu = \JHtmlSidebar::render();
     }
 
+
+    /**
+     * @param string $name Model name
+     */
+    public function getModel($name)
+    {
+
+    }
+
+    /**
+     *
+     */
+    public function execute()
+    {
+
+    }
+
+
+    /**
+     * @param string $viewName
+     * @param array $variables
+     */
+    public function render($viewName, $variables = [])
+    {
+        // define variables
+        $sidebar = $this->sidebarMenu;
+        if (is_array($variables) && !empty($variables)) {
+            foreach ($variables as $var => $value) {
+                ${$var} = $value;
+            }
+        }
+        // include view
+        include $this->root . '/views/' . $viewName . '.php';
+    }
 
 }

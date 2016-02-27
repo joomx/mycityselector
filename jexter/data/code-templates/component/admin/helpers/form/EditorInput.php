@@ -4,12 +4,12 @@
  * @email <mail@art-prog.ru>
  */
 
-namespace adamasantares\JxForms;
+namespace adamasantares\jxforms;
 
 /**
  * Wrap for JFormFieldEditor
  * Class EditorInput
- * @package adamasantares\JxForms
+ * @package adamasantares\jxforms
  */
 class EditorInput extends \JFormFieldEditor {
 

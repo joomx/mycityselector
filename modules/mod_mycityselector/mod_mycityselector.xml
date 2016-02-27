@@ -2,13 +2,13 @@
 <!-- https://docs.joomla.org/Manifest_files -->
 <extension type="module" version="3.2" method="upgrade" client="site">
 	<name>My City Selector MOD</name>
-	<creationDate>Mar 2015</creationDate>
+	<creationDate>Feb 2016</creationDate>
 	<author>Konstantin Kutsevalov</author>
 	<authorEmail>konstantin@kutsevalov.name</authorEmail>
 	<authorUrl>http://www.kutsevalov.name/2013/08/12/modul-vibora-goroda-dlya-joomla/</authorUrl>
 	<copyright>All rights reserved</copyright>
 	<license>GNU/GPL</license>
-	<version>1.3.0</version>
+	<version>2.0.0</version>
 	<description><![CDATA[
 	<h3 class="description-module-header">My City Selector</h3>
 	<div class="description-module" style="text-align:left;">
@@ -18,7 +18,7 @@
 	</div>
 	]]></description>
 	<scriptfile>installer.php</scriptfile>
-	<files><filename>MCSTranslit.php</filename><filename>ext-params.css</filename><filename>ext-params.js.php</filename><filename>ext_mod_mini.png</filename><filename>jquery.tablednd.js</filename><filename>jquery.tablednd.min.js</filename><filename module="mod_mycityselector">mod_mycityselector.php</filename><filename>mod_mycityselector.xml</filename><folder>tmpl</folder><filename>yandex-geo.php</filename></files>
+	<files><filename>MCSTranslit.php</filename><filename>ext-params.css</filename><filename>ext-params.js.php</filename><filename>ext_mod_mini.png</filename><filename>installer.php</filename><filename>jquery.tablednd.min.js</filename><filename module="mod_mycityselector">mod_mycityselector.php</filename><filename>mod_mycityselector.xml</filename><folder>tmpl</folder><filename>yandex-geo.php</filename></files>
 	<config>
 		<fields name="params">
 

@@ -4,12 +4,12 @@
  * @email <mail@art-prog.ru>
  */
 
-namespace adamasantares\JxForms;
+namespace adamasantares\jxforms;
 
 /**
  * Wrap for JFormFieldRadio
  * Class RadioInput
- * @package adamasantares\JxForms
+ * @package adamasantares\jxforms
  */
 class RadioInput extends \JFormFieldRadio {
 

@@ -4,12 +4,12 @@
  * @email <mail@art-prog.ru>
  */
 
-namespace adamasantares\JxForms;
+namespace adamasantares\jxforms;
 
 /**
  * Wrap for JFormFieldText
  * Class TextInput
- * @package adamasantares\JxForms
+ * @package adamasantares\jxforms
  */
 class TextInput extends \JFormFieldText {
 

@@ -11,11 +11,11 @@ require_once JPATH_BASE . '/../libraries/joomla/form/fields/checkbox.php';
 require_once JPATH_BASE . '/../libraries/joomla/form/fields/radio.php';
 
 // form generator
-if (!class_exists('\adamasantares\JxForms\JxForm')) {
+if (!class_exists('\adamasantares\jxforms\JxForm')) {
     require_once __DIR__ . '/JxForm.php';
 }
 
 // form fields helper
-if (!class_exists('\adamasantares\JxForms\JxField')) {
+if (!class_exists('\adamasantares\jxforms\JxField')) {
     require_once __DIR__ . '/JxField.php';
 }

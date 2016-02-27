@@ -1,7 +1,7 @@
 {
     "name": "MyCitySelector",
     "id": "pkg_mycityselector",
-    "version": "1.3.0",
+    "version": "2.0.0",
     "type": "package",
     "manifest": "@builder/config/pkg_mycityselector.xml",
     "license": "@builder/license.txt",
@@ -13,16 +13,17 @@
             "name": "MyCitySelector",
             "id": "plgmycityselector",
             "type": "plugin/system",
-            "version": "1.3.0",
+            "version": "2.0.0",
             "excludes": []
         },
         {
             "name": "MyCitySelector",
             "id": "mod_mycityselector",
             "type": "module/site",
-            "version": "1.3.0",
+            "version": "2.0.0",
             "excludes": [
-                "jquery.tablednd.js"
+                "jquery.tablednd.js",
+                "orange.rar"
             ]
         },
         {
@@ -30,7 +31,7 @@
             "id": "com_mycityselector",
             "script": "mycityselector.php",
             "type": "component",
-            "version": "1.0.0",
+            "version": "2.0.0",
             "excludes": []
         }
     ]

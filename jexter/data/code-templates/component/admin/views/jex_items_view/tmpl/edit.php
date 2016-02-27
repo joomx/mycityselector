@@ -9,7 +9,7 @@
 
 defined('_JEXEC') or die(header('HTTP/1.0 403 Forbidden') . 'Restricted access');
 
-use adamasantares\JxForms\JxField;
+use adamasantares\jxforms\JxField;
 
 ?>
 <div id="j-sidebar-container" class="span2">
