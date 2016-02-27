@@ -234,12 +234,9 @@ class plgSystemPlg_Mycityselector extends JPlugin
      */
     private function autoSwitchCity()
     {
-        //TODO текущий город не переключается на значение по умолчанию при возврате с поддомена на основной домен.
-
-        // это необходимо делать только когда пользователь первый раз открыл сайт,
-        // то есть referer не соответствует нашему основному домену
         $referer = @$_SERVER['HTTP_REFERER'];
-        if (!$this->editMode && strpos($referer, $this->baseDomain) === false) {
+        //if (!$this->editMode && strpos($referer, $this->baseDomain) === false) {
+        if (!$this->editMode) {
             // определяем, находимся ли мы на субдомене, и какой ему принадлежит город
             $hostParts = explode('.', $_SERVER['HTTP_HOST']);
             $subDomain = (count($hostParts) > 2) ? $hostParts[0] : null;  // $hostParts[0] - текущий субдомен
