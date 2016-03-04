@@ -7,21 +7,16 @@
 
 defined('_JEXEC') or die(header('HTTP/1.0 403 Forbidden') . 'Restricted access');
 
-/* @var $this \adamasantares\jxmvc\JxView */
-/* @var $sidebar string */
-
-/* @var $items array */
-/* @var $listDirection string */
-/* @var $saveOrderingUrl string */
+/* @var $this JViewLegacy */
 /* @var $listOrder string */
-/* @var $pagination string */
-
+/* @var $listDirection string */
 
 JHtml::_('behavior.multiselect');
-$count = count($items);
+
+$count = count($this->items);
 
 if ($listOrder == 'a.ordering') {
-    $saveOrderingUrl = 'index.php?option=com_mycityselector&task=saveOrderAjax&tmpl=component';
+    $saveOrderingUrl = 'index.php?option=' . $this->getComponentName() . '&task=saveOrderAjax&tmpl=component';
     JHtml::_('sortablelist.sortable', 'articleList', 'adminForm', strtolower($listDirection), $saveOrderingUrl);
 }
 
@@ -30,7 +25,7 @@ if ($listOrder == 'a.ordering') {
     <?= $sidebar ?>
 </div>
 <div id="j-main-container" class="span10">
-    <form action="index.php" method="post" name="adminForm" class="admin-form com_mycityselector" id="adminForm">
+    <form action="index.php" method="post" name="adminForm" class="admin-form <?= $this->getComponentName() ?>" id="adminForm">
         <div class="pagination"><?= $pagination ?></div>
         <hr/>
         <table class="table">
@@ -52,7 +47,7 @@ if ($listOrder == 'a.ordering') {
         if ($count == 0) {
             ?><tr><td colspan="50" align="center"><b><?= JText::_('COM_MYCITYSELECTOR_ITEMS_NOT_FOUND') ?></b></td></tr><?php
         } else {
-            foreach ($this->get('Items') as $i => $item) {
+            foreach ($items as $i => $item) {
                 $isPublished = ($item['status'] == 1);
                 ?><tr class="item-row <?= ($i % 2 > 0) ? 'even' : 'odd' ?>">
                     <td class="order nowrap center" width="10px">
@@ -65,7 +60,7 @@ if ($listOrder == 'a.ordering') {
                         <input type="checkbox" id="cb<?= $i ?>" name="cid[]" value="<?= $item['id'] ?>" onclick="Joomla.isChecked(this.checked);">
                     </td>
                 <td align="left">
-                    <a href="index.php?option=com_mycityselector&task=update&id=<?= $item['id'] ?>" title=""><?= $item['name'] ?></a>
+                    <a href="index.php?option=<?= $this->getComponentName() ?>&task=update&id=<?= $item['id'] ?>" title=""><?= $item['name'] ?></a>
                 </td>
                     <td class="center">
                         <div class="btn-group">
@@ -77,7 +72,7 @@ if ($listOrder == 'a.ordering') {
                             <button data-toggle="dropdown" class="dropdown-toggle btn btn-micro"><span class="caret"></span></button>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a href="index.php?option=com_mycityselector&task=update&id=<?= $item['id'] ?>" title="">
+                                    <a href="index.php?option=<?= $this->getComponentName() ?>&task=update&id=<?= $item['id'] ?>" title="">
                                         <span class="icon-edit"></span> <?= JText::_('COM_MYCITYSELECTOR_ITEM_EDIT') ?>
                                     </a>
                                 </li>
@@ -101,7 +96,9 @@ if ($listOrder == 'a.ordering') {
 
         <div class="clr"></div>
         <input type="hidden" name="boxchecked" value="0">
+        <?= $this->formControllerName() ?>
         <?= $this->formOption() ?>
+        <?= $this->formTask() ?>
         <?= $this->formToken() ?>
     </form>
 </div>

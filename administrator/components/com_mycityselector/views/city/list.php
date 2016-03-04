@@ -8,12 +8,12 @@
 defined('_JEXEC') or die(header('HTTP/1.0 403 Forbidden') . 'Restricted access');
 
 /* @var $this JViewLegacy */
+/* @var $listOrder string */
+/* @var $listDirection string */
 
 JHtml::_('behavior.multiselect');
 
 $count = count($this->items);
-$listOrder = $this->escape($this->get('State')->get('list.ordering'));
-$listDirection  = $this->escape($this->get('State')->get('list.direction'));
 
 if ($listOrder == 'a.ordering') {
     $saveOrderingUrl = 'index.php?option=com_mycityselector&task=saveOrderAjax&tmpl=component';
@@ -22,11 +22,11 @@ if ($listOrder == 'a.ordering') {
 
 ?>
 <div id="j-sidebar-container" class="span2">
-    <?= $this->sidebar ?>
+    <?= $sidebar ?>
 </div>
 <div id="j-main-container" class="span10">
     <form action="index.php" method="post" name="adminForm" class="admin-form com_mycityselector" id="adminForm">
-        <div class="pagination"><?= $this->pagination ?></div>
+        <div class="pagination"><?= $pagination ?></div>
         <hr/>
         <table class="table">
         <thead>
@@ -47,7 +47,7 @@ if ($listOrder == 'a.ordering') {
         if ($count == 0) {
             ?><tr><td colspan="50" align="center"><b><?= JText::_('COM_MYCITYSELECTOR_ITEMS_NOT_FOUND') ?></b></td></tr><?php
         } else {
-            foreach ($this->get('Items') as $i => $item) {
+            foreach ($items as $i => $item) {
                 $isPublished = ($item['status'] == 1);
                 ?><tr class="item-row <?= ($i % 2 > 0) ? 'even' : 'odd' ?>">
                     <td class="order nowrap center" width="10px">
@@ -92,12 +92,12 @@ if ($listOrder == 'a.ordering') {
         </tbody>
         </table>
         <hr/>
-        <div class="pagination"><?= $this->pagination ?></div>
+        <div class="pagination"><?= $pagination ?></div>
 
         <div class="clr"></div>
         <input type="hidden" name="boxchecked" value="0">
-        <input type="hidden" name="option" value="com_mycityselector" />
-        <input type="hidden" name="task" value="" />
-        <?php echo JHtml::_('form.token'); ?>
+        <?= $this->formOption() ?>
+        <?= $this->formTask() ?>
+        <?= $this->formToken() ?>
     </form>
 </div>

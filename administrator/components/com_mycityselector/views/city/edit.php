@@ -19,7 +19,7 @@ use adamasantares\jxforms\JxField;
 
     <div id="system-message-container"></div>
 
-    <form action="index.php?option=com_mycityselector" method="post" name="adminForm" id="adminForm">
+    <form action="index.php?option=<?= $this->getComponentName() ?>" method="post" name="adminForm" id="adminForm">
 
         <?= JxField::text('Item[name]', JText::_('COM_MYCITYSELECTOR_FORM_TITLE_NAME'), $this->data['name'], [
             'id' => 'com_mycityselector_name',
@@ -47,9 +47,10 @@ use adamasantares\jxforms\JxField;
             </div>
         </div>
 
-        <input type="hidden" name="option" value="com_hello" />
-        <input type="hidden" name="task" value="">
-        <?php echo JHtml::_('form.token'); ?>
+        <?= $this->formControllerName() ?>
+        <?= $this->formOption() ?>
+        <?= $this->formTask() ?>
+        <?= $this->formToken() ?>
     </form>
 
 </div>

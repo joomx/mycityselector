@@ -18,11 +18,35 @@ class JxController {
      */
     protected $sidebarMenu = null;
 
-
     /**
      * @var string Component's root path
      */
-    private $root = '';
+    protected $root = '';
+
+    /**
+     * @var string controller id
+     */
+    protected $_id = 'jx-controller';
+
+    /**
+     * @var string action
+     */
+    protected $_action = 'index';
+
+    /**
+     * @var string Component's name
+     */
+    protected $_component = 'com_name';
+
+    /**
+     * @var string JInput
+     */
+    protected $input;
+
+    /**
+     * @var string JInput
+     */
+    protected $db;
 
 
     /**
@@ -51,17 +75,14 @@ class JxController {
     }
 
 
-    public function __construct($root)
+    public function __construct($root, $componentName)
     {
         $this->root = $root;
-        // registering actions
-        $this->registerTask('default', 'actionIndex');
-        foreach(get_class_methods($this) as $method) {
-            if (substr($method, 0, 6) == 'action') {
-                $task = strtolower(str_replace('action', '', $method));
-                $this->registerTask($task, $method);
-            }
-        }
+        $this->_id = empty($_REQUEST['controller']) ? 'default' : $_REQUEST['controller'];
+        $this->_action = empty($_REQUEST['task']) ? 'index' : $_REQUEST['task'];
+        $this->_component = $componentName;
+        $this->input = \JFactory::getApplication()->input;
+        $this->db = \JFactory::getDbo();
         // assets
         $document = \JFactory::getDocument();
         $css = ['type' => 'text/css', 'media' => null];
@@ -82,48 +103,77 @@ class JxController {
             }
         }
         // menu items for left sidebar
-        foreach ($this->sidebarMenuItems() as $task => $name) {
-
-            // TODO fix option parameter!
-
-            \JHtmlSidebar::addEntry($name, 'index.php?option=com_mycityselector&task=' . $task, ($this->task==$task));
+        foreach ($this->sidebarMenuItems() as $action => $name) {
+            \JHtmlSidebar::addEntry($name, 'index.php?option=' . $componentName . '&task=' . $action, ($this->_action==$action));
         }
         $this->sidebarMenu = \JHtmlSidebar::render();
     }
 
 
     /**
+     * Returns component name
+     */
+    public function getComponentName()
+    {
+        return $this->_component;
+    }
+
+
+    /**
+     * Returns model
      * @param string $name Model name
+     * @throws \Exception
      */
     public function getModel($name)
     {
-
+        $path = $this->root . '/models/' . $name . '.php';
+        if (is_file($path)) {
+            require_once($path);
+            $className = ucfirst(strtolower($name)) . 'Model';
+            if (class_exists($className)) {
+                $model = new $className();
+                return $model;
+            }
+            throw new \Exception("Model '{$className}' not found.");
+        }
+        throw new \Exception("Model '{$name}' not found.");
     }
 
     /**
-     *
+     * Execute action
+     * @throws \Exception
      */
     public function execute()
     {
-
+        if (empty($this->_action)) {
+            $this->_action = 'index';
+        }
+        $method = 'action' . ucfirst(strtolower($this->_action));
+        if (method_exists($this, $method)) {
+            $this->$method();
+        } else if (method_exists($this, 'actionIndex')) {
+            $this->actionIndex();
+        } else {
+            throw new \Exception("Action '{$method}' not found");
+        }
     }
 
 
     /**
+     * Renders view
      * @param string $viewName
      * @param array $variables
+     * @throws \Exception
      */
     public function render($viewName, $variables = [])
     {
-        // define variables
-        $sidebar = $this->sidebarMenu;
-        if (is_array($variables) && !empty($variables)) {
-            foreach ($variables as $var => $value) {
-                ${$var} = $value;
-            }
+        $viewFile = $this->root . '/views/' . $this->_id . '/' . $viewName . '.php';
+        if (!is_file($viewFile)) {
+            throw new \Exception("View '{$viewName}' not found");
         }
-        // include view
-        include $this->root . '/views/' . $viewName . '.php';
+        $view = new JxView($this);
+        $variables['sidebar'] = $this->sidebarMenu; // add sidebar
+        $view->render($viewFile, $variables);
     }
 
 }

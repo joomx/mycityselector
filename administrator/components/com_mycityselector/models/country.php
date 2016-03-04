@@ -11,7 +11,7 @@ defined('_JEXEC') or die(header('HTTP/1.0 403 Forbidden') . 'Restricted access')
 jimport('joomla.application.component.modellist');
 
 
-class MycityselectorModelCountry extends JModelList {
+class CountryModel extends JModelList {
 
     /**
      * Table name

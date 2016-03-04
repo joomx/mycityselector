@@ -7,4 +7,4 @@
 
 defined('_JEXEC') or die(header('HTTP/1.0 403 Forbidden') . 'Restricted access');
 
-echo 'Hello! This is MyCitySelector.';
+echo 'Hello!';

@@ -1,7 +1,8 @@
 
 CREATE TABLE IF NOT EXISTS `#__mycityselector_country` (
   `id` int(11) NOT NULL,
-  `name` varchar(30) NOT NULL
+  `name` varchar(30) NOT NULL,
+  `status` TINYINT(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 CREATE TABLE IF NOT EXISTS `#__mycityselector_region` (
@@ -9,7 +10,8 @@ CREATE TABLE IF NOT EXISTS `#__mycityselector_region` (
   `country_id` int(11),
   `name` varchar(50) NOT NULL,
   `district` varchar(50) NOT NULL,
-  `subdomain` varchar(50) NOT NULL
+  `subdomain` varchar(50) NOT NULL,
+  `status` TINYINT(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 CREATE TABLE IF NOT EXISTS `#__mycityselector_city` (

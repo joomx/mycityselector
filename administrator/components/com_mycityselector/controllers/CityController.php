@@ -14,7 +14,7 @@ require_once __DIR__ . '/../helpers/mvc/JxView.php';
 use adamasantares\jxmvc\JxController;
 use adamasantares\jxmvc\JxView;
 
-class DefaultController extends JxController {
+class CityController extends JxController {
 
 
     /**
@@ -53,7 +53,7 @@ class DefaultController extends JxController {
         JToolBarHelper::publishList();
         JToolBarHelper::unpublishList();
         JToolBarHelper::custom('drop', 'delete', 'delete', JText::_('COM_MYCITYSELECTOR_ITEM_DELETE'));
-        $model = $this->getModel('country');	// (./models/[$modelName].php)
+        $model = $this->getModel('city');	// (./models/[$modelName].php)
         $this->render('list', [
             'items' => $model->getItems(),
             'pagination' => $model->getPagination(),
@@ -74,7 +74,7 @@ class DefaultController extends JxController {
         JToolBarHelper::save2new('saveandnew');
         JToolBarHelper::cancel('default');
 
-        $model = $this->getModel('country');	// (./models/[$modelName].php)
+        $model = $this->getModel('city');	// (./models/[$modelName].php)
         $data = [];
         foreach ($model->getFields() as $name => $coloumn) {
             $data[$name] = '';
@@ -83,9 +83,6 @@ class DefaultController extends JxController {
             } else {
                 if (in_array($coloumn['type'], ['int', 'bigint', 'tinyint', 'float', 'double'])) {
                     $data[$name] = '0';
-                    if ($name == 'status') {
-                        $data[$name] = '1';
-                    }
                 }
             }
         }
