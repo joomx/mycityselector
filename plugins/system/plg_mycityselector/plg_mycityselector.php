@@ -239,8 +239,8 @@ class plgSystemPlg_Mycityselector extends JPlugin
         if (!$this->editMode) {
             // определяем, находимся ли мы на субдомене, и какой ему принадлежит город
             $hostParts = explode('.', $_SERVER['HTTP_HOST']);
-            $subDomain = (count($hostParts) > 2) ? $hostParts[0] : null;  // $hostParts[0] - текущий субдомен
-            if ($this->hasSubdomains && !empty($subDomain) && $subDomain != 'www') {
+            $subDomain = (count($hostParts) > 2) ? $hostParts[0] : 'www';  // $hostParts[0] - текущий субдомен
+            if ($this->hasSubdomains) {
                 foreach ($this->citiesList['__all__'] as $city => $data) {
                     if ($data['subdomain'] == $subDomain) {
                         $this->city = $city;
