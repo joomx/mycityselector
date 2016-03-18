@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="component" version="3.2" method="upgrade">
     <name>Mycityselector</name>
-    <creationDate>Feb 2016</creationDate>
+    <creationDate>Mar 2016</creationDate>
     <author>Konstantin Kutsevalov</author>
     <authorEmail>konstantin@kutsevalov.name</authorEmail>
     <authorUrl>http://kutsevalov.name</authorUrl>
@@ -31,10 +31,12 @@
     <administration>
         <menu img="/administrator/components/com_mycityselector/images/bubble-comment.png">COM_MYCITYSELECTOR_NAME</menu>
         <submenu>
-            <menu link="option=com_mycityselector" img="class:module">COM_MYCITYSELECTOR_ITEMS</menu>
+            <menu link="option=com_mycityselector" img="class:module">COM_MYCITYSELECTOR_COUNTRIES</menu>
+            <menu link="option=com_mycityselector&amp;controller=region" img="class:module">COM_MYCITYSELECTOR_REGIONS</menu>
+            <menu link="option=com_mycityselector&amp;controller=city" img="class:module">COM_MYCITYSELECTOR_CITIES</menu>
         </submenu>
 
-        <files folder="admin"><filename>admin-scripts.js</filename><filename>admin-style.css</filename><filename>com_mycityselector.xml</filename><filename>controller.php</filename><folder>helpers</folder><folder>images</folder><filename>index.html</filename><filename>install.sql</filename><folder>language</folder><folder>models</folder><filename>mycityselector.php</filename><filename>uninstall.sql</filename><folder>views</folder></files>
+        <files folder="admin"><filename>admin-scripts.js</filename><filename>admin-style.css</filename><filename>com_mycityselector.xml</filename><folder>controllers</folder><folder>helpers</folder><folder>images</folder><filename>index.html</filename><filename>install.sql</filename><folder>language</folder><folder>models</folder><filename>mycityselector.php</filename><filename>uninstall.sql</filename><folder>views</folder></files>
 
         <languages folder="admin">
             <language tag="en-GB">language/en-GB/en-GB.com_mycityselector.sys.ini</language>

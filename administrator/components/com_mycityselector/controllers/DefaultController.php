@@ -68,29 +68,16 @@ class DefaultController extends JxController {
      */
     public function actionAdd()
     {
+        $model = $this->getModel('country');
+        $data = $model->getDefaultData();
         JToolBarHelper::title(JText::_('COM_MYCITYSELECTOR_NAME') . ' - ' . JText::_('COM_MYCITYSELECTOR_ITEM_ADDING'), 'big-ico');
         JToolBarHelper::apply('save');
         JToolBarHelper::save('saveandclose');
         JToolBarHelper::save2new('saveandnew');
-        JToolBarHelper::cancel('default');
-
-        $model = $this->getModel('country');	// (./models/[$modelName].php)
-        $data = [];
-        foreach ($model->getFields() as $name => $coloumn) {
-            $data[$name] = '';
-            if (!empty($coloumn['default'])) {
-                $data[$name] = $coloumn['default'];
-            } else {
-                if (in_array($coloumn['type'], ['int', 'bigint', 'tinyint', 'float', 'double'])) {
-                    $data[$name] = '0';
-                    if ($name == 'status') {
-                        $data[$name] = '1';
-                    }
-                }
-            }
-        }
+        JToolBarHelper::cancel('index');
         $this->render('edit', [
-            'data' => $data
+            'model' => $model,
+            'data' => $data,
         ]);
 	}
 
@@ -102,10 +89,7 @@ class DefaultController extends JxController {
      */
     public function actionUpdate()
     {
-		$model = $this->getModel('city');
-        $view = $this->getView('cities', 'html');
-        $view->setModel($model, true);
-        $view->sidebar = $this->sidebar;
+		$model = $this->getModel('country');
         $id = intval($this->input->getCmd('id'));
         if (!empty($_POST['cid'])) {
             $id = intval($_POST['cid'][0]);
@@ -116,17 +100,15 @@ class DefaultController extends JxController {
             JToolBarHelper::apply('save');
             JToolBarHelper::save('saveandclose');
             JToolBarHelper::save2new('saveandnew');
-            JToolBarHelper::cancel('default');
-            $view->setLayout('edit');
-            $data = $data;
-
-            // todo create form
-
+            JToolBarHelper::cancel('index');
+            $this->render('edit', [
+                'model' => $model,
+                'data' => $data,
+            ]);
         } else {
             JToolBarHelper::addNew();
-            $view->setLayout('not_found');
+            $this->render('not_found', []);
         }
-        $view->display();
 	}
 
 
@@ -162,26 +144,27 @@ class DefaultController extends JxController {
      */
     private function save($redirectTo = 'index')
     {
-        $page = 0; // TODO store current page in session
+        $page = 0;
         $url = '';
-        $model = $this->getModel('city');
+        $model = $this->getModel('country');
         $id = $model->saveItem($_POST);
         if (!$id) {
             // error
-            JFactory::getApplication()->enqueueMessage(JText::_('COM_MYCITYSELECTOR_HELLO_SAVE_ERROR'), 'error');
+            $this->setMessage(JText::_('COM_MYCITYSELECTOR_HELLO_SAVE_ERROR'), 'error');
         } else {
             switch ($redirectTo) {
                 case 'add':
-                    $url .= '&taks=' . $redirectTo;
+                    $url .= '&task=' . $redirectTo;
                     break;
                 case 'update':
-                    $url .= '&taks=' . $redirectTo . '&id=' . $id;
+                    $url .= '&task=' . $redirectTo . '&id=' . $id;
                     break;
                 default:
                     $url .= '&page=' . $page;
             }
         }
-        $this->setRedirect('index.php?option=' . $this->_component . $url)->redirect();
+        $this->setMessage(JText::_('COM_MYCITYSELECTOR_FORM_SAVED'), 'message');
+        $this->redirect('index.php?option=' . $this->_component . '&controller=default' . $url);
     }
 
 
@@ -191,11 +174,12 @@ class DefaultController extends JxController {
     public function actionDrop()
     {
         $page = $this->input->getCmd('page', 0);
-		$model	= $this->getModel('city');
+		$model	= $this->getModel('country');
         if (!empty($_POST['cid'])) {
             $model->dropItems($_POST['cid']);
+            $this->setMessage(JText::_('COM_MYCITYSELECTOR_FORM_SAVED'));
         }
-        $this->setRedirect('index.php?option=' . $this->_component . '&page=' . $page)->redirect();
+        $this->redirect('index.php?option=' . $this->_component . '&page=' . $page);
 	}
 
 
@@ -205,11 +189,11 @@ class DefaultController extends JxController {
     public function actionPublish()
     {
         $page = $this->input->getCmd('page', 0);
-		$model	= $this->getModel('city');
+		$model	= $this->getModel('country');
         if (!empty($_POST['cid'])) {
             $model->publishItems($_POST['cid'], 1);
         }
-        $this->setRedirect('index.php?option=' . $this->_component . '&page=' . $page)->redirect();
+        $this->redirect('index.php?option=' . $this->_component . '&page=' . $page);
 	}
 
 
@@ -219,11 +203,11 @@ class DefaultController extends JxController {
     public function actionUnPublish()
     {
         $page = $this->input->getCmd('page', 0);
-		$model	= $this->getModel('city');
+		$model	= $this->getModel('country');
         if (!empty($_POST['cid'])) {
             $model->publishItems($_POST['cid'], 0);
         }
-        $this->setRedirect('index.php?option=' . $this->_component . '&page=' . $page)->redirect();
+        $this->redirect('index.php?option=' . $this->_component . '&page=' . $page);
 	}
 
 

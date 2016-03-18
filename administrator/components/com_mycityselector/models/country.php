@@ -20,6 +20,12 @@ class CountryModel extends JModelList {
     private $table = '#__mycityselector_country';
 
     /**
+     * Prefix for fields names PREFIX[field_name]
+     * @var string
+     */
+    private $fieldPrefix = 'Country';
+
+    /**
      * Primary key of table
      * @var string
      */
@@ -50,7 +56,7 @@ class CountryModel extends JModelList {
     function __construct($config = [])
     {
         if (empty($config['filter_fields'])) {
-            $config['filter_fields'] = ['id', 'name', 'status'];
+            $config['filter_fields'] = ['id', 'name', 'subdomain', 'status'];
         }
 		parent::__construct($config);
         $fields = $this->_db->getTableColumns($this->table, false);
@@ -112,6 +118,37 @@ class CountryModel extends JModelList {
 
 
     /**
+     * Returns table's fields
+     * @return string
+     */
+    public function getDefaultData()
+    {
+        $data = [];
+        foreach ($this->fields as $key => $params) {
+            if (isset($params['default'])) {
+                $data[$params['name']] = $params['default'];
+            } else {
+                $data[$params['name']] = '';
+            }
+        }
+        return $data;
+    }
+
+
+    /**
+     * Returns field's name for input element
+     * @return string
+     */
+    public function getFieldName($name)
+    {
+        if (isset($this->fields[$name])) {
+            return $this->fieldPrefix . '[' . $name . ']';
+        }
+        return $name;
+    }
+
+
+    /**
      * Returns validation rules
      * @return array
      */
@@ -119,9 +156,6 @@ class CountryModel extends JModelList {
     {
         // TODO rules
         return [
-
-
-
         ];
     }
 
@@ -169,27 +203,27 @@ class CountryModel extends JModelList {
      * @param $data Array of fields and values pairs
      * @return int Id of record (return 0 on error)
      */
-    public function saveItem($id, $data)
+    public function saveItem($data)
     {
-        // get all keys with "City[value]"
+        // get all keys with "Prefix[value]"
+        $prefix = $this->fieldPrefix;
         $id = 0;
-        // get all keys with "Item[value]"
-        if (!empty($data['City'])) {
+        if (!empty($data[$prefix])) {
             $pairFieldValue = $fields = $values = [];
-            foreach ($data['City'] as $param => $value) {
+            foreach ($data[$prefix] as $param => $value) {
                 if ($param == 'id') {
                     $id = intval($value);
                     continue;
                 }
                 $pairFieldValue[] = $this->_db->quoteName($param) . '=' . $this->_db->quote($value);
                 $fields[] = $this->_db->quoteName($param);
-                $values[] = $this->_db->quoteName($value);
+                $values[] = $this->_db->quote($value);
             }
             // check item
-            $isExists = $this->_db->setQuery("SELECT count(`id`) FROM `{$this->table}` WHERE `id`={$id}")->execute();
-            if ($isExists->num_rows == 0) {
+            $isExists = $id > 0 ? $this->_db->setQuery("SELECT count(`id`) FROM `{$this->table}` WHERE `id`={$id}")->execute() : false;
+            if ($isExists === false || $isExists->num_rows == 0) {
                 // create
-                $query = $this->_db->getQuery(true)->insert($this->table)->columns($fields)->values($values);
+                $query = $this->_db->getQuery(true)->insert($this->table)->columns($fields)->values(implode(',', $values));
                 $result = $this->_db->setQuery($query)->execute();
                 if ($result) {
                     return $this->_db->insertid();

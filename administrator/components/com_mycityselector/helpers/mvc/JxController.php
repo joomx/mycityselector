@@ -120,6 +120,36 @@ class JxController {
 
 
     /**
+     * Sets message to User's state
+     * @param $message
+     * @param string $status
+     */
+    public function setMessage($message, $status = '')
+    {
+        $app = \JFactory::getApplication();
+        $app->setUserState($this->_component . '_message', $message);
+        $app->setUserState($this->_component . '_status', $status);
+    }
+
+
+    /**
+     * Returns message from User's state
+     * @return string
+     */
+    public function getMessage()
+    {
+        $app = \JFactory::getApplication();
+        $message = $app->getUserState($this->_component . '_message');
+        $status = $app->getUserState($this->_component . '_status');
+        $this->setMessage('');
+        if (!empty($message)) {
+            return \JFactory::getApplication()->enqueueMessage($message, $status);
+        }
+        return '';
+    }
+
+
+    /**
      * Returns model
      * @param string $name Model name
      * @throws \Exception
@@ -174,6 +204,16 @@ class JxController {
         $view = new JxView($this);
         $variables['sidebar'] = $this->sidebarMenu; // add sidebar
         $view->render($viewFile, $variables);
+    }
+
+
+    /**
+     * Does redirect
+     */
+    public function redirect($url)
+    {
+        header('Location: ' . $url);
+        exit;
     }
 
 }

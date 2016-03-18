@@ -10,10 +10,11 @@ defined('_JEXEC') or die(header('HTTP/1.0 403 Forbidden') . 'Restricted access')
 /* @var $this JViewLegacy */
 /* @var $listOrder string */
 /* @var $listDirection string */
+/* @var $items array */
 
 JHtml::_('behavior.multiselect');
 
-$count = count($this->items);
+$count = count($items);
 
 if ($listOrder == 'a.ordering') {
     $saveOrderingUrl = 'index.php?option=' . $this->getComponentName() . '&task=saveOrderAjax&tmpl=component';
@@ -25,6 +26,9 @@ if ($listOrder == 'a.ordering') {
     <?= $sidebar ?>
 </div>
 <div id="j-main-container" class="span10">
+
+    <div id="system-message-container"><?= $this->getMessage() ?></div>
+
     <form action="index.php" method="post" name="adminForm" class="admin-form <?= $this->getComponentName() ?>" id="adminForm">
         <div class="pagination"><?= $pagination ?></div>
         <hr/>
@@ -38,6 +42,7 @@ if ($listOrder == 'a.ordering') {
                     <?php echo JHtml::_('grid.checkall'); ?>
                 </th>
                 <th nowrap="nowrap"><?= JText::_('COM_MYCITYSELECTOR_GRID_TITLE') ?></th>
+                <th nowrap="nowrap">&nbsp</th>
                 <th nowrap="nowrap"><?= JText::_('COM_MYCITYSELECTOR_ITEMS_OPERATIONS') ?></th>
                 <th nowrap="nowrap">ID</th>
             </tr>
@@ -59,10 +64,15 @@ if ($listOrder == 'a.ordering') {
                     <td class="center">
                         <input type="checkbox" id="cb<?= $i ?>" name="cid[]" value="<?= $item['id'] ?>" onclick="Joomla.isChecked(this.checked);">
                     </td>
-                <td align="left">
-                    <a href="index.php?option=<?= $this->getComponentName() ?>&task=update&id=<?= $item['id'] ?>" title=""><?= $item['name'] ?></a>
-                </td>
-                    <td class="center">
+                    <td align="left">
+                        <a href="index.php?option=<?= urlencode($this->getComponentName()) ?>&task=update&id=<?= $item['id'] ?>" title=""><?= $item['name'] ?></a>
+                    </td>
+                    <td align="left">
+                        <a href="index.php?option=<?= urlencode($this->getComponentName()) ?>&controller=region&task=index&country_id=<?= $item['id'] ?>" title="">
+                            <?= JText::_('COM_MYCITYSELECTOR_REGIONS') ?>
+                        </a>
+                    </td>
+                    <td class="left" width="100px">
                         <div class="btn-group">
                             <a class="btn btn-micro hasTooltip" href="javascript:void(0);"
                                onclick="return listItemTask('cb<?= $i ?>','<?= $isPublished ? 'unpublish' : 'publish' ?>')" title=""
@@ -72,7 +82,7 @@ if ($listOrder == 'a.ordering') {
                             <button data-toggle="dropdown" class="dropdown-toggle btn btn-micro"><span class="caret"></span></button>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a href="index.php?option=<?= $this->getComponentName() ?>&task=update&id=<?= $item['id'] ?>" title="">
+                                    <a href="index.php?option=<?= urlencode($this->getComponentName()) ?>&controller=<?= urlencode($this->getControllerName()) ?>&task=update&id=<?= $item['id'] ?>" title="">
                                         <span class="icon-edit"></span> <?= JText::_('COM_MYCITYSELECTOR_ITEM_EDIT') ?>
                                     </a>
                                 </li>
@@ -84,7 +94,7 @@ if ($listOrder == 'a.ordering') {
                             </ul>
                         </div>
                     </td>
-                    <td class="left"><?= $item['id'] ?></td>
+                    <td class="left" width="20px"><?= $item['id'] ?></td>
                 </tr><?php
             }
         }

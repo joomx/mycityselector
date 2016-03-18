@@ -23,6 +23,9 @@ use function \adamasantares\html\tg;
 class JxView
 {
 
+    /**
+     * @var JxController
+     */
     public $controller;
 
     public function __construct($controller)
@@ -36,6 +39,22 @@ class JxView
     public function getComponentName()
     {
         return $this->controller->getComponentName();
+    }
+
+    /**
+     * Returns component name
+     */
+    public function getControllerName()
+    {
+        return isset($_REQUEST['controller']) ? $_REQUEST['controller'] : 'default';
+    }
+
+    /**
+     * Returns message from User's state
+     */
+    public function getMessage()
+    {
+        return $this->controller->getMessage();
     }
 
     /**
@@ -81,8 +100,8 @@ class JxView
      */
     public function formControllerName()
     {
-        $option = isset($_REQUEST['controller']) ? $_REQUEST['controller'] : 'default';
-        return tg('input!hidden$controller', $option);
+        $controller = isset($_REQUEST['controller']) ? $_REQUEST['controller'] : 'default';
+        return tg('input!hidden$controller', $controller);
     }
 
     public function formToken()
