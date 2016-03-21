@@ -139,13 +139,6 @@ class plgSystemPlg_Mycityselector extends JPlugin
      */
     private function parseCitiesList()
     {
-        // Если сайт сам по себе находится на поддомене,
-        // (например sub.domain.ru это базовый адрес), то не должно происходить
-        // никаких редиректов на domain.ru при выборе города пользователем.
-        // Чтобы это определить, смотрим прописаны ли у каких-нибудь городов
-        // субдомены (страницы не в счет) для редиректов.
-        // И если нет, значит текущий субдомен основной.
-        // Кроме того, запоминаем список городов в массив, для последующей проверки редиректа
         $citiesList = explode("\n", $this->params->get('cities_list', "Москва\nСанкт-Петербург"));
         $groupName = '';
         foreach ($citiesList as $index => $value) {
@@ -205,11 +198,11 @@ class plgSystemPlg_Mycityselector extends JPlugin
         if (substr($baseDomain, 0, 4) == 'www.') {
             $baseDomain = substr($baseDomain, 5);
         }
-        if (!empty($baseDomain) && strpos($host, $baseDomain) !== false) {
+        if (!empty($baseDomain) && strpos($host, $baseDomain) !== false) { // если базовый домен указан в настройках, то пользователь молодец.
             $this->baseDomain = $baseDomain;
             $this->cookieDomain = '.' . $this->baseDomain;
         } else {
-            // автоматическое определение
+            // иначе, делаем автоматическое определение
             $this->baseDomain = $host; // по умолчанию считаем текущий хост основным доменом
             $this->cookieDomain = '.' . $host;
             $part = explode('.', $host);
@@ -234,8 +227,10 @@ class plgSystemPlg_Mycityselector extends JPlugin
      */
     private function autoSwitchCity()
     {
-        $referer = @$_SERVER['HTTP_REFERER'];
-        //if (!$this->editMode && strpos($referer, $this->baseDomain) === false) {
+        /* Здесь есть два случая:
+         * - если нет поддоменов, то автоматическое переключение не нужно
+         * - если есть поддомен, то сверяемся со списком и устанавливаем соответствующий город в кукисах
+         */
         if (!$this->editMode) {
             // определяем, находимся ли мы на субдомене, и какой ему принадлежит город
             $hostParts = explode('.', $_SERVER['HTTP_HOST']);
@@ -317,6 +312,7 @@ class plgSystemPlg_Mycityselector extends JPlugin
      * Сохраняет все полученные плагином данные в глобальную переменную
      */
     private function storeData(){
+        // todo вместо глобальной переменной попробовать использовать JFactory::getApplication()->setUserState('var_key', 'value');
         global $MCS_BUFFER; // глобальная переменная для передачи информации от плагина к модулю
         // поскольку плагин вызывается раньше модуля, то все полученные им данные мы передаем модулю
         // в готовом виде, чтобы не делать таких же вычислений повторно в модуле

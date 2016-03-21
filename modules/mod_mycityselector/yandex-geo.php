@@ -2,18 +2,21 @@
 /**
  * Делает запрос на сервис геолокации Яндекс и возвращает название города
  */
-if (!isset($_POST['key']) || $_POST['key'] != 'sv84ts934pesgs037cw0bynh23z0-203c0-039c9ru') {
-    exit(header("HTTP/1.0 404 Not Found") . '404 Not Found');
+
+// TODO сделать генерацию этого ключа при установке, чтобы они были уникальными для каждого сайта
+// todo а чтобы JS скрипт знал какой ключ, передавать его в кукисах или JFactory::getDocument()->addScriptDeclaration('var mcskey = "ключ";');
+if (!isset($_REQUEST['key']) || $_REQUEST['key'] != 'sv84ts934pesgs037cw0bynh23z0-203c0-039c9ru') {
+    exit(header("HTTP/1.0 404 Not Found") . '404 Not Found (pk empty)');
 }
 
-if (!isset($_POST['lon']) || !isset($_POST['lat'])) {
-    exit(json_encode(array('error' => 1)));
+if (!isset($_REQUEST['lon']) || !isset($_REQUEST['lat'])) {
+    exit(json_encode(['error' => 1]));
 }
 
 $userAgent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] :
     'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36';
-$latitude = $_POST['lat']; // широта
-$longitude = $_POST['lon']; // долгота
+$latitude = $_REQUEST['lat']; // широта
+$longitude = $_REQUEST['lon']; // долгота
 
 // для тестов
 //$latitude = '55.7522200'; $longitude = '37.6155600'; // Москва
@@ -22,18 +25,21 @@ $longitude = $_POST['lon']; // долгота
 
 
 // http://geocode-maps.yandex.ru/1.x/?format=json&lang=RU_ru&kind=locality&geocode={longitude},{latitude}
-$url = 'http://geocode-maps.yandex.ru/1.x/?format=json&lang=RU_ru&kind=locality&geocode=' . $longitude . ',' . $latitude;
+$url = 'https://geocode-maps.yandex.ru/1.x/?'
+    . 'format=json&lang=RU_ru&kind=locality&spn=0.001,0.001&geocode=' . $longitude . ',' . $latitude;
 
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL, $url);
 curl_setopt($ch, CURLOPT_USERAGENT, $userAgent);
-curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 2); // устанавливаем минимальные временные рамки для связи с api
-curl_setopt($ch, CURLOPT_TIMEOUT, 2);
+curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 1); // устанавливаем минимальные временные рамки для связи с api
+curl_setopt($ch, CURLOPT_TIMEOUT, 1);
 curl_setopt($ch, CURLOPT_HEADER, 0);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
 $resp = curl_exec($ch);
-
 $json = json_decode($resp, true);
+
 if (is_array($json)) {
     if (isset($json['response'])
         && isset($json['response']['GeoObjectCollection'])
@@ -44,6 +50,6 @@ if (is_array($json)) {
     }
 }
 
-exit(json_encode(array('error' => 2)));
+exit(json_encode(['error' => 2]));
 
 

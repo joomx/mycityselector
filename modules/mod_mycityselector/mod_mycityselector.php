@@ -23,6 +23,7 @@ class MyCitySelectorModule
         global $MCS_BUFFER;
         if (!empty($MCS_BUFFER)) {
             // => берем данные из плагина (он вызывается раньше модуля)
+            // все эти переменные будут использоваться внутри шаблона
             $modID = $MCS_BUFFER['mod_id'];
             $http = $MCS_BUFFER['http'];
             $currentCity = $MCS_BUFFER['city_name'];
@@ -54,7 +55,8 @@ class MyCitySelectorModule
     /**
      * Inject jQuery framework for Joomla 2.5
      */
-    public function addJQuery(){
+    public function addJQuery()
+    {
         if (JHtml::isRegistered('jquery.framework')) {
             JHtml::_('jquery.framework');
         } else {

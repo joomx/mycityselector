@@ -218,9 +218,41 @@ function zipping($sourceDir = '', $destinationFile = '', $overwrite = true, $arc
     $sourceDir = rtrim($sourceDir, '/\\') . '/';
     $files = glob($sourceDir . '*') + glob($sourceDir . '*.*'); // read files list BEFORE create arc file
     $zip = new ZipArchive();
-    $ret = $zip->open($destinationFile, ($overwrite ? ZipArchive::OVERWRITE : ZipArchive::CREATE));
+    if ($overwrite && is_file($destinationFile)) {
+        unlink($destinationFile);
+    }
+    $ret = $zip->open($destinationFile, ZipArchive::CREATE);
     if ($ret !== TRUE) {
         out('Error! Can\'t create zip file' . "\n", 'red');
+        switch ($ret) {
+            case \ZipArchive::ER_EXISTS:
+                out(" 'File already exists {$destinationFile}'\n", 'red');
+                break;
+            case \ZipArchive::ER_INCONS:
+                out(" 'Zip archive inconsistent.'\n", 'red');
+                break;
+            case \ZipArchive::ER_INVAL:
+                out(" 'Invalid argument.'\n", 'red');
+                break;
+            case \ZipArchive::ER_MEMORY:
+                out(" 'Malloc failure.'\n", 'red');
+                break;
+            case \ZipArchive::ER_NOENT:
+                out(" 'No such file {$destinationFile}'\n", 'red');
+                break;
+            case \ZipArchive::ER_NOZIP:
+                out(" 'Not a zip archive.'\n", 'red');
+                break;
+            case \ZipArchive::ER_OPEN:
+                out(" 'Can't open file {$destinationFile}'\n", 'red');
+                break;
+            case \ZipArchive::ER_READ:
+                out(" 'Read error.'\n", 'red');
+                break;
+            case \ZipArchive::ER_SEEK:
+                out(" 'Seek error.'\n", 'red');
+                break;
+        }
         exit;
     } else {
         $count = count($files);
