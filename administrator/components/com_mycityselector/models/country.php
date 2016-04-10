@@ -178,12 +178,16 @@ class CountryModel extends JModelList {
      * @param int $id
      * @return array
      */
-    public function getItem($id)
+    public function getItem($id = 0)
     {
-        $id = $this->_db->escape($id);
         $query = $this->getListQuery();
-        $query->where("`id`={$id}");
-		return $this->_db->setQuery($query)->loadAssoc();
+        if ($id > 0) {
+            $id = $this->_db->escape($id);
+            $query->where("`id`={$id}");
+        } else {
+            $query->order('`id` ASC');
+        }
+		return $this->_db->setQuery($query, 0, 1)->loadAssoc();
 	}
 
 
@@ -285,7 +289,7 @@ class CountryModel extends JModelList {
             if (strpos($url, '?') === false) {
                 $url .= '?';
             } else {
-                $url .= '&';
+                $url = str_replace('&page=' . $page, '', $url) . '&';
             }
             $pages = intval($count / $this->pageLimit);
             if ($count % $this->pageLimit > 0) {
@@ -299,6 +303,7 @@ class CountryModel extends JModelList {
                 }
             }
             $html .= '<br/>Total ' . $count . ' items';
+            $html .= '<input type="hidden" name="page" value="' . $page . '"/>';
         }
         return $html;
     }

@@ -14,7 +14,7 @@ require_once __DIR__ . '/../helpers/mvc/JxView.php';
 use adamasantares\jxmvc\JxController;
 use adamasantares\jxmvc\JxView;
 
-class DefaultController extends JxController {
+class RegionController extends JxController {
 
 
     /**
@@ -48,14 +48,22 @@ class DefaultController extends JxController {
      */
     public function actionIndex()
     {
-        JToolBarHelper::title(JText::_('COM_MYCITYSELECTOR_NAME'), 'big-ico');
+        JToolBarHelper::title(JText::_('COM_MYCITYSELECTOR_REGION'), 'big-ico');
         JToolBarHelper::addNew();
         JToolBarHelper::publishList();
         JToolBarHelper::unpublishList();
         JToolBarHelper::custom('drop', 'delete', 'delete', JText::_('COM_MYCITYSELECTOR_ITEM_DELETE'));
-        $model = $this->getModel('country');	// (./models/[$modelName].php)
+        $model = $this->getModel('region');	// (./models/[$modelName].php)
+        $countryId = intval($this->input->getCmd('country_id'));
+        $country = $this->getModel('country')->getItem();
+        $countryName = '';
+        if (!empty($country)) {
+            $countryName = $country['name'];
+        }
         $this->render('list', [
-            'items' => $model->getItems(),
+            'countryId' => $countryId,
+            'countryName' => $countryName,
+            'items' => $model->getItems($countryId),
             'pagination' => $model->getPagination(),
             'listOrder' => $this->input->getCmd('list.ordering', ''),
             'listDirection' => $this->input->getCmd('list.direction', '')
@@ -68,7 +76,7 @@ class DefaultController extends JxController {
      */
     public function actionAdd()
     {
-        $model = $this->getModel('country');
+        $model = $this->getModel('region');
         $data = $model->getDefaultData();
         JToolBarHelper::title(JText::_('COM_MYCITYSELECTOR_NAME') . ' - ' . JText::_('COM_MYCITYSELECTOR_ITEM_ADDING'), 'big-ico');
         JToolBarHelper::apply('save');
@@ -89,7 +97,7 @@ class DefaultController extends JxController {
      */
     public function actionUpdate()
     {
-		$model = $this->getModel('country');
+		$model = $this->getModel('region');
         $id = intval($this->input->getCmd('id'));
         if (!empty($_POST['cid'])) {
             $id = intval($_POST['cid'][0]);
@@ -174,7 +182,7 @@ class DefaultController extends JxController {
     public function actionDrop()
     {
         $page = $this->input->getCmd('page', 0);
-		$model	= $this->getModel('country');
+		$model	= $this->getModel('region');
         if (!empty($_POST['cid'])) {
             $model->dropItems($_POST['cid']);
             $this->setMessage(JText::_('COM_MYCITYSELECTOR_FORM_SAVED'));
@@ -189,7 +197,7 @@ class DefaultController extends JxController {
     public function actionPublish()
     {
         $page = $this->input->getCmd('page', 0);
-		$model	= $this->getModel('country');
+		$model	= $this->getModel('region');
         if (!empty($_POST['cid'])) {
             $model->publishItems($_POST['cid'], 1);
         }
@@ -203,7 +211,7 @@ class DefaultController extends JxController {
     public function actionUnPublish()
     {
         $page = $this->input->getCmd('page', 0);
-		$model	= $this->getModel('country');
+		$model	= $this->getModel('region');
         if (!empty($_POST['cid'])) {
             $model->publishItems($_POST['cid'], 0);
         }

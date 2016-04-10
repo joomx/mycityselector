@@ -104,7 +104,7 @@ class JxController {
         }
         // menu items for left sidebar
         foreach ($this->sidebarMenuItems() as $action => $name) {
-            \JHtmlSidebar::addEntry($name, 'index.php?option=' . $componentName . '&task=' . $action, ($this->_action==$action));
+            \JHtmlSidebar::addEntry($name, 'index.php?option=' . $componentName . '&task=default&controller=' . $action, ($this->_id==$action));
         }
         $this->sidebarMenu = \JHtmlSidebar::render();
     }
@@ -131,7 +131,6 @@ class JxController {
         $app->setUserState($this->_component . '_status', $status);
     }
 
-
     /**
      * Returns message from User's state
      * @return string
@@ -147,7 +146,6 @@ class JxController {
         }
         return '';
     }
-
 
     /**
      * Returns model
@@ -188,7 +186,6 @@ class JxController {
         }
     }
 
-
     /**
      * Renders view
      * @param string $viewName
@@ -205,7 +202,6 @@ class JxController {
         $variables['sidebar'] = $this->sidebarMenu; // add sidebar
         $view->render($viewFile, $variables);
     }
-
 
     /**
      * Does redirect

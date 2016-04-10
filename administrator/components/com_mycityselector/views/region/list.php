@@ -27,10 +27,11 @@ if ($listOrder == 'a.ordering') {
 </div>
 <div id="j-main-container" class="span10">
 
-    <h3><?= JText::_('COM_MYCITYSELECTOR_COUNTRIES') ?></h3>
     <div id="system-message-container"><?= $this->getMessage() ?></div>
 
     <form action="index.php" method="post" name="adminForm" class="admin-form <?= $this->getComponentName() ?>" id="adminForm">
+        <h3><?= $countryName ?> / <?= JText::_('COM_MYCITYSELECTOR_REGIONS') ?></h3>
+        <hr/>
         <div class="pagination"><?= $pagination ?></div>
         <hr/>
         <table class="table">

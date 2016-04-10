@@ -22,7 +22,7 @@ use adamasantares\jxforms\JxField;
 </div>
 <div id="j-main-container" class="span10">
 
-    <h3><?= JText::_('COM_MYCITYSELECTOR_COUNTRY') ?></h3>
+    <h3><?= JText::_('COM_MYCITYSELECTOR_REGION') ?></h3>
 
     <div id="system-message-container"><?= $this->getMessage() ?></div>
 
@@ -50,6 +50,7 @@ use adamasantares\jxforms\JxField;
             'inline' => true
         ]) ?>
 
+        <input type="hidden" name="<?= $model->getFieldName('country_id') ?>" value="<?= $data['country_id'] ?>" />
         <input type="hidden" name="<?= $model->getFieldName('id') ?>" value="<?= $data['id'] ?>" />
 
         <?= $this->formControllerName() ?>
