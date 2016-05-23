@@ -49,6 +49,12 @@ class RegionModel extends JModelList {
      */
     private $pageLimit = 20;
 
+    /**
+     * Country Id
+     * @var int
+     */
+    private $countryId = 0;
+
 
     /**
      * Init
@@ -57,6 +63,9 @@ class RegionModel extends JModelList {
     {
         if (empty($config['filter_fields'])) {
             $config['filter_fields'] = ['id', 'name', 'subdomain', 'status'];
+        }
+        if (!empty($config['country_id'])) {
+            $this->countryId = intval($config['country_id']);
         }
 		parent::__construct($config);
         $fields = $this->_db->getTableColumns($this->table, false);
@@ -162,14 +171,24 @@ class RegionModel extends JModelList {
 
     /**
      * Returns items (records)
+     * @param int $countryId
+     * @param bool $limit
      * @return array
      */
-    public function getItems()
+    public function getItems($countryId = null, $limit = true)
     {
+        if (empty($countryId)) {
+            $countryId = $this->countryId;
+        } else {
+            $countryId = intval($countryId);
+        }
 		$page = intval($this->input->getCmd('page', '0'));
 		$start = intval($this->pageLimit * $page);
-        $query = $this->getListQuery();
-        return $this->_db->setQuery($query, $start, $this->pageLimit)->loadAssocList();
+        $query = $this->getListQuery()->where("country_id={$countryId}");
+        if ($limit) {
+            return $this->_db->setQuery($query, $start, $this->pageLimit)->loadAssocList();
+        }
+        return $this->_db->setQuery($query)->loadAssocList();
 	}
 
 
@@ -263,6 +282,9 @@ class RegionModel extends JModelList {
      */
     public function dropItems($keys)
     {
+        if (!is_array($keys)) {
+            $keys = [$keys];
+        }
         foreach ($keys as $i => $key) {
             $keys[$i] = intval($key);
         }
@@ -272,13 +294,19 @@ class RegionModel extends JModelList {
 
 
     /**
+     * @param int $countryId
      * @return string (JPagination)
      */
-    public function getPagination()
+    public function getPagination($countryId = null)
     {
+        if (empty($countryId)) {
+            $countryId = $this->countryId;
+        } else {
+            $countryId = intval($countryId);
+        }
         $html = '';
         $page = intval($this->input->getCmd('page', 0));
-        $this->_db->setQuery("SELECT COUNT(*) AS `val` FROM `{$this->table}`");
+        $this->_db->setQuery("SELECT COUNT(*) AS `val` FROM `{$this->table}` WHERE `country_id` = {$countryId}");
         $count = $this->_db->loadResult();
         if ($count > 0) {
             $url = $_SERVER['REQUEST_URI'];

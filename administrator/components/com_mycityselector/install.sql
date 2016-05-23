@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS `#__mycityselector_country` (
 
 INSERT INTO `#__mycityselector_country` (`id`, `name`, `subdomain`, `status`) VALUES (1, 'Россия', 'russia', 1);
 INSERT INTO `#__mycityselector_country` (`id`, `name`, `subdomain`, `status`) VALUES (2, 'Беларусь', 'belarus', 1);
-INSERT INTO `#__mycityselector_country` (`id`, `name`, `subdomain`, `status`) VALUES (3, 'Украина', 'ukraine', 1);
+INSERT INTO `#__mycityselector_country` (`id`, `name`, `subdomain`, `status`) VALUES (3, 'Україна', 'ukraine', 1);
 
 CREATE TABLE IF NOT EXISTS `#__mycityselector_region` (
   `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,

@@ -8,12 +8,13 @@
 defined('_JEXEC') or die(header('HTTP/1.0 403 Forbidden') . 'Restricted access');
 
 /* @var $this JViewLegacy */
+/* @var $items array */
 /* @var $listOrder string */
 /* @var $listDirection string */
 
 JHtml::_('behavior.multiselect');
 
-$count = count($this->items);
+$count = count($items);
 
 if ($listOrder == 'a.ordering') {
     $saveOrderingUrl = 'index.php?option=com_mycityselector&task=saveOrderAjax&tmpl=component';

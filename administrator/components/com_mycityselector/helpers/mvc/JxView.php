@@ -13,7 +13,14 @@ if (!class_exists('\adamasantares\html\Tag')) {
 use \JHtml;
 use \JText;
 use \adamasantares\html\Tag;
-use function \adamasantares\html\tg;
+//if (PHP_VERSION_ID >= 506000) {
+    //use function \adamasantares\html\tg; // php >= 5.6
+//} else {
+    function tg($properties, $content = null)
+    {
+        return \adamasantares\html\tg($properties, $content);
+    }
+//}
 
 
 /**
@@ -90,7 +97,7 @@ class JxView
      */
     public function formOption()
     {
-        $option = isset($_REQUEST['option']) ? $_REQUEST['option'] : '';
+        $option = isset($_REQUEST['option']) ? $_REQUEST['option'] : $this->getComponentName();
         return tg('input!hidden$option', $option);
     }
 

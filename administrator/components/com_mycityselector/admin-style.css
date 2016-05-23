@@ -12,5 +12,34 @@
     border-radius: 10px;
 }
 
-/* todo put your styles here */
+.color-red {
+    color: red;
+}
+
+.debug-mode {
+
+}
+.debug-mode .isis-demo {
+    display: inline-block;
+    font-size: 12px;
+    padding: 4px;
+    margin: 6px 4px;
+    border: 1px solid gray;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+.debug-mode .isis-demo .icon {
+    font-size: 18px;
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    margin-right: .25em;
+    line-height: 18px;
+}
+.debug-mode .icon-color {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+}
 

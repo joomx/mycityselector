@@ -34,12 +34,15 @@ class CityController extends JxController {
      */
     public function sidebarMenuItems()
     {
-        return [
-            'default' => JText::_('COM_MYCITYSELECTOR_COUNTRIES'),
-            //'country' => JText::_('COM_MYCITYSELECTOR_COUNTRIES'),
+        $sidebar = [
+            'default' => JText::_('COM_MYCITYSELECTOR_COUNTRIES'), //'country'
             'region' => JText::_('COM_MYCITYSELECTOR_REGIONS'),
             'city' => JText::_('COM_MYCITYSELECTOR_CITIES'),
         ];
+        if (JFactory::getConfig()->get('debug') == 1) {
+            $sidebar['dev'] = 'DEV TOOLS';
+        }
+        return $sidebar;
     }
 
 
@@ -53,7 +56,8 @@ class CityController extends JxController {
         JToolBarHelper::publishList();
         JToolBarHelper::unpublishList();
         JToolBarHelper::custom('drop', 'delete', 'delete', JText::_('COM_MYCITYSELECTOR_ITEM_DELETE'));
-        $model = $this->getModel('city');	// (./models/[$modelName].php)
+        $regionId = intval($this->input->getCmd('region_id'));
+        $model = $this->getModel('city', ['region_id' => $regionId]);	// (./models/[$modelName].php)
         $this->render('list', [
             'items' => $model->getItems(),
             'pagination' => $model->getPagination(),

@@ -43,6 +43,11 @@ class CityModel extends JModelList {
      */
     private $pageLimit = 20;
 
+    /**
+     * @var int
+     */
+    private $regionId = 0;
+
 
     /**
      * Init
@@ -51,6 +56,9 @@ class CityModel extends JModelList {
     {
         if (empty($config['filter_fields'])) {
             $config['filter_fields'] = ['id', 'name', 'status'];
+        }
+        if (!empty($config['region_id'])) {
+            $this->regionId = intval($config['region_id']);
         }
 		parent::__construct($config);
         $fields = $this->_db->getTableColumns($this->table, false);
@@ -128,14 +136,24 @@ class CityModel extends JModelList {
 
     /**
      * Returns items (records)
+     * @param int $regionId
+     * @param bool $limit
      * @return array
      */
-    public function getItems()
+    public function getItems($regionId = null, $limit = true)
     {
+        if (empty($countryId)) {
+            $regionId = $this->regionId;
+        } else {
+            $regionId = intval($regionId);
+        }
 		$page = intval($this->input->getCmd('page', '0'));
 		$start = intval($this->pageLimit * $page);
-        $query = $this->getListQuery();
-        return $this->_db->setQuery($query, $start, $this->pageLimit)->loadAssocList();
+        $query = $this->getListQuery()->where("region_id={$regionId}");
+        if ($limit) {
+            return $this->_db->setQuery($query, $start, $this->pageLimit)->loadAssocList();
+        }
+        return $this->_db->setQuery($query)->loadAssocList();
 	}
 
 
@@ -169,11 +187,9 @@ class CityModel extends JModelList {
      * @param $data Array of fields and values pairs
      * @return int Id of record (return 0 on error)
      */
-    public function saveItem($id, $data)
+    public function saveItem($id = 0, $data)
     {
         // get all keys with "City[value]"
-        $id = 0;
-        // get all keys with "Item[value]"
         if (!empty($data['City'])) {
             $pairFieldValue = $fields = $values = [];
             foreach ($data['City'] as $param => $value) {
@@ -224,11 +240,14 @@ class CityModel extends JModelList {
 
 
     /**
-     * Drop (remove) selected items
+     * Drop (remove) selected cities
      * @param $keys
      */
     public function dropItems($keys)
     {
+        if (!is_array($keys)) {
+            $keys = [$keys];
+        }
         foreach ($keys as $i => $key) {
             $keys[$i] = intval($key);
         }
@@ -238,13 +257,36 @@ class CityModel extends JModelList {
 
 
     /**
+     * Drop cities by region id
+     * @param $keys
+     */
+    public function dropByRegions($keys)
+    {
+        if (!is_array($keys)) {
+            $keys = [$keys];
+        }
+        foreach ($keys as $i => $key) {
+            $keys[$i] = intval($key);
+        }
+        $keys = implode(',', $keys);
+        $this->_db->setQuery("DELETE FROM `{$this->table}` WHERE `region_id` IN ({$keys})")->execute();
+    }
+
+
+    /**
+     * @param int $regionId
      * @return string (JPagination)
      */
-    public function getPagination()
+    public function getPagination($regionId = null)
     {
+        if (empty($countryId)) {
+            $regionId = $this->regionId;
+        } else {
+            $regionId = intval($regionId);
+        }
         $html = '';
         $page = intval($this->input->getCmd('page', 0));
-        $this->_db->setQuery("SELECT COUNT(*) AS `val` FROM `{$this->table}`");
+        $this->_db->setQuery("SELECT COUNT(*) AS `val` FROM `{$this->table}` WHERE `region_id` = {$regionId}");
         $count = $this->_db->loadResult();
         if ($count > 0) {
             $url = $_SERVER['REQUEST_URI'];

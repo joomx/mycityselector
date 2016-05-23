@@ -162,14 +162,18 @@ class CountryModel extends JModelList {
 
     /**
      * Returns items (records)
+     * @param bool $limit
      * @return array
      */
-    public function getItems()
+    public function getItems($limit = true)
     {
 		$page = intval($this->input->getCmd('page', '0'));
 		$start = intval($this->pageLimit * $page);
         $query = $this->getListQuery();
-        return $this->_db->setQuery($query, $start, $this->pageLimit)->loadAssocList();
+        if ($limit) {
+            return $this->_db->setQuery($query, $start, $this->pageLimit)->loadAssocList();
+        }
+        return $this->_db->setQuery($query)->loadAssocList();
 	}
 
 
@@ -267,6 +271,9 @@ class CountryModel extends JModelList {
      */
     public function dropItems($keys)
     {
+        if (!is_array($keys)) {
+            $keys = [$keys];
+        }
         foreach ($keys as $i => $key) {
             $keys[$i] = intval($key);
         }

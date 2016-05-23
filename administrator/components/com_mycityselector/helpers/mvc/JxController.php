@@ -150,16 +150,17 @@ class JxController {
     /**
      * Returns model
      * @param string $name Model name
+     * @param mixed $config Model's config (argument for constructor)
      * @throws \Exception
      */
-    public function getModel($name)
+    public function getModel($name, $config = null)
     {
         $path = $this->root . '/models/' . $name . '.php';
         if (is_file($path)) {
             require_once($path);
             $className = ucfirst(strtolower($name)) . 'Model';
             if (class_exists($className)) {
-                $model = new $className();
+                $model = new $className($config);
                 return $model;
             }
             throw new \Exception("Model '{$className}' not found.");

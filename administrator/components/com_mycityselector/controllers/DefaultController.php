@@ -34,12 +34,15 @@ class DefaultController extends JxController {
      */
     public function sidebarMenuItems()
     {
-        return [
-            'default' => JText::_('COM_MYCITYSELECTOR_COUNTRIES'),
-            //'country' => JText::_('COM_MYCITYSELECTOR_COUNTRIES'),
+        $sidebar = [
+            'default' => JText::_('COM_MYCITYSELECTOR_COUNTRIES'), //'country'
             'region' => JText::_('COM_MYCITYSELECTOR_REGIONS'),
             'city' => JText::_('COM_MYCITYSELECTOR_CITIES'),
         ];
+        if (JFactory::getConfig()->get('debug') == 1) {
+            $sidebar['dev'] = 'DEV TOOLS';
+        }
+        return $sidebar;
     }
 
 
@@ -169,15 +172,31 @@ class DefaultController extends JxController {
 
 
     /**
-     * Drop items
+     * Drop country
      */
     public function actionDrop()
     {
         $page = $this->input->getCmd('page', 0);
-		$model	= $this->getModel('country');
+		$country	= $this->getModel('country');
+        $region	= $this->getModel('region');
+        $city	= $this->getModel('city');
         if (!empty($_POST['cid'])) {
-            $model->dropItems($_POST['cid']);
-            $this->setMessage(JText::_('COM_MYCITYSELECTOR_FORM_SAVED'));
+            foreach ($_POST['cid'] as $cid) {
+                $regions = $region->getItems($cid, false);
+                if (!empty($regions)) {
+                    // drop cities
+                    $keys = [];
+                    foreach ($regions as $fields) {
+                        $keys[] = $fields['id'];
+                    }
+                    $city->dropByRegions($keys);
+                    // drop regions
+                    $region->dropItems($keys);
+                }
+            }
+            // drop countries
+            $country->dropItems($_POST['cid']);
+            $this->setMessage(JText::_('COM_MYCITYSELECTOR_MESSAGE_DELETED'));
         }
         $this->redirect('index.php?option=' . $this->_component . '&controller=' . $this->_id . '&page=' . $page);
 	}
