@@ -13,7 +13,7 @@ My City Selector Joomla Extension
 
 My City Selector - это расширение для CMS Joomla, позволяющее администратору сайта отображать разную информацию для разных городов.
 
-<img src="https://raw.githubusercontent.com/adamasantares/mycityselector/develop/doc_images/intor.png" alt="" width="100%" />
+<img src="https://raw.githubusercontent.com/adamasantares/mycityselector/master/doc_images/intor.png" alt="" width="100%" />
 
 Расширение совместимо с модулем мультиязычности. Но при этом может понадобиться создать для каждого языка свою копию модуля mod_mycityselector. На данный момент, есть только один серьезный недостаток - это невозможность сопоставить между собой один и тот же город с разными названиями. Поэтому при переключении языка, скорее всего потребуется повторно выбрать город.
 Данный недочет обязательно будет исправлен в следующей версии.
@@ -59,9 +59,9 @@ My City Selector - это расширение для CMS Joomla, позволя
 
 Расширение состоит из плагина и модуля. При корректной установке плагин должен активироваться автоматически. Так что сразу переходим к настройкам модуля. Важные параметры модуля находятся не только на основной вкладке настроек, но и на вкладке дополнительных параметров.
 
-<img src="https://raw.githubusercontent.com/adamasantares/mycityselector/develop/doc_images/mod_base_settings.png" alt="" width="100%" />
+<img src="https://raw.githubusercontent.com/adamasantares/mycityselector/master/doc_images/mod_base_settings.png" alt="" width="100%" />
 
-<img src="https://raw.githubusercontent.com/adamasantares/mycityselector/develop/doc_images/mod_advanced_settings.png" alt="" width="100%" />
+<img src="https://raw.githubusercontent.com/adamasantares/mycityselector/master/doc_images/mod_advanced_settings.png" alt="" width="100%" />
 
 Рассмотрим все параметры по порядку.
 
@@ -85,7 +85,7 @@ My City Selector - это расширение для CMS Joomla, позволя
  * связка SypexGeo + YandexGeo, когда первый используется как более быстрого определения, а второй, вроде контрольного выстрела
 
 *Примечание: использование YandexGeo вероятнее всего выдаст пользователю запрос на разрешение использовать функционал геолокации, имейте это в виду.*
-<img src="https://raw.githubusercontent.com/adamasantares/mycityselector/develop/doc_images/geolocation_request.png" alt="" />
+<img src="https://raw.githubusercontent.com/adamasantares/mycityselector/master/doc_images/geolocation_request.png" alt="" />
 
 По умолчанию данный функционал отключен.
 
@@ -100,13 +100,13 @@ My City Selector - это расширение для CMS Joomla, позволя
 
 Рассмотрим на примерах, для начала на простом списке без групп и адресов.
 
-<img src="https://raw.githubusercontent.com/adamasantares/mycityselector/develop/doc_images/example_1.png" alt="" />
+<img src="https://raw.githubusercontent.com/adamasantares/mycityselector/master/doc_images/example_1.png" alt="" />
 
 При такой конфигурации, контент для всех городов существует в рамках одного домена. То есть при индексации вашего сайта, скорее всего роботы получат контент для города, установленного по умолчанию. Для пользователя, переключение контента будет происходить "на лету", без каких либо перезагрузок страниц.
 
 Теперь, если назначить каждому городу свою страницу на сайте, то при выборе города будет происходить redirect на соответствущую страницу.
 
-<img src="https://raw.githubusercontent.com/adamasantares/mycityselector/develop/doc_images/example_2.png" alt="" />
+<img src="https://raw.githubusercontent.com/adamasantares/mycityselector/master/doc_images/example_2.png" alt="" />
 
 Обратите внимание, что основному городу страница не задается, поскольку не может у сайта отсутствовать главная страница (корень сайта). Таким образом главная страница сайта - это главная страница города, указанного по умолчанию. Для лучшего понимания, изображу как должна выглядеть структура такого сайта.
 
@@ -135,7 +135,7 @@ My City Selector - это расширение для CMS Joomla, позволя
 
 Самым же правильным и простым способом является привязка каждому городу своего поддомена.
 
-<img src="https://raw.githubusercontent.com/adamasantares/mycityselector/develop/doc_images/cities_subdomains.png" alt="" />
+<img src="https://raw.githubusercontent.com/adamasantares/mycityselector/master/doc_images/cities_subdomains.png" alt="" />
 
 Фактически сайт все равно продолжает существовать в единственном числе, но разные поддомены позволяют пользователям и поисковикам отчетливо осознавать, что они находятся на сайте (поддомене) конкретного города. Принип работы остается таким же как и в первых двух вариантах: один материал - несколько разных блоков [city].
 
@@ -149,7 +149,7 @@ My City Selector - это расширение для CMS Joomla, позволя
 
 Внешний вид диалогового окна выбора города. В "коробке" всего два, не особо выдающихся шаблона (простите, я не дизайнер).
 
-<img src="https://raw.githubusercontent.com/adamasantares/mycityselector/develop/doc_images/default_templates.png" alt="" />
+<img src="https://raw.githubusercontent.com/adamasantares/mycityselector/master/doc_images/default_templates.png" alt="" />
 
 Как и для любого модуля в Joomla можно создать переопределение шаблона или сделать свой (подробнее см. раздел "Кастомизация").
 
@@ -161,7 +161,7 @@ My City Selector - это расширение для CMS Joomla, позволя
 
 Позволяет добавить текст перед названием текущего города. Пример:
 
-<img align="center" src="https://raw.githubusercontent.com/adamasantares/mycityselector/develop/doc_images/before_after.png" alt="" />
+<img align="center" src="https://raw.githubusercontent.com/adamasantares/mycityselector/master/doc_images/before_after.png" alt="" />
 
 ## Кастомизация
 
