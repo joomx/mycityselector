@@ -34,12 +34,15 @@ class RegionController extends JxController {
      */
     public function sidebarMenuItems()
     {
-        return [
-            'default' => JText::_('COM_MYCITYSELECTOR_COUNTRIES'),
-            //'country' => JText::_('COM_MYCITYSELECTOR_COUNTRIES'),
+        $sidebar = [
+            'default' => JText::_('COM_MYCITYSELECTOR_COUNTRIES'), //'country'
             'region' => JText::_('COM_MYCITYSELECTOR_REGIONS'),
             'city' => JText::_('COM_MYCITYSELECTOR_CITIES'),
         ];
+        if (JFactory::getConfig()->get('debug') == 1) {
+            $sidebar['dev'] = 'DEV TOOLS';
+        }
+        return $sidebar;
     }
 
 
@@ -53,17 +56,18 @@ class RegionController extends JxController {
         JToolBarHelper::publishList();
         JToolBarHelper::unpublishList();
         JToolBarHelper::custom('drop', 'delete', 'delete', JText::_('COM_MYCITYSELECTOR_ITEM_DELETE'));
-        $model = $this->getModel('region');	// (./models/[$modelName].php)
         $countryId = intval($this->input->getCmd('country_id'));
-        $country = $this->getModel('country')->getItem();
-        $countryName = '';
-        if (!empty($country)) {
-            $countryName = $country['name'];
+        $country = $this->getModel('country')->getItem($countryId);
+        if (empty($country)) {
+            return $this->render('not_found');
         }
+        $countryName = $country['name'];
+        $countryId = $country['id'];
+        $model = $this->getModel('region', ['country_id' => $countryId]);	// (./models/[$modelName].php)
         $this->render('list', [
             'countryId' => $countryId,
             'countryName' => $countryName,
-            'items' => $model->getItems($countryId),
+            'items' => $model->getItems(),
             'pagination' => $model->getPagination(),
             'listOrder' => $this->input->getCmd('list.ordering', ''),
             'listDirection' => $this->input->getCmd('list.direction', '')
@@ -182,10 +186,12 @@ class RegionController extends JxController {
     public function actionDrop()
     {
         $page = $this->input->getCmd('page', 0);
-		$model	= $this->getModel('region');
+		$region	= $this->getModel('region');
+        $city	= $this->getModel('city');
         if (!empty($_POST['cid'])) {
-            $model->dropItems($_POST['cid']);
-            $this->setMessage(JText::_('COM_MYCITYSELECTOR_FORM_SAVED'));
+            $city->dropByRegions($_POST['cid']);
+            $region->dropItems($_POST['cid']);
+            $this->setMessage(JText::_('COM_MYCITYSELECTOR_MESSAGE_DELETED'));
         }
         $this->redirect('index.php?option=' . $this->_component . '&controller=' . $this->_id . '&page=' . $page);
 	}

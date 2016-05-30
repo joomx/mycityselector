@@ -88,8 +88,14 @@ if ($listOrder == 'a.ordering') {
                                     </a>
                                 </li>
                                 <li>
+                                    <a href="index.php?option=<?= urlencode($this->getComponentName()) ?>&controller=region&task=index&country_id=<?= $item['id'] ?>" title="">
+                                        <span class="icon-forward-circle"></span> <?= JText::_('COM_MYCITYSELECTOR_REGIONS') ?>
+                                    </a>
+                                </li>
+                                <li role="separator" class="divider"></li>
+                                <li>
                                     <a href="javascript:void(0)" onclick="listItemTask('cb<?= $i ?>', 'drop')">
-                                        <span class="icon-delete"></span> <?= JText::_('COM_MYCITYSELECTOR_ITEM_DELETE') ?>
+                                        <span class="icon-delete color-red"></span> <?= JText::_('COM_MYCITYSELECTOR_ITEM_DELETE') ?>
                                     </a>
                                 </li>
                             </ul>

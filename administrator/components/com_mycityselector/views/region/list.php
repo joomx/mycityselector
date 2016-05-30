@@ -70,8 +70,8 @@ if ($listOrder == 'a.ordering') {
                         <a href="index.php?option=<?= urlencode($this->getComponentName()) ?>&task=update&id=<?= $item['id'] ?>" title=""><?= $item['name'] ?></a>
                     </td>
                     <td align="left">
-                        <a href="index.php?option=<?= urlencode($this->getComponentName()) ?>&controller=region&task=index&country_id=<?= $item['id'] ?>" title="">
-                            <?= JText::_('COM_MYCITYSELECTOR_REGIONS') ?>
+                        <a href="index.php?option=<?= urlencode($this->getComponentName()) ?>&controller=city&task=index&region_id=<?= $item['id'] ?>" title="">
+                            <?= JText::_('COM_MYCITYSELECTOR_CITIES') ?>
                         </a>
                     </td>
                     <td class="left" width="100px">

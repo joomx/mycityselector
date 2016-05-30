@@ -7,6 +7,8 @@
 
 defined('_JEXEC') or die(header('HTTP/1.0 403 Forbidden') . 'Restricted access');
 
-require_once dirname(__FILE__) . '/helpers/mvc/JxRouter.php';
+define('COM_MCS_PATH', dirname(__FILE__));
 
-\adamasantares\jxmvc\JxRouter::executeController(dirname(__FILE__), 'com_mycityselector');
+require_once COM_MCS_PATH . '/helpers/mvc/JxRouter.php';
+
+\adamasantares\jxmvc\JxRouter::executeController(COM_MCS_PATH, 'com_mycityselector');
