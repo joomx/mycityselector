@@ -44,6 +44,7 @@ if (!defined('_JDEFINES')) {
     define('JPATH_BASE', $siteRoot);
     require_once JPATH_BASE . '/includes/defines.php';
 }
+require_once JPATH_BASE . '/includes/framework.php';
 require_once JPATH_LIBRARIES . '/import.legacy.php';
 require_once JPATH_LIBRARIES . '/cms.php';
 

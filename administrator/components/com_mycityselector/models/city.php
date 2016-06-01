@@ -142,14 +142,17 @@ class CityModel extends JModelList {
      */
     public function getItems($regionId = null, $limit = true)
     {
-        if (empty($countryId)) {
+        if (empty($regionId)) {
             $regionId = $this->regionId;
         } else {
             $regionId = intval($regionId);
         }
 		$page = intval($this->input->getCmd('page', '0'));
 		$start = intval($this->pageLimit * $page);
-        $query = $this->getListQuery()->where("region_id={$regionId}");
+        $query = $this->getListQuery();
+        if ($regionId != 0) {
+            $query->where("region_id={$regionId}");
+        }
         if ($limit) {
             return $this->_db->setQuery($query, $start, $this->pageLimit)->loadAssocList();
         }
@@ -279,14 +282,14 @@ class CityModel extends JModelList {
      */
     public function getPagination($regionId = null)
     {
-        if (empty($countryId)) {
+        if (empty($regionId)) {
             $regionId = $this->regionId;
         } else {
             $regionId = intval($regionId);
         }
         $html = '';
         $page = intval($this->input->getCmd('page', 0));
-        $this->_db->setQuery("SELECT COUNT(*) AS `val` FROM `{$this->table}` WHERE `region_id` = {$regionId}");
+        $this->_db->setQuery("SELECT COUNT(*) AS `val` FROM `{$this->table}`".($regionId == 0 ? '' : " WHERE `region_id` = {$regionId}"));
         $count = $this->_db->loadResult();
         if ($count > 0) {
             $url = $_SERVER['REQUEST_URI'];
