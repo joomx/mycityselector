@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="component" version="3.2" method="upgrade">
     <name>Mycityselector</name>
-    <creationDate>May 2016</creationDate>
+    <creationDate>Jun 2016</creationDate>
     <author>Konstantin Kutsevalov</author>
     <authorEmail>konstantin@kutsevalov.name</authorEmail>
     <authorUrl>http://kutsevalov.name</authorUrl>

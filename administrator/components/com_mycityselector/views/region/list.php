@@ -67,7 +67,7 @@ if ($listOrder == 'a.ordering') {
                         <input type="checkbox" id="cb<?= $i ?>" name="cid[]" value="<?= $item['id'] ?>" onclick="Joomla.isChecked(this.checked);">
                     </td>
                     <td align="left">
-                        <a href="index.php?option=<?= urlencode($this->getComponentName()) ?>&task=update&id=<?= $item['id'] ?>" title=""><?= $item['name'] ?></a>
+                        <a href="index.php?option=<?= urlencode($this->getComponentName()) ?>&task=update&controller=region&id=<?= $item['id'] ?>" title=""><?= $item['name'] ?></a>
                     </td>
                     <td align="left">
                         <a href="index.php?option=<?= urlencode($this->getComponentName()) ?>&controller=city&task=index&region_id=<?= $item['id'] ?>" title="">
