@@ -1,5 +1,5 @@
 <?php
-$regions = 'Республика Адыгея
+$regions = ['Республика Адыгея
 Республика Алтай
 Республика Башкортостан
 Республика Бурятия
@@ -83,17 +83,60 @@ $regions = 'Республика Адыгея
 Ненецкий автономный округ
 Ханты-Мансийский автономный округ
 Чукотский автономный округ
-Ямало-Ненецкий автономный округ';
+Ямало-Ненецкий автономный округ',
 
-$regions = explode("\n", $regions);
-sort($regions);
+'Мінск
+Брэсцкая вобласць
+Віцебская вобласць
+Гомельская вобласць
+Гродзенская вобласць
+Мінская вобласць
+Магілёўская вобласць',
+
+'Вінницька область
+Волинська область
+Дніпропетровська область
+Донецька область
+Житомирська область
+Закарпатська область
+Запорізька область
+Івано-Франківська область
+Київська область
+Кіровоградська область
+Луганська область
+Львівська область
+Миколаївська область
+Одеська область
+Полтавська область
+Рівненська область
+Сумська область
+Тернопільська область
+Харківська область
+Херсонська область
+Хмельницька область
+Черкаська область
+Чернігівська область
+Чернівецька область
+Київ
+Севастополь
+Автономна Республіка Крим'
+];
+
+
+
 $db->setQuery("TRUNCATE #__mycityselector_region"); // remove regions
 $db->execute();
-foreach ($regions as $region) {
-    out("  {$region}\n", 'light_blue');
-    $name = $db->escape($region);
-    $db->setQuery("INSERT INTO #__mycityselector_region (`country_id`, `name`, `subdomain`) VALUES (1, '{$name}', '')");
-    $db->execute();
+$i = 1;
+foreach ($regions as $regionsCountry) {
+    $regionsCountry = explode("\n", $regionsCountry);
+    sort($regionsCountry);
+    foreach ($regionsCountry as $region) {
+        out("  {$region}\n", 'light_blue');
+        $name = $db->escape($region);
+        $db->setQuery("INSERT INTO #__mycityselector_region (`country_id`, `name`, `subdomain`) VALUES ({$i}, '{$name}', '')");
+        $db->execute();
+    }
+    $i++;
 }
 out(" Generate slugs\n", 'green');
 include dirname(__FILE__) . '/slug1.php';
