@@ -434,6 +434,25 @@ function readCliParameters($args, $scenario)
 
 
 /**
+ * Removes all lines from file that contains "@devnode" in any line position
+ * @param $file
+ */
+function removeFileNotes($file)
+{
+    if (is_file($file)) {
+        $lines = file($file);
+        foreach ($lines as $k => $line) {
+            if (stripos($line, '@devnode') !== false) {
+                unset($lines[$k]);
+            }
+        }
+        $lines = implode('', $lines);
+        file_put_contents($file, $lines);
+    }
+}
+
+
+/**
  * Updates manifest file by passed values
  * @param String $file Path to original manifest file
  * @param Array $data <p>

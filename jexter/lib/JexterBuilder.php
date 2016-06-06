@@ -35,7 +35,7 @@ class JexterBuilder {
      */
     public static function run($args)
     {
-        // TODO I thin it need to merger $args and $projectConfig...
+        // TODO I think it need to merger $args and $projectConfig...
         $packages = [];
         $jexterConfig = loadMyConfig();
         // load {project}.json
@@ -152,6 +152,11 @@ class JexterBuilder {
                 $config[$key] = normalizePath(str_replace('@builder', JEXTER_DIR, $config[$key]));
             }
         }
+        if (!empty($config['packageFiles'])) {
+            foreach ($config['packageFiles'] as $key => $path) {
+                $config['packageFiles'][$key] = normalizePath(str_replace('@builder', JEXTER_DIR, $path));
+            }
+        }
         return $config;
     }
 
@@ -234,6 +239,7 @@ class JexterBuilder {
                         $mainfest = $name;
                     }
                     $file = ['tag' => 'filename', 'attr' => [], 'value' => $name];
+                    removeFileNotes($file); 
                 }
             }
             out("done\n", "green");
@@ -265,6 +271,7 @@ class JexterBuilder {
                         $mainfest = $name;
                     }
                     $file = ['tag' => 'filename', 'attr' => [], 'value' => $name];
+                    removeFileNotes($file); 
                 }
             }
             out("done\n", "green");
@@ -287,7 +294,8 @@ class JexterBuilder {
         if (!empty($filesAdmin)) {
             $data['administration/files'] = $filesAdmin;
         }
-        $res = updateManifest($copyAdminPath . '/' . $mainfest, $data, $config['copy'] . '/' . $ext['id'] . '/' . $mainfest);
+        $res = updateManifest($copyAdminPath . '/' . $mainfest, $data);
+        removeFileNotes($copyAdminPath . '/' . $mainfest);
         if (!$res) {
             out("error\n", 'red');
             return null;
@@ -339,6 +347,7 @@ class JexterBuilder {
                 if (is_dir($file)) {
                     $file = ['tag' => 'folder', 'attr' => [], 'value' => $name]; // if directory
                 } else {
+                    removeFileNotes($file); 
                     // if file
                     if ($name == $ext['script']) { // if it's main script of plugin
                         $file = ['tag' => 'filename', 'attr' => ['plugin' => $ext['id']], 'value' => $name];
@@ -355,6 +364,7 @@ class JexterBuilder {
                 'version' => $config['version'],
                 'files' => $files
             ]);
+            removeFileNotes($copyPath . '/' . $mainfest); 
             if (!$res) {
                 out("error\n", 'red');
                 return null;
@@ -410,6 +420,7 @@ class JexterBuilder {
                     $file = ['tag' => 'folder', 'attr' => [], 'value' => $name]; // if directory
                 } else {
                     // if file
+                    removeFileNotes($file); 
                     if ($name == $ext['script']) { // if it's main script of plugin
                         $file = ['tag' => 'filename', 'attr' => ['module' => $ext['id']], 'value' => $name];
                     } else {
@@ -425,6 +436,7 @@ class JexterBuilder {
                 'version' => $config['version'],
                 'files' => $files
             ]);
+            removeFileNotes($copyPath . '/' . $mainfest); 
             if (!$res) {
                 out("error\n", 'red');
                 return null;
@@ -448,7 +460,7 @@ class JexterBuilder {
 
     // TODO library
     private static function buildLibrary($ext, $config) {
-
+        //removeFileNotes($file); 
     }
 
     /**
@@ -488,6 +500,19 @@ class JexterBuilder {
             }
         }
 
+        // package files (just copy its to package folder)
+        if (!empty($config['packageFiles'])) {
+            out("  - copy package files ... \n", 'yellow');
+            foreach ($config['packageFiles'] as $file) {
+                out("     add file " . $file . " ... ", 'light_blue');
+                if (copy($file, $config['destination'] . '/' . basename($file))) {
+                    out("ok\n", 'light_blue');
+                } else {
+                    out("error\n", 'red');
+                }
+            }
+        }
+
         out("  - generate manifest file {$config['manifest']} ... ", 'yellow');
         $manifest = basename($config['manifest']);
         $res = updateManifest(
@@ -499,16 +524,12 @@ class JexterBuilder {
             ],
             $config['destination'] . '/' . $manifest
         );
+        removeFileNotes($config['destination'] . '/' . $manifest); 
         if (!$res) {
             out("error on Manifest file updating\n", 'red');
             return null;
         } else {
             out("ok\n", 'green');
-        }
-
-        // license
-        if (!empty($config['license']) && is_file($config['license'])) {
-            copy($config['license'], $config['destination'] . '/license.txt');
         }
 
         out("  - packing ...\n", 'yellow');

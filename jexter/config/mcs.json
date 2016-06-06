@@ -4,9 +4,12 @@
     "version": "2.0.0",
     "type": "package",
     "manifest": "@builder/config/pkg_mycityselector.xml",
-    "license": "@builder/license.txt",
     "updateServers": [
         {"type": "extension", "name": "MCS Update Server", "url": "http://..."}
+    ],
+    "packageFiles": [
+        "@builder/../administrator/components/com_mycityselector/installer.php",
+        "@builder/../components/com_mycityselector/license.txt"
     ],
     "packageItems": [
         {
