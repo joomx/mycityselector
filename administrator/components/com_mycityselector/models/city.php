@@ -20,6 +20,12 @@ class CityModel extends JModelList {
     private $table = '#__mycityselector_city';
 
     /**
+     * Prefix for fields names PREFIX[field_name]
+     * @var string
+     */
+    private $fieldPrefix = 'City';
+
+    /**
      * Primary key of table
      * @var string
      */
@@ -118,6 +124,17 @@ class CityModel extends JModelList {
         return $this->fields;
     }
 
+    /**
+     * Returns field's name for input element
+     * @return string
+     */
+    public function getFieldName($name)
+    {
+        if (isset($this->fields[$name])) {
+            return $this->fieldPrefix . '[' . $name . ']';
+        }
+        return $name;
+    }
 
     /**
      * Returns validation rules
@@ -190,9 +207,11 @@ class CityModel extends JModelList {
      * @param $data Array of fields and values pairs
      * @return int Id of record (return 0 on error)
      */
-    public function saveItem($id = 0, $data)
+    public function saveItem($data)
     {
         // get all keys with "City[value]"
+        $prefix = $this->fieldPrefix;
+        $id = 0;
         if (!empty($data['City'])) {
             $pairFieldValue = $fields = $values = [];
             foreach ($data['City'] as $param => $value) {
