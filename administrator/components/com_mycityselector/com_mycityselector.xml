@@ -21,7 +21,7 @@
         </sql>
     </uninstall>
 
-    <files folder="site"><filename>index.html</filename><folder>language</folder><filename>mycityselector.php</filename></files>
+    <files folder="site"><filename>index.html</filename><folder>language</folder><filename>license.txt</filename><filename>mycityselector.php</filename></files>
 
     <languages folder="site">
         <language tag="en-GB">language/en-GB/en-GB.com_mycityselector.sys.ini</language>
@@ -36,7 +36,7 @@
             <menu link="option=com_mycityselector&amp;controller=city" img="class:module">COM_MYCITYSELECTOR_CITIES</menu>
         </submenu>
 
-        <files folder="admin"><filename>admin-scripts.js</filename><filename>admin-style.css</filename><filename>com_mycityselector.xml</filename><folder>controllers</folder><folder>helpers</folder><folder>images</folder><filename>index.html</filename><filename>install.sql</filename><folder>language</folder><folder>models</folder><filename>mycityselector.php</filename><filename>uninstall.sql</filename><folder>views</folder></files>
+        <files folder="admin"><filename>admin-scripts.js</filename><filename>admin-style.css</filename><filename>com_mycityselector.xml</filename><folder>controllers</folder><folder>helpers</folder><folder>images</folder><filename>index.html</filename><filename>install.sql</filename><filename>installer.php</filename><folder>language</folder><filename>license.txt</filename><folder>models</folder><filename>mycityselector.php</filename><filename>uninstall.sql</filename><folder>views</folder></files>
 
         <languages folder="admin">
             <language tag="en-GB">language/en-GB/en-GB.com_mycityselector.sys.ini</language>
@@ -46,8 +46,5 @@
         </languages>
     </administration>
 
-    <!--updateservers>
-        <server type="extension" priority="1" name="MyCitySelector Update server">{update_url}</server>
-    </updateservers-->
 
 </extension>

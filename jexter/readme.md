@@ -1,11 +1,32 @@
 JEXTER
 ======
 
-This will be ...
+Building
+--------
 
-Console script that can help you to create and build Joomla extensions.
+```
+# php ./jexter/build [ext_name]
+```
 
-I plan to create UI for this tool, after completed console version
+"ext_name" is name of extension and same name of config file of project from "config" directory.
+
+For example:
+
+```
+# php ./jexter/build mcs
+```
+
+for this example in directory "config" must be exists "mcs.json" file with project configuration.
 
 
+Notes
+-----
+
+All lines with "@devnode" marker of project files will be remove from result package version
+ 
+```
+echo 'hello';
+//@devnode need to add "world" to echo
+// ^^^^ this line will be removed from result package of extension (total line!)
+```
 

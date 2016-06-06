@@ -17,9 +17,9 @@
 		О настройках модуля можно прочитать <a href="http://www.kutsevalov.name/2013/08/13/modul-vibora-goroda-dlya-joomla/" title="перейти" target="_blank">здесь</a>.
 	</div>
 	]]></description>
-	<scriptfile>installer.php</scriptfile>
 	<files><filename>MCSTranslit.php</filename><filename>ext-params.css</filename><filename>ext-params.js.php</filename><filename>ext_mod_mini.png</filename><filename>installer.php</filename><filename>jquery.tablednd.min.js</filename><filename module="mod_mycityselector">mod_mycityselector.php</filename><filename>mod_mycityselector.xml</filename><folder>tmpl</folder><filename>yandex-geo.php</filename></files>
 	<config>
+        <!--@devnote TODO перенести настройки в компонент -->
 		<fields name="params">
 
 			<fieldset name="basic">
