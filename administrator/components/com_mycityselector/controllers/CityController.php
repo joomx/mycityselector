@@ -104,9 +104,9 @@ class CityController extends JxController {
     public function actionUpdate()
     {
 		$model = $this->getModel('city');
-        $view = $this->getView('cities', 'html');
-        $view->setModel($model, true);
-        $view->sidebar = $this->sidebar;
+        //$view = $this->getView('city', 'html');
+        //$view->setModel($model, true);
+        //$view->sidebar = $this->sidebar;
         $id = intval($this->input->getCmd('id'));
         if (!empty($_POST['cid'])) {
             $id = intval($_POST['cid'][0]);
@@ -118,16 +118,20 @@ class CityController extends JxController {
             JToolBarHelper::save('saveandclose');
             JToolBarHelper::save2new('saveandnew');
             JToolBarHelper::cancel('default');
-            $view->setLayout('edit');
-            $data = $data;
+            //$view->setLayout('edit');
+            //$data = $data;
+            $this->render('edit', [
+                'model' => $model,
+                'data' => $data,
+            ]);
 
-            // todo create form
 
         } else {
             JToolBarHelper::addNew();
-            $view->setLayout('not_found');
+            //$view->setLayout('not_found');
+            $this->render('not_found', []);
         }
-        $view->display();
+        //$view->display();
 	}
 
 
@@ -173,16 +177,17 @@ class CityController extends JxController {
         } else {
             switch ($redirectTo) {
                 case 'add':
-                    $url .= '&taks=' . $redirectTo;
+                    $url .= '&task=' . $redirectTo;
                     break;
                 case 'update':
-                    $url .= '&taks=' . $redirectTo . '&id=' . $id;
+                    $url .= '&task=' . $redirectTo . '&id=' . $id;
                     break;
                 default:
                     $url .= '&page=' . $page;
             }
         }
-        $this->setRedirect('index.php?option=' . $this->_component . $url)->redirect();
+        $this->setMessage(JText::_('COM_MYCITYSELECTOR_FORM_SAVED'), 'message');
+        $this->redirect('index.php?option=' . $this->_component . '&controller=' . $this->_id . $url);
     }
 
 

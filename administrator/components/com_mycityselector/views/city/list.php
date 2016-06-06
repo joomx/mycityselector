@@ -26,6 +26,7 @@ if ($listOrder == 'a.ordering') {
     <?= $sidebar ?>
 </div>
 <div id="j-main-container" class="span10">
+    <div id="system-message-container"><?= $this->getMessage() ?></div>
     <form action="index.php" method="post" name="adminForm" class="admin-form com_mycityselector" id="adminForm">
         <div class="pagination"><?= $pagination ?></div>
         <hr/>

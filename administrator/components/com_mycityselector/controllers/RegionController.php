@@ -158,7 +158,7 @@ class RegionController extends JxController {
     {
         $page = 0;
         $url = '';
-        $model = $this->getModel('country');
+        $model = $this->getModel('region');
         $id = $model->saveItem($_POST);
         if (!$id) {
             // error
