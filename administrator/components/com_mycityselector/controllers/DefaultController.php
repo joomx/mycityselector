@@ -55,6 +55,12 @@ class DefaultController extends JxController {
         JToolBarHelper::addNew();
         JToolBarHelper::publishList();
         JToolBarHelper::unpublishList();
+        //TODO Добавить проверку прав доступа
+//        if ($canDo->get('core.admin') || $canDo->get('core.options'))
+//        {
+            JToolbarHelper::preferences('com_mycityselector');
+//            JToolbarHelper::divider();
+//        }
         JToolBarHelper::custom('drop', 'delete', 'delete', JText::_('COM_MYCITYSELECTOR_ITEM_DELETE'));
         $model = $this->getModel('country');	// (./models/[$modelName].php)
         $this->render('list', [

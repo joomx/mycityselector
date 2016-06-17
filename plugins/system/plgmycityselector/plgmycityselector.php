@@ -254,6 +254,17 @@ XML;
         //   ],
         //   ...
         // ]
+        $db = JFactory::getDbo();
+        $query = $db->getQuery(true)->select('c.name as country, b.name as region, a.name as name, a.subdomain as subdomain')
+            ->from('#__mycityselector_city a')
+            ->leftJoin('#__mycityselector_region b on a.region_id = b.id')
+            ->leftJoin('#__mycityselector_country c on a.country_id = c.id')
+            ->where('a.status=1 AND b.status=1 AND c.status=1');
+        $db->setQuery($query);
+        $cities = $db->loadAssocList('name');
+
+
+
         $this->citiesList = $citiesList;
     }
 
@@ -395,35 +406,6 @@ XML;
         JFactory::getSession()->set('MCS_BUFFER', $MCS_BUFFER);
     }
 
-
-    /**
-     * Определяет город с помощью сервиса sypexgeo.net
-     */
-    private function sypexGeoIP($ip, $defaultCity=''){  // todo move methods to PlgGeolocationHelper
-        $userAgent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] :
-            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36';
-        $ch = curl_init();
-        // документация: http://sypexgeo.net/ru/api/
-        curl_setopt($ch, CURLOPT_URL, 'http://api.sypexgeo.net/json/' . $ip);
-        curl_setopt($ch, CURLOPT_USERAGENT, $userAgent);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 2); // устанавливаем минимальные временные рамки для связи с api
-        curl_setopt($ch, CURLOPT_TIMEOUT, 2);
-        curl_setopt($ch, CURLOPT_HEADER, 0);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        $resp = curl_exec($ch);
-        $resp = json_decode($resp, true); // Array ( [ip] => 127.0.0.1 [city] => [region] => [country] => )
-        if (is_array($resp)
-            && isset($resp['city'])
-            && isset($resp['city']['name_ru'])
-            && !empty($resp['city']['name_ru'])) {
-                // город успешно определен
-                $city = $resp['city']['name_ru'];
-                if (isset($this->citiesList['__all__'][$city])) {
-                    return $city;
-                }
-        }
-        return $defaultCity;
-    }
 
 
     /**
