@@ -17,7 +17,7 @@ JHtml::_('behavior.multiselect');
 $count = count($items);
 
 if ($listOrder == 'a.ordering') {
-    $saveOrderingUrl = 'index.php?option=com_mycityselector&task=saveOrderAjax&tmpl=component';
+    $saveOrderingUrl = 'index.php?option=com_mycityselector&controller=city&task=saveOrderAjax&tmpl=component';
     JHtml::_('sortablelist.sortable', 'articleList', 'adminForm', strtolower($listDirection), $saveOrderingUrl);
 }
 
@@ -74,7 +74,7 @@ if ($listOrder == 'a.ordering') {
                             <button data-toggle="dropdown" class="dropdown-toggle btn btn-micro"><span class="caret"></span></button>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a href="index.php?option=com_mycityselector&task=update&id=<?= $item['id'] ?>" title="">
+                                    <a href="index.php?option=com_mycityselector&controller=city&task=update&id=<?= $item['id'] ?>" title="">
                                         <span class="icon-edit"></span> <?= JText::_('COM_MYCITYSELECTOR_ITEM_EDIT') ?>
                                     </a>
                                 </li>
@@ -99,6 +99,7 @@ if ($listOrder == 'a.ordering') {
         <div class="clr"></div>
         <input type="hidden" name="boxchecked" value="0">
         <?= $this->formOption() ?>
+        <?= $this->formControllerName() ?>
         <?= $this->formTask() ?>
         <?= $this->formToken() ?>
     </form>
