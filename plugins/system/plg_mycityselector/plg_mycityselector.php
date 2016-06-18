@@ -196,7 +196,7 @@ class plgSystemPlg_Mycityselector extends JPlugin
         $baseDomain = trim($this->params->get('main_domain'));
         $baseDomain = str_replace(array('https://', 'http://'), array('', ''), $baseDomain);
         if (substr($baseDomain, 0, 4) == 'www.') {
-            $baseDomain = substr($baseDomain, 5);
+            $baseDomain = substr($baseDomain, 4);
         }
         if (!empty($baseDomain) && strpos($host, $baseDomain) !== false) { // если базовый домен указан в настройках, то пользователь молодец.
             $this->baseDomain = $baseDomain;
