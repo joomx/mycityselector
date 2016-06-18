@@ -13,14 +13,8 @@ if (!class_exists('\adamasantares\html\Tag')) {
 use \JHtml;
 use \JText;
 use \adamasantares\html\Tag;
-//if (PHP_VERSION_ID >= 506000) {
-    //use function \adamasantares\html\tg; // php >= 5.6
-//} else {
-    function tg($properties, $content = null)
-    {
-        return \adamasantares\html\tg($properties, $content);
-    }
-//}
+
+if (!function_exists('tg')) { function tg($properties, $content = null) { return \adamasantares\html\tg($properties, $content); } }
 
 
 /**
@@ -29,6 +23,12 @@ use \adamasantares\html\Tag;
  */
 class JxView
 {
+
+    /**
+     * @var JFactory::getDocument() $document Returns document or its methods values
+     * $this->document will return JFactory::getDocument()
+     * For example: $this->document->getTitle();
+     */
 
     /**
      * @var JxController
@@ -114,6 +114,25 @@ class JxView
     public function formToken()
     {
         return \JHtml::_('form.token');
+    }
+
+    /**
+     * @param $name
+     * @return null
+     */
+    public function __get($name)
+    {
+        $doc = JFactory::getDocument();
+        switch ($name) {
+            case 'document':
+                return $doc;
+            case 'title':
+                return $doc->getTitle();
+            case 'hello':
+                return 'Hello';
+                break;
+        }
+        return null;
     }
 
 }
