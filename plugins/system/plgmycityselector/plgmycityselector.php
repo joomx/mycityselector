@@ -42,6 +42,11 @@ class plgSystemPlgMycityselector extends JPlugin
     public $params = null; // todo move to options object
 
     /**
+     * @var \Joomla\Registry\Registry Объект параметров компонента
+     */
+    private $config;
+
+    /**
      * @var string Основной домен сайта
      */
     private $baseDomain = ''; // todo move to options object
@@ -54,7 +59,7 @@ class plgSystemPlgMycityselector extends JPlugin
     /**
      * @var array Список городов из настроек модуля
      */
-    private $citiesList = ['__all__' => []]; // todo move to options object
+    public static $citiesList = []; // todo move to options object
 
     /**
      * @var bool Если в списке городов указаны поддомены, то равен true.
@@ -80,6 +85,7 @@ class plgSystemPlgMycityselector extends JPlugin
         $this->params = new JRegistry();
         // определяем ID текущего модуля
         $this->loadModuleData();
+        $this->config = JComponentHelper::getParams('com_mycityselector');
         // проверка режима редактирования или админки
         $jInput = JFactory::getApplication()->input;
         $this->editMode = ($jInput->get('view') == 'form' && $jInput->get('layout') == 'edit');
@@ -97,7 +103,7 @@ class plgSystemPlgMycityselector extends JPlugin
             );
 
             // формируем массив городов и определяем наличие поддоменов
-            $this->parseCitiesList();
+            $this->getCitiesList();
             // определяем текущий город
             $this->defineCity();
             // проверяем соответствие текущего города с текущим адресом (поддоменом или адресом страницы)
@@ -202,7 +208,7 @@ XML;
     /**
      * Подготавливает список городов, преобразуя его из строки в массив требуемого формата
      */
-    private function parseCitiesList()
+    private function getCitiesList()
     {
         // Если сайт сам по себе находится на поддомене,
         // (например sub.domain.ru это базовый адрес), то не должно происходить
@@ -211,7 +217,7 @@ XML;
         // субдомены (страницы не в счет) для редиректов.
         // И если нет, значит текущий субдомен основной.
         // Кроме того, запоминаем список городов в массив, для последующей проверки редиректа
-        $citiesList = explode("\n", $this->params->get('cities_list', "Москва\nСанкт-Петербург"));
+/*        $citiesList = explode("\n", $this->params->get('cities_list', "Москва\nСанкт-Петербург"));
         $groupName = '';
         foreach ($citiesList as $index => $value) {
             // если для города указан субдомен или страница, то запись выглядит так: "Москва=moscow"
@@ -242,7 +248,7 @@ XML;
                 }
             }
             unset($citiesList[$index]); // удаляем числовой индекс
-        }
+        }*/
         // Получается массив вида: [
         //   '__all__' => [
         //      'Москва' => ['url' => 'moscow.site.ru', 'subdomain' => 'moscow', 'path' => ''],
@@ -254,6 +260,8 @@ XML;
         //   ],
         //   ...
         // ]
+        if (sizeof(self::$citiesList) > 0) return
+        $citiesList = [];
         $db = JFactory::getDbo();
         $query = $db->getQuery(true)->select('c.name as country, b.name as region, a.name as name, a.subdomain as subdomain')
             ->from('#__mycityselector_city a')
@@ -262,10 +270,13 @@ XML;
             ->where('a.status=1 AND b.status=1 AND c.status=1');
         $db->setQuery($query);
         $cities = $db->loadAssocList('name');
+        $citiesList['__all__'] = $cities;
+        foreach ($cities as $city ) {
+            $citiesList[$city['region']][$city['name']] = $city;
+        }
 
 
-
-        $this->citiesList = $citiesList;
+        self::$citiesList = $citiesList;
     }
 
 

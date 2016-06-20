@@ -73,7 +73,7 @@ $this->addStyle($myUrl . 'default.css');
                     <div class="city">
                         <a class="link<?= ($currentCity==$city) ? ' active' : '' ?>"
                             id="city-<?= $this->translit($city) ?>" data-city="<?= $city ?>"
-                            href="<?= $data['url'] ?>" title=""><?= $city ?></a>
+                            href="<?= preg_replace('#^(http|https)(://)([^\/]*)(.*)$#','$1$2'.$data['subdomain'].'.'.$baseDomain.'$4',$returnUrl); ?>" title=""><?= $city ?></a>
                     </div>
                     <?php
                 }
