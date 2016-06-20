@@ -26,7 +26,7 @@ class JxRouter
      */
     public static function executeController($root, $componentName, $defaultController = 'default')
     {
-        $controllerRequest = \JFactory::getApplication()->input->getCmd('controller', $defaultController);
+            $controllerRequest = \JFactory::getApplication()->input->getCmd('controller', $defaultController);
 
         $controllerName = ucfirst($controllerRequest) . 'Controller';
         $path = rtrim($root, '/') . '/controllers/' . $controllerName . '.php';

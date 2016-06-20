@@ -201,7 +201,7 @@ class CityController extends JxController {
         if (!empty($_POST['cid'])) {
             $model->dropItems($_POST['cid']);
         }
-        $this->setRedirect('index.php?option=' . $this->_component . '&page=' . $page)->redirect();
+        $this->redirect('index.php?option=' . $this->_component . '&controller='.$this->_id.'&page=' . $page);
 	}
 
 
@@ -215,7 +215,7 @@ class CityController extends JxController {
         if (!empty($_POST['cid'])) {
             $model->publishItems($_POST['cid'], 1);
         }
-        $this->setRedirect('index.php?option=' . $this->_component . '&page=' . $page)->redirect();
+        $this->redirect('index.php?option=' . $this->_component . '&controller='.$this->_id.'&page=' . $page);
 	}
 
 
@@ -229,7 +229,7 @@ class CityController extends JxController {
         if (!empty($_POST['cid'])) {
             $model->publishItems($_POST['cid'], 0);
         }
-        $this->setRedirect('index.php?option=' . $this->_component . '&page=' . $page)->redirect();
+        $this->redirect('index.php?option=' . $this->_component . '&controller='.$this->_id.'&page=' . $page);
 	}
 
 
