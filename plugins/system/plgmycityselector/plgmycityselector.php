@@ -32,6 +32,11 @@ class plgSystemPlgMycityselector extends JPlugin
     private $city; // todo move to options object
 
     /**
+     * @var string Название города определенного по домену
+     */
+    private $cityByDomain;
+
+    /**
      * @var bool Флаг указывающий на режим редактирования материала на frontend'е
      */
     private $editMode = false; // todo move to flags object
@@ -108,16 +113,16 @@ class plgSystemPlgMycityselector extends JPlugin
             // формируем массив городов и определяем наличие поддоменов
             $this->getCitiesList();
             // определяем текущий город
-            $this->defineCity();
+            //$this->defineCity();
+            // Определяем город из cookie
+            $this->defineCityByCookie();
+            // определяем город по домену
+            $this->defineCityByDomain();
             // проверяем соответствие текущего города с текущим адресом (поддоменом или адресом страницы)
             $this->autoSwitchCity();
         }
         // запоминаем для модуля, который будет вызван позднее
         $this->storeData();
-
-        //TODO убрать
-        $this->defineCityByDomain();
-        //
     }
 
 
@@ -419,24 +424,42 @@ private function loadData() {
         $this->city = $city;
     }
 
+    /**
+     * Определяет город по домену (если город есть в базе и он опубликован)
+     */
     private function defineCityByDomain () {
         $domain = $_SERVER['HTTP_HOST'];
         $sdl = stripos($domain,$this->baseDomain);
         if ($sdl == 0) {
-            $this->city = '';
+            $this->cityByDomain = '';
             return;
         } else {
             $subdomain = substr($domain,0,$sdl-1);
             $query = $this->db->getQuery(true)->select('name')->from('#__mycityselector_city')
-                ->where('subdomain='.$this->db->quote(strtolower($subdomain)));
+                ->where('subdomain='.$this->db->quote(strtolower($subdomain)).' AND status=1');
+            $this->db->setQuery($query);
+            if ($result = $this->db->loadRow()) {
+                $this->cityByDomain = $result[0];
+                return;
+            } else {
+                $this->cityByDomain = '';
+                return;
+            }
+        }
+    }
+
+    private function defineCityByCookie() {
+        $defaultCity = $this->comParams->get('default_city', 'Москва');
+        if ($city = $_COOKIE['MCS_CITY_NAME']) {
+            $query = $this->db->getQuery(true)->select('name')->from('#__mycityselector_city')
+                ->where('name='.$this->db->quote($city).' AND status=1');
             $this->db->setQuery($query);
             if ($result = $this->db->loadRow()) {
                 $this->city = $result[0];
-                return;
             } else {
                 $this->city = '';
-                return;
             }
+
         }
     }
 
@@ -453,7 +476,8 @@ private function loadData() {
             'http' => $this->http,
             'base_domain' => $this->baseDomain,
             'cookie_domain' => $this->cookieDomain,
-            'city_name' => $this->city,
+            'city' => $this->city,
+            'cityByDomain' => $this->cityByDomain,
             'params' => $this->params,
             'citiesList' => $this->citiesList,
         );

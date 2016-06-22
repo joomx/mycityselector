@@ -41,9 +41,9 @@ class MyCitySelectorModule
             $modID = JModuleHelper::getModule('mod_mycityselector')->id;
             //$http = $MCS_BUFFER['http'];
             $http = 'http'; //TODO добавить метод определения http/https
-            $currentCity = $parameters->get('default_city'); //TODO заменить на результат работы метода определения города
             $baseDomain = $parameters->get('basedomain');
             $cookieDomain = $parameters->get('basedomain');
+            $currentCity = \plgSystemPlgMycityselector::$mcs_buffer['cityByDomain'] ? \plgSystemPlgMycityselector::$mcs_buffer['cityByDomain'] : $parameters->get('default_city');
             $this->params = $params = $MCS_BUFFER['params'];
             //$citiesList = $MCS_BUFFER['citiesList'];
             $citiesList = \plgSystemPlgMycityselector::$mcs_buffer['citiesList'];

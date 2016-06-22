@@ -17,6 +17,9 @@ $this->addJQuery();
 $this->addScript($myUrl . 'default.js');
 $this->addStyle($myUrl . 'default.css');
 
+// подключаем YandexGeoLocation
+$this->addScript('https://api-maps.yandex.ru/2.1/?lang=ru_RU');
+
 
 // Drop-down меню
 ?><div class="mcs-module<?= $this->get('moduleclass_sfx') ?>">
