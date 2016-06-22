@@ -41,12 +41,12 @@ class MyCitySelectorModule
             $modID = JModuleHelper::getModule('mod_mycityselector')->id;
             //$http = $MCS_BUFFER['http'];
             $http = 'http'; //TODO добавить метод определения http/https
-            $currentCity = $parameters->get('defaultcity'); //TODO заменить на результат работы метода определения города
+            $currentCity = $parameters->get('default_city'); //TODO заменить на результат работы метода определения города
             $baseDomain = $parameters->get('basedomain');
             $cookieDomain = $parameters->get('basedomain');
             $this->params = $params = $MCS_BUFFER['params'];
             //$citiesList = $MCS_BUFFER['citiesList'];
-            $citiesList = \plgSystemPlgMycityselector::$citiesList;
+            $citiesList = \plgSystemPlgMycityselector::$mcs_buffer['citiesList'];
             $hasGroups = (count($citiesList) > 1);
             // => путь до файла шаблона
             //$layoutPath = JModuleHelper::getLayoutPath('mod_mycityselector', $params->get('layout', 'default'));
