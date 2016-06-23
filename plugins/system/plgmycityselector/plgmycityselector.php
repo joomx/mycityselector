@@ -29,7 +29,12 @@ class plgSystemPlgMycityselector extends JPlugin
     /**
      * @var string Название текущего города
      */
-    private $city = 'Москва'; // todo move to options object
+    private $city; // todo move to options object
+
+    /**
+     * @var string Название города определенного по домену
+     */
+    private $cityByDomain;
 
     /**
      * @var bool Флаг указывающий на режим редактирования материала на frontend'е
@@ -40,6 +45,11 @@ class plgSystemPlgMycityselector extends JPlugin
      * @var JRegistry Объект параметров модуля
      */
     public $params = null; // todo move to options object
+
+    /**
+     * @var \Joomla\Registry\Registry Объект параметров компонента
+     */
+    private $comParams;
 
     /**
      * @var string Основной домен сайта
@@ -54,7 +64,7 @@ class plgSystemPlgMycityselector extends JPlugin
     /**
      * @var array Список городов из настроек модуля
      */
-    private $citiesList = ['__all__' => []]; // todo move to options object
+    private $citiesList = []; // todo move to options object
 
     /**
      * @var bool Если в списке городов указаны поддомены, то равен true.
@@ -66,6 +76,11 @@ class plgSystemPlgMycityselector extends JPlugin
      */
     private $http = 'http://'; // todo move to options object
 
+    /**
+     * @var array Переменная для передачи данных между плагином и компонентом.
+     */
+    public static $mcs_buffer;
+
 
     /**
      * Initialization
@@ -76,10 +91,9 @@ class plgSystemPlgMycityselector extends JPlugin
 
         // todo move methods to PlgOptionsHelper
 
-        $this->db = JFactory::getDbo();
-        $this->params = new JRegistry();
-        // определяем ID текущего модуля
-        $this->loadModuleData();
+
+        $this->loadData();
+
         // проверка режима редактирования или админки
         $jInput = JFactory::getApplication()->input;
         $this->editMode = ($jInput->get('view') == 'form' && $jInput->get('layout') == 'edit');
@@ -97,9 +111,13 @@ class plgSystemPlgMycityselector extends JPlugin
             );
 
             // формируем массив городов и определяем наличие поддоменов
-            $this->parseCitiesList();
+            $this->getCitiesList();
             // определяем текущий город
-            $this->defineCity();
+            //$this->defineCity();
+            // Определяем город из cookie
+            $this->defineCityByCookie();
+            // определяем город по домену
+            $this->defineCityByDomain();
             // проверяем соответствие текущего города с текущим адресом (поддоменом или адресом страницы)
             $this->autoSwitchCity();
         }
@@ -196,13 +214,20 @@ XML;
         $this->modID = $id;
     }
 
+private function loadData() {
+    $this->db = JFactory::getDbo();
+    $this->comParams = JComponentHelper::getParams('com_mycityselector');
+    $module = JModuleHelper::getModule('mod_mycityselector');
+    $this->params = new JRegistry($module->params);
+    $this->modID = $module->id;
 
+}
     // todo здесь будет просто чтение из базы (из компонента)
     // todo move methods to PlgOptionsHelper
     /**
      * Подготавливает список городов, преобразуя его из строки в массив требуемого формата
      */
-    private function parseCitiesList()
+    private function getCitiesList()
     {
         // Если сайт сам по себе находится на поддомене,
         // (например sub.domain.ru это базовый адрес), то не должно происходить
@@ -211,7 +236,7 @@ XML;
         // субдомены (страницы не в счет) для редиректов.
         // И если нет, значит текущий субдомен основной.
         // Кроме того, запоминаем список городов в массив, для последующей проверки редиректа
-        $citiesList = explode("\n", $this->params->get('cities_list', "Москва\nСанкт-Петербург"));
+/*        $citiesList = explode("\n", $this->params->get('cities_list', "Москва\nСанкт-Петербург"));
         $groupName = '';
         foreach ($citiesList as $index => $value) {
             // если для города указан субдомен или страница, то запись выглядит так: "Москва=moscow"
@@ -242,7 +267,7 @@ XML;
                 }
             }
             unset($citiesList[$index]); // удаляем числовой индекс
-        }
+        }*/
         // Получается массив вида: [
         //   '__all__' => [
         //      'Москва' => ['url' => 'moscow.site.ru', 'subdomain' => 'moscow', 'path' => ''],
@@ -254,6 +279,8 @@ XML;
         //   ],
         //   ...
         // ]
+        if (sizeof($this->citiesList) > 0) return
+        $citiesList = [];
         $db = JFactory::getDbo();
         $query = $db->getQuery(true)->select('c.name as country, b.name as region, a.name as name, a.subdomain as subdomain')
             ->from('#__mycityselector_city a')
@@ -262,7 +289,10 @@ XML;
             ->where('a.status=1 AND b.status=1 AND c.status=1');
         $db->setQuery($query);
         $cities = $db->loadAssocList('name');
-
+        $citiesList['__all__'] = $cities;
+        foreach ($cities as $city ) {
+            $citiesList[$city['region']][$city['name']] = $city;
+        }
 
 
         $this->citiesList = $citiesList;
@@ -273,7 +303,7 @@ XML;
      * Определение базового домена
      */
     private function defineBaseDomain()// todo move methods to PlgOptionsHelper
-    {
+/*    {
         $host = $_SERVER['HTTP_HOST'];
         // проверяем параметр модуля main_domain, если основной домен указан, то автоматическое определение пропускаем
         $baseDomain = trim($this->params->get('main_domain'));
@@ -295,6 +325,14 @@ XML;
                 $this->baseDomain = $part[$len - 2] . '.' . $part[$len - 1];
                 $this->cookieDomain = '.' . $this->baseDomain;
             }
+        }
+    }*/
+    {
+        $this->baseDomain = $this->comParams->get('basedomain');
+        if ($this->comParams->get('subdomain_cities') == '1') {
+            $this->cookieDomain = '.' . $this->baseDomain;
+        } else {
+            $this->cookieDomain = $this->baseDomain;
         }
     }
 
@@ -346,8 +384,8 @@ XML;
     private function defineCity()// todo move methods to PlgOptionsHelper
     {
         $doc = JFactory::getDocument();
-        $defaultCity = $this->params->get('default_city', 'Москва');
-        $baseIP = $this->params->get('baseip', 'none');
+        $defaultCity = $this->comParams->get('default_city', 'Москва');
+        $baseIP = $this->comParams->get('baseip', 'none');
         if (isset($_GET['mcs']) && $_GET['mcs'] == 'clscookie') {
             unset($_COOKIE['mycity_selected_name']);
             unset($_COOKIE['MCS_CITY_NAME']);
@@ -356,7 +394,7 @@ XML;
         $city = isset($_COOKIE['MCS_CITY_NAME']) ? $_COOKIE['MCS_CITY_NAME'] : '';
         if (empty($city)) {
             // пользователь еще не выбирал свой город (он не сохранен в кукисах)
-            if ($this->params->get('let_select', '1') == '1') {
+            if ($this->comParams->get('let_select', '1') == '1') {
                 $doc->addScriptDeclaration('window.mcs_dialog=1;'); // отобразить окно выбора города
             } else {
                 $doc->addScriptDeclaration('window.mcs_dialog=2;'); // отобразить предложение о смене города
@@ -365,24 +403,64 @@ XML;
             if ($baseIP == 'none') {
                 // не использовать автоопределение города
                 $city = $defaultCity;
-            } elseif ($baseIP == 'sypex') {
+
+/*            } elseif ($baseIP == 'sypex') {
                 // делаем запрос на API Sypex Geo
                 $city = $this->sypexGeoIP($_SERVER['REMOTE_ADDR'], $defaultCity);
             } elseif ($baseIP == 'sypex_yandexgeo') {
                 // делаем запрос на API Sypex Geo + корректируем город через Яндекс geolocation
                 $city = $this->sypexGeoIP($_SERVER['REMOTE_ADDR'], $defaultCity);
-                $doc->addScriptDeclaration('window.mcs_yandexgeo=true;');
+                $doc->addScriptDeclaration('window.mcs_yandexgeo=true;');*/
             } elseif ($baseIP == 'yandexgeo') {
                 // делаем запрос на Яндекс geolocation
-                $city = $this->sypexGeoIP($_SERVER['REMOTE_ADDR'], $defaultCity);
+                //$city = $this->sypexGeoIP($_SERVER['REMOTE_ADDR'], $defaultCity);
                 $doc->addScriptDeclaration('window.mcs_yandexgeo=true;');
             }
             // сохраняем определенный город в cookie
-            setcookie('MCS_CITY_NAME', $city, time() + 3600 * 24 * 30, '/', $this->cookieDomain);
+            //setcookie('MCS_CITY_NAME', $city, time() + 3600 * 24 * 30, '/', $this->cookieDomain);
         } else {
             $doc->addScriptDeclaration('window.mcs_dialog=0;'); // никаких действий с выбором города
         }
         $this->city = $city;
+    }
+
+    /**
+     * Определяет город по домену (если город есть в базе и он опубликован)
+     */
+    private function defineCityByDomain () {
+        $domain = $_SERVER['HTTP_HOST'];
+        $sdl = stripos($domain,$this->baseDomain);
+        if ($sdl == 0) {
+            $this->cityByDomain = '';
+            return;
+        } else {
+            $subdomain = substr($domain,0,$sdl-1);
+            $query = $this->db->getQuery(true)->select('name')->from('#__mycityselector_city')
+                ->where('subdomain='.$this->db->quote(strtolower($subdomain)).' AND status=1');
+            $this->db->setQuery($query);
+            if ($result = $this->db->loadRow()) {
+                $this->cityByDomain = $result[0];
+                return;
+            } else {
+                $this->cityByDomain = '';
+                return;
+            }
+        }
+    }
+
+    private function defineCityByCookie() {
+        $defaultCity = $this->comParams->get('default_city', 'Москва');
+        if ($city = $_COOKIE['MCS_CITY_NAME']) {
+            $query = $this->db->getQuery(true)->select('name')->from('#__mycityselector_city')
+                ->where('name='.$this->db->quote($city).' AND status=1');
+            $this->db->setQuery($query);
+            if ($result = $this->db->loadRow()) {
+                $this->city = $result[0];
+            } else {
+                $this->city = '';
+            }
+
+        }
     }
 
 
@@ -390,20 +468,21 @@ XML;
      * Сохраняет все полученные плагином данные в глобальную переменную
      */
     private function storeData(){
-        global $MCS_BUFFER; // глобальная переменная для передачи информации от плагина к модулю
+        //global $MCS_BUFFER; // глобальная переменная для передачи информации от плагина к модулю
         // поскольку плагин вызывается раньше модуля, то все полученные им данные мы передаем модулю
         // в готовом виде, чтобы не делать таких же вычислений повторно в модуле
-        $MCS_BUFFER = array(
+        self::$mcs_buffer = array(
             'mod_id' => $this->modID,
             'http' => $this->http,
             'base_domain' => $this->baseDomain,
             'cookie_domain' => $this->cookieDomain,
-            'city_name' => $this->city,
+            'city' => $this->city,
+            'cityByDomain' => $this->cityByDomain,
             'params' => $this->params,
             'citiesList' => $this->citiesList,
         );
         // дублируем в сессию для доступа из отдельных скриптов
-        JFactory::getSession()->set('MCS_BUFFER', $MCS_BUFFER);
+        JFactory::getSession()->set('MCS_BUFFER', self::$mcs_buffer);
     }
 
 

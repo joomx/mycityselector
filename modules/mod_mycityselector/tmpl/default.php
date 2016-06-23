@@ -17,6 +17,9 @@ $this->addJQuery();
 $this->addScript($myUrl . 'default.js');
 $this->addStyle($myUrl . 'default.css');
 
+// подключаем YandexGeoLocation
+$this->addScript('https://api-maps.yandex.ru/2.1/?lang=ru_RU');
+
 
 // Drop-down меню
 ?><div class="mcs-module<?= $this->get('moduleclass_sfx') ?>">
@@ -73,7 +76,7 @@ $this->addStyle($myUrl . 'default.css');
                     <div class="city">
                         <a class="link<?= ($currentCity==$city) ? ' active' : '' ?>"
                             id="city-<?= $this->translit($city) ?>" data-city="<?= $city ?>"
-                            href="<?= $data['url'] ?>" title=""><?= $city ?></a>
+                            href="<?= preg_replace('#^(http|https)(://)([^\/]*)(.*)$#','$1$2'.$data['subdomain'].'.'.$baseDomain.'$4',$returnUrl); ?>" title=""><?= $city ?></a>
                     </div>
                     <?php
                 }

@@ -7,10 +7,37 @@
                 label="COM_MYCITYSELECTOR_BASE_DOMAIN"
                 description="COM_MYCITYSELECTOR_BASE_DOMAIN_DESCRIPTION" />
         <field
-                name="defaultcity"
+                name="default_city"
                 type="sql"
                 label="COM_MYCITYSELECTOR_DEFAULTCITY"
                 query="SELECT name as value FROM #__mycityselector_city;" />
+        <field
+                name="subdomain_cities"
+                type="radio"
+                class="btn-group btn-group-yesno"
+                label="COM_MYCITYSELECTOR_SUBDOMAINCITIES"
+                default="1" >
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+                </field>
+        <field
+                name="baseip"
+                type="radio"
+                class="btn-group btn-group-yesno"
+                label="COM_MYCITYSELECTOR_BASEIP"
+                default="1" >
+            <option value="yandexgeo">JYES</option>
+            <option value="none">JNO</option>
+        </field>
+        <field
+                name="let_select"
+                type="radio"
+                label="COM_MYCITYSELECTOR_LETSELECT"
+                default="1" >
+            <option value="1">COM_MYCITYSELECTOR_LET1</option>
+            <option value="2">COM_MYCITYSELECTOR_LET2</option>
+        </field>
+
     </fieldset>
 
     <fieldset

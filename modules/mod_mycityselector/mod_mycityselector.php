@@ -20,41 +20,54 @@ class MyCitySelectorModule
      */
     public function __construct()
     {
-        global $MCS_BUFFER;
-        if (!empty($MCS_BUFFER)) {
-            // => берем данные из плагина (он вызывается раньше модуля)
-            $modID = $MCS_BUFFER['mod_id'];
-            $http = $MCS_BUFFER['http'];
-            $currentCity = $MCS_BUFFER['city_name'];
-            $baseDomain = $MCS_BUFFER['base_domain'];
-            $cookieDomain = $MCS_BUFFER['cookie_domain'];
-            $this->params = $params = $MCS_BUFFER['params'];
-            $citiesList = $MCS_BUFFER['citiesList'];
-            $hasGroups = (count($citiesList) > 1);
-            // => путь до файла шаблона
-            $layoutPath = JModuleHelper::getLayoutPath('mod_mycityselector', $params->get('layout', 'default'));
-            // => URL до папки с шаблоном
-            $myUrl = JURI::base() . str_replace(JPATH_BASE . '/', '', dirname($layoutPath)) . '/';
-            // => подключаем файл шаблона
-            require $layoutPath;
-        } else {
+        if (!class_exists('plgSystemPlgMycityselector')) {
+
+
             $find = JFactory::getDbo()
-                ->setQuery("SELECT COUNT(*) AS `cnt` FROM `#__extensions` WHERE `element`='plg_mycityselector'")
+                ->setQuery("SELECT COUNT(*) AS `cnt` FROM `#__extensions` WHERE `element`='plgmycityselector'")
                 ->loadResult();
             if ($find) {
                 $err = 'Плагин MyCitySelector не активен!';
             } else {
                 $err = 'Плагин MyCitySelector не установлен!';
+
             }
             echo '<span style="color:red;">' . $err . '</span>';
+            return;
+
+        } else {
+            $parameters = JComponentHelper::getParams('com_mycityselector');
+            // => берем данные из настроек компонента
+            $modID = JModuleHelper::getModule('mod_mycityselector')->id;
+            //$http = $MCS_BUFFER['http'];
+            $http = 'http'; //TODO добавить метод определения http/https
+            $baseDomain = $parameters->get('basedomain');
+            $cookieDomain = $parameters->get('basedomain');
+            $currentCity = \plgSystemPlgMycityselector::$mcs_buffer['cityByDomain'] ? \plgSystemPlgMycityselector::$mcs_buffer['cityByDomain'] : $parameters->get('default_city');
+            $this->params = $params = $MCS_BUFFER['params'];
+            //$citiesList = $MCS_BUFFER['citiesList'];
+            $citiesList = \plgSystemPlgMycityselector::$mcs_buffer['citiesList'];
+            $hasGroups = (count($citiesList) > 1);
+            // => путь до файла шаблона
+            //$layoutPath = JModuleHelper::getLayoutPath('mod_mycityselector', $params->get('layout', 'default'));
+            $layoutPath = JModuleHelper::getLayoutPath('mod_mycityselector', 'default');
+            // => URL до папки с шаблоном
+            $myUrl = JURI::base() . str_replace(JPATH_BASE . '/', '', dirname($layoutPath)) . '/';
+            // => подключаем файл шаблона
+
+            // адрес возврата при редиректе на поддомен
+            $returnUrl = JUri::getInstance()->toString();
+            require $layoutPath;
         }
+
     }
 
 
     /**
      * Inject jQuery framework for Joomla 2.5
      */
-    public function addJQuery(){
+    public function addJQuery()
+    {
         if (JHtml::isRegistered('jquery.framework')) {
             JHtml::_('jquery.framework');
         } else {
@@ -89,7 +102,7 @@ class MyCitySelectorModule
      * @param String $default
      * @return String
      */
-    public function get($param, $default='')
+    public function get($param, $default = '')
     {
         if (isset($MCS_BUFFER[$param])) {
             $default = $MCS_BUFFER[$param];
