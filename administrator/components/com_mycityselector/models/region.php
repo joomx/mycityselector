@@ -55,6 +55,16 @@ class RegionModel extends JModelList {
      */
     private $countryId = 0;
 
+    /**
+     * @var string
+     */
+    private $ordering = 'name';
+
+    /**
+     * @var string
+     */
+    private $direction = 'asc';
+
 
     /**
      * Init
@@ -62,7 +72,7 @@ class RegionModel extends JModelList {
     function __construct($config = [])
     {
         if (empty($config['filter_fields'])) {
-            $config['filter_fields'] = ['id', 'name', 'subdomain', 'status'];
+            $config['filter_fields'] = ['ordering', 'id', 'name', 'subdomain', 'status'];
         }
         if (!empty($config['country_id'])) {
             $this->countryId = intval($config['country_id']);
@@ -85,6 +95,18 @@ class RegionModel extends JModelList {
 		$this->input = JFactory::getApplication()->input;
 	}
 
+    /**
+     * Properties getter
+     * @param $name
+     * @return null
+     */
+    function __get($name)
+    {
+        if (!empty($this->$name)) {
+            return $this->$name;
+        }
+        return null;
+    }
 
     /**
      * @inheritdoc
@@ -170,6 +192,18 @@ class RegionModel extends JModelList {
 
 
     /**
+     * Sets order and direction for sorting (before read items)
+     * @param $field
+     * @param $direction
+     */
+    public function setOrder($field, $direction)
+    {
+        $this->ordering = $field;
+        $this->direction = $direction;
+    }
+
+
+    /**
      * Returns items (records)
      * @param int $countryId
      * @param bool $limit
@@ -185,6 +219,7 @@ class RegionModel extends JModelList {
 		$page = intval($this->input->getCmd('page', '0'));
 		$start = intval($this->pageLimit * $page);
         $query = $this->getListQuery()->where("country_id={$countryId}");
+        $query->order($this->ordering . ' ' . $this->direction);
         if ($limit) {
             return $this->_db->setQuery($query, $start, $this->pageLimit)->loadAssocList();
         }
@@ -199,10 +234,14 @@ class RegionModel extends JModelList {
      */
     public function getItem($id)
     {
-        $id = $this->_db->escape($id);
         $query = $this->getListQuery();
-        $query->where("`id`={$id}");
-		return $this->_db->setQuery($query)->loadAssoc();
+        if ($id > 0) {
+            $id = $this->_db->escape($id);
+            $query->where("`id`={$id}");
+        } else {
+            $query->order('`id` ASC');
+        }
+        return $this->_db->setQuery($query, 0, 1)->loadAssoc();
 	}
 
 
@@ -242,6 +281,9 @@ class RegionModel extends JModelList {
             $isExists = $id > 0 ? $this->_db->setQuery("SELECT count(`id`) FROM `{$this->table}` WHERE `id`={$id}")->execute() : false;
             if ($isExists === false || $isExists->num_rows == 0) {
                 // create
+                $maxOrder = $this->_db->setQuery("SELECT max(`ordering`) FROM `{$this->table}`")->loadRow();
+                $fields[] = 'ordering';
+                $values[] = empty($maxOrder[0]) ? 1 : $maxOrder[0] + 1;
                 $query = $this->_db->getQuery(true)->insert($this->table)->columns($fields)->values(implode(',', $values));
                 $result = $this->_db->setQuery($query)->execute();
                 if ($result) {
@@ -330,6 +372,31 @@ class RegionModel extends JModelList {
             $html .= '<input type="hidden" name="page" value="' . $page . '"/>';
         }
         return $html;
+    }
+
+
+    /**
+     * Saves new ordering values
+     * @param array $keys [id => order, id => order, ...]
+     */
+    public function saveOrdering($keys)
+    {
+        // @devnote все записи должны иметь не нулевое значение в поле ordering (при создании записи устанавливается автоматически)
+        // @devnote Ключи приходят в порядке их расположения в списке (измененный порядок)
+        $ordering = array_values($keys);
+        sort($ordering);
+        if ($this->direction == 'desc') {
+            $ordering = array_reverse($ordering);
+        }
+        $i = 0;
+        foreach ($keys as $id => $v) {
+            $id = intval($id);
+            $orderNum = intval($ordering[$i]);
+            if ($id > 0) {
+                $this->_db->setQuery("UPDATE `{$this->table}` SET `ordering` = {$orderNum} WHERE `id` = {$id}")->execute();
+            }
+            $i++;
+        }
     }
 	
 }

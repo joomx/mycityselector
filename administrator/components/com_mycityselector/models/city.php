@@ -54,6 +54,16 @@ class CityModel extends JModelList {
      */
     private $regionId = 0;
 
+    /**
+     * @var string
+     */
+    private $ordering = 'name';
+
+    /**
+     * @var string
+     */
+    private $direction = 'asc';
+
 
     /**
      * Init
@@ -61,7 +71,7 @@ class CityModel extends JModelList {
     function __construct($config = [])
     {
         if (empty($config['filter_fields'])) {
-            $config['filter_fields'] = ['id', 'name', 'status'];
+            $config['filter_fields'] = ['ordering', 'id', 'name', 'status'];
         }
         if (!empty($config['region_id'])) {
             $this->regionId = intval($config['region_id']);
@@ -83,6 +93,19 @@ class CityModel extends JModelList {
         }
 		$this->input = JFactory::getApplication()->input;
 	}
+
+    /**
+     * Properties getter
+     * @param $name
+     * @return null
+     */
+    function __get($name)
+    {
+        if (!empty($this->$name)) {
+            return $this->$name;
+        }
+        return null;
+    }
 
 
     /**
@@ -144,10 +167,19 @@ class CityModel extends JModelList {
     {
         // TODO rules
         return [
-
-
-
         ];
+    }
+
+
+    /**
+     * Sets order and direction for sorting (before read items)
+     * @param $field
+     * @param $direction
+     */
+    public function setOrder($field, $direction)
+    {
+        $this->ordering = $field;
+        $this->direction = $direction;
     }
 
 
@@ -170,6 +202,7 @@ class CityModel extends JModelList {
         if ($regionId != 0) {
             $query->where("region_id={$regionId}");
         }
+        $query->order($this->ordering . ' ' . $this->direction);
         if ($limit) {
             return $this->_db->setQuery($query, $start, $this->pageLimit)->loadAssocList();
         }
@@ -227,6 +260,9 @@ class CityModel extends JModelList {
             $isExists = $this->_db->setQuery("SELECT count(`id`) FROM `{$this->table}` WHERE `id`={$id}")->execute();
             if ($isExists->num_rows == 0) {
                 // create
+                $maxOrder = $this->_db->setQuery("SELECT max(`ordering`) FROM `{$this->table}`")->loadRow();
+                $fields[] = 'ordering';
+                $values[] = empty($maxOrder[0]) ? 1 : $maxOrder[0] + 1;
                 $query = $this->_db->getQuery(true)->insert($this->table)->columns($fields)->values($values);
                 $result = $this->_db->setQuery($query)->execute();
                 if ($result) {
@@ -332,6 +368,30 @@ class CityModel extends JModelList {
             $html .= '<input type="hidden" name="page" value="' . $page . '"/>';
         }
         return $html;
+    }
+
+    /**
+     * Saves new ordering values
+     * @param array $keys [id => order, id => order, ...]
+     */
+    public function saveOrdering($keys)
+    {
+        // @devnote все записи должны иметь не нулевое значение в поле ordering (при создании записи устанавливается автоматически)
+        // @devnote Ключи приходят в порядке их расположения в списке (измененный порядок)
+        $ordering = array_values($keys);
+        sort($ordering);
+        if ($this->direction == 'desc') {
+            $ordering = array_reverse($ordering);
+        }
+        $i = 0;
+        foreach ($keys as $id => $v) {
+            $id = intval($id);
+            $orderNum = intval($ordering[$i]);
+            if ($id > 0) {
+                $this->_db->setQuery("UPDATE `{$this->table}` SET `ordering` = {$orderNum} WHERE `id` = {$id}")->execute();
+            }
+            $i++;
+        }
     }
 	
 }

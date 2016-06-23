@@ -48,6 +48,11 @@ class JxController {
      */
     protected $db;
 
+    /**
+     * @var \JApplicationWeb
+     */
+    protected $app;
+
 
     /**
      * Sidebar menu items
@@ -83,6 +88,7 @@ class JxController {
         $this->_component = $componentName;
         $this->input = \JFactory::getApplication()->input;
         $this->db = \JFactory::getDbo();
+        $this->app = \JFactory::getApplication();
         // assets
         $document = \JFactory::getDocument();
         $css = ['type' => 'text/css', 'media' => null];
@@ -107,6 +113,48 @@ class JxController {
             \JHtmlSidebar::addEntry($name, 'index.php?option=' . $componentName . '&task=default&controller=' . $action, ($this->_id==$action));
         }
         $this->sidebarMenu = \JHtmlSidebar::render();
+    }
+
+    /**
+     * Returns state value by name
+     * @param $name
+     * @param $default
+     * @return mixed
+     */
+    public function getState($name, $default = null)
+    {
+        $key = get_class($this) . '_';
+        $session = \JFactory::getSession();
+        return $session->get($key . $name, $default);
+    }
+
+    /**
+     * Sets state value by name
+     * @param $name
+     * @param $value
+     */
+    public function setState($name, $value)
+    {
+        $key = get_class($this) . '_';
+        $session = \JFactory::getSession();
+        $session->set($key . $name, $value);
+    }
+
+    /**
+     * Sets state value by name from request
+     * @param $name
+     * @param array $filter Enabled filters names
+     * @return mixed
+     */
+    public function setStateFromRequest($name, $filter = [])
+    {
+        $key = get_class($this) . '_';
+        if (!empty($_REQUEST[$name])) {
+            if (!(!empty($filter) && !in_array($_REQUEST[$name], $filter))) {
+                $session = \JFactory::getSession();
+                $session->set($key . $name, $_REQUEST[$name]);
+            }
+        }
     }
 
 

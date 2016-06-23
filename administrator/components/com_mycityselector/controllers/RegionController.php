@@ -63,14 +63,21 @@ class RegionController extends JxController {
         }
         $countryName = $country['name'];
         $countryId = $country['id'];
-        $model = $this->getModel('region', ['country_id' => $countryId]);	// (./models/[$modelName].php)
+        $model = $this->getModel('region', ['country_id' => $countryId]); /* @var $model RegionModel */	// (./models/[$modelName].php)
+        // sorting
+        $this->setStateFromRequest('order_by', $model->filter_fields);
+        $listOrder = $this->getState('order_by', 'name');
+        $this->setStateFromRequest('order_direction', ['asc', 'desc']);
+        $listDirection  = $this->getState('order_direction', 'asc');
+        $model->setOrder($listOrder, $listDirection);
+
         $this->render('list', [
             'countryId' => $countryId,
             'countryName' => $countryName,
             'items' => $model->getItems(),
             'pagination' => $model->getPagination(),
-            'listOrder' => $this->input->getCmd('list.ordering', ''),
-            'listDirection' => $this->input->getCmd('list.direction', '')
+            'listOrder' => $listOrder,
+            'listDirection' => $listDirection
         ]);
 	}
 
@@ -80,7 +87,7 @@ class RegionController extends JxController {
      */
     public function actionAdd()
     {
-        $model = $this->getModel('region');
+        $model = $this->getModel('region'); /* @var $model RegionModel */
         $data = $model->getDefaultData();
         JToolBarHelper::title(JText::_('COM_MYCITYSELECTOR_NAME') . ' - ' . JText::_('COM_MYCITYSELECTOR_ITEM_ADDING'), 'big-ico');
         JToolBarHelper::apply('save');
@@ -101,7 +108,7 @@ class RegionController extends JxController {
      */
     public function actionUpdate()
     {
-		$model = $this->getModel('region');
+		$model = $this->getModel('region'); /* @var $model RegionModel */
         $id = intval($this->input->getCmd('id'));
         if (!empty($_POST['cid'])) {
             $id = intval($_POST['cid'][0]);
@@ -158,7 +165,7 @@ class RegionController extends JxController {
     {
         $page = 0;
         $url = '';
-        $model = $this->getModel('region');
+        $model = $this->getModel('region'); /* @var $model RegionModel */
         $id = $model->saveItem($_POST);
         if (!$id) {
             // error
@@ -186,7 +193,7 @@ class RegionController extends JxController {
     public function actionDrop()
     {
         $page = $this->input->getCmd('page', 0);
-		$region	= $this->getModel('region');
+		$region	= $this->getModel('region'); /* @var $model RegionModel */
         $city	= $this->getModel('city');
         if (!empty($_POST['cid'])) {
             $city->dropByRegions($_POST['cid']);
@@ -203,7 +210,7 @@ class RegionController extends JxController {
     public function actionPublish()
     {
         $page = $this->input->getCmd('page', 0);
-		$model	= $this->getModel('region');
+		$model	= $this->getModel('region'); /* @var $model RegionModel */
         if (!empty($_POST['cid'])) {
             $model->publishItems($_POST['cid'], 1);
         }
@@ -217,7 +224,7 @@ class RegionController extends JxController {
     public function actionUnPublish()
     {
         $page = $this->input->getCmd('page', 0);
-		$model	= $this->getModel('region');
+		$model	= $this->getModel('region'); /* @var $model RegionModel */
         if (!empty($_POST['cid'])) {
             $model->publishItems($_POST['cid'], 0);
         }
@@ -228,12 +235,18 @@ class RegionController extends JxController {
     /**
      * Save new order of items
      */
-    public function actionSaveOrder()
+    public function actionSaveOrdering()
     {
-
-        // todo
-
-	}
-
+        $responce = ['status' => '200', 'debug_get' => $_GET];
+        $order = empty($_GET['order']) ? [] : $_GET['order'];
+        if (!empty($order)) {
+            $model = $this->getModel('region'); /* @var $model RegionModel */
+            $listOrder = $this->getState('order_by', 'name');
+            $listDirection  = $this->getState('order_direction', 'asc');
+            $model->setOrder($listOrder, $listDirection);
+            $model->saveOrdering($order);
+        }
+        exit(json_encode($responce));
+    }
 	
 }

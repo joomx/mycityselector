@@ -57,12 +57,32 @@ class CityController extends JxController {
         JToolBarHelper::unpublishList();
         JToolBarHelper::custom('drop', 'delete', 'delete', JText::_('COM_MYCITYSELECTOR_ITEM_DELETE'));
         $regionId = intval($this->input->getCmd('region_id'));
-        $model = $this->getModel('city', ['region_id' => $regionId]);	// (./models/[$modelName].php)
+        $model = $this->getModel('city', ['region_id' => $regionId]); /* @var $model CityModel */	// (./models/[$modelName].php)
+        // sorting
+        $this->setStateFromRequest('order_by', $model->filter_fields);
+        $listOrder = $this->getState('order_by', 'name');
+        $this->setStateFromRequest('order_direction', ['asc', 'desc']);
+        $listDirection  = $this->getState('order_direction', 'asc');
+        $model->setOrder($listOrder, $listDirection);
+        // country & region names
+        $region = $this->getModel('region')->getItem($regionId);
+        if (empty($region)) {
+            return $this->render('not_found');
+        }
+        $regionName = $region['name'];
+        $country = $this->getModel('country')->getItem($region['country_id']);
+        if (empty($country)) {
+            return $this->render('not_found');
+        }
+        $countryName = $country['name'];
+
         $this->render('list', [
             'items' => $model->getItems(),
             'pagination' => $model->getPagination(),
-            'listOrder' => $this->input->getCmd('list.ordering', ''),
-            'listDirection' => $this->input->getCmd('list.direction', '')
+            'listOrder' => $listOrder,
+            'listDirection' => $listDirection,
+            'countryName' => $countryName,
+            'regionName' => $regionName,
         ]);
 	}
 
@@ -78,7 +98,7 @@ class CityController extends JxController {
         JToolBarHelper::save2new('saveandnew');
         JToolBarHelper::cancel('default');
 
-        $model = $this->getModel('city');	// (./models/[$modelName].php)
+        $model = $this->getModel('city'); /* @var $model CityModel */
         $data = [];
         foreach ($model->getFields() as $name => $coloumn) {
             $data[$name] = '';
@@ -98,15 +118,10 @@ class CityController extends JxController {
 
     /**
      * Edit form for item
-     * @param   boolean  $cache   If true, the view output will be cached
-     * @param   array    $urlParams  An array of safe url parameters and their variable types, for valid values see {@link JFilterInput::clean()}.
      */
     public function actionUpdate()
     {
-		$model = $this->getModel('city');
-        //$view = $this->getView('city', 'html');
-        //$view->setModel($model, true);
-        //$view->sidebar = $this->sidebar;
+		$model = $this->getModel('city'); /* @var $model CityModel */
         $id = intval($this->input->getCmd('id'));
         if (!empty($_POST['cid'])) {
             $id = intval($_POST['cid'][0]);
@@ -118,20 +133,15 @@ class CityController extends JxController {
             JToolBarHelper::save('saveandclose');
             JToolBarHelper::save2new('saveandnew');
             JToolBarHelper::cancel('default');
-            //$view->setLayout('edit');
-            //$data = $data;
             $this->render('edit', [
                 'model' => $model,
                 'data' => $data,
             ]);
-
-
         } else {
             JToolBarHelper::addNew();
             //$view->setLayout('not_found');
             $this->render('not_found', []);
         }
-        //$view->display();
 	}
 
 
@@ -169,7 +179,7 @@ class CityController extends JxController {
     {
         $page = 0; // TODO store current page in session
         $url = '';
-        $model = $this->getModel('city');
+        $model = $this->getModel('city'); /* @var $model CityModel */
         $id = $model->saveItem($_POST);
         if (!$id) {
             // error
@@ -197,7 +207,7 @@ class CityController extends JxController {
     public function actionDrop()
     {
         $page = $this->input->getCmd('page', 0);
-		$model	= $this->getModel('city');
+		$model	= $this->getModel('city'); /* @var $model CityModel */
         if (!empty($_POST['cid'])) {
             $model->dropItems($_POST['cid']);
         }
@@ -211,7 +221,7 @@ class CityController extends JxController {
     public function actionPublish()
     {
         $page = $this->input->getCmd('page', 0);
-		$model	= $this->getModel('city');
+		$model	= $this->getModel('city'); /* @var $model CityModel */
         if (!empty($_POST['cid'])) {
             $model->publishItems($_POST['cid'], 1);
         }
@@ -225,7 +235,7 @@ class CityController extends JxController {
     public function actionUnPublish()
     {
         $page = $this->input->getCmd('page', 0);
-		$model	= $this->getModel('city');
+		$model	= $this->getModel('city'); /* @var $model CityModel */
         if (!empty($_POST['cid'])) {
             $model->publishItems($_POST['cid'], 0);
         }
@@ -236,12 +246,19 @@ class CityController extends JxController {
     /**
      * Save new order of items
      */
-    public function actionSaveOrder()
+    public function actionSaveOrdering()
     {
+        $responce = ['status' => '200', 'debug_get' => $_GET];
+        $order = empty($_GET['order']) ? [] : $_GET['order'];
+        if (!empty($order)) {
+            /* @var $model CityModel */
+            $model = $this->getModel('city');
+            $listOrder = $this->getState('order_by', 'name');
+            $listDirection  = $this->getState('order_direction', 'asc');
+            $model->setOrder($listOrder, $listDirection);
+            $model->saveOrdering($order);
+        }
+        exit(json_encode($responce));
+    }
 
-        // todo
-
-	}
-
-	
 }

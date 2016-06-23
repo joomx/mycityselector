@@ -62,12 +62,18 @@ class DefaultController extends JxController {
 //            JToolbarHelper::divider();
 //        }
         JToolBarHelper::custom('drop', 'delete', 'delete', JText::_('COM_MYCITYSELECTOR_ITEM_DELETE'));
-        $model = $this->getModel('country');	// (./models/[$modelName].php)
+        $model = $this->getModel('country'); /* @var $model CountryModel */ // (./models/[$modelName].php)
+        // sorting
+        $this->setStateFromRequest('order_by', $model->filter_fields);
+        $listOrder = $this->getState('order_by', 'name');
+        $this->setStateFromRequest('order_direction', ['asc', 'desc']);
+        $listDirection  = $this->getState('order_direction', 'asc');
+        $model->setOrder($listOrder, $listDirection);
         $this->render('list', [
             'items' => $model->getItems(),
             'pagination' => $model->getPagination(),
-            'listOrder' => $this->input->getCmd('list.ordering', ''),
-            'listDirection' => $this->input->getCmd('list.direction', '')
+            'listOrder' => $listOrder,
+            'listDirection' => $listDirection
         ]);
 	}
 
@@ -77,7 +83,7 @@ class DefaultController extends JxController {
      */
     public function actionAdd()
     {
-        $model = $this->getModel('country');
+        $model = $this->getModel('country'); /* @var $model CountryModel */
         $data = $model->getDefaultData();
         JToolBarHelper::title(JText::_('COM_MYCITYSELECTOR_NAME') . ' - ' . JText::_('COM_MYCITYSELECTOR_ITEM_ADDING'), 'big-ico');
         JToolBarHelper::apply('save');
@@ -98,7 +104,7 @@ class DefaultController extends JxController {
      */
     public function actionUpdate()
     {
-		$model = $this->getModel('country');
+		$model = $this->getModel('country'); /* @var $model CountryModel */
         $id = intval($this->input->getCmd('id'));
         if (!empty($_POST['cid'])) {
             $id = intval($_POST['cid'][0]);
@@ -155,7 +161,7 @@ class DefaultController extends JxController {
     {
         $page = 0;
         $url = '';
-        $model = $this->getModel('country');
+        $model = $this->getModel('country'); /* @var $model CountryModel */
         $id = $model->saveItem($_POST);
         if (!$id) {
             // error
@@ -183,7 +189,7 @@ class DefaultController extends JxController {
     public function actionDrop()
     {
         $page = $this->input->getCmd('page', 0);
-		$country	= $this->getModel('country');
+		$country	= $this->getModel('country'); /* @var $model CountryModel */
         $region	= $this->getModel('region');
         $city	= $this->getModel('city');
         if (!empty($_POST['cid'])) {
@@ -214,7 +220,7 @@ class DefaultController extends JxController {
     public function actionPublish()
     {
         $page = $this->input->getCmd('page', 0);
-		$model	= $this->getModel('country');
+		$model	= $this->getModel('country'); /* @var $model CountryModel */
         if (!empty($_POST['cid'])) {
             $model->publishItems($_POST['cid'], 1);
         }
@@ -228,7 +234,7 @@ class DefaultController extends JxController {
     public function actionUnPublish()
     {
         $page = $this->input->getCmd('page', 0);
-		$model	= $this->getModel('country');
+		$model	= $this->getModel('country'); /* @var $model CountryModel */
         if (!empty($_POST['cid'])) {
             $model->publishItems($_POST['cid'], 0);
         }
@@ -239,12 +245,19 @@ class DefaultController extends JxController {
     /**
      * Save new order of items
      */
-    public function actionSaveOrder()
+    public function actionSaveOrdering()
     {
-
-        // todo
-
+        $responce = ['status' => '200', 'debug_get' => $_GET];
+        $order = empty($_GET['order']) ? [] : $_GET['order'];
+        if (!empty($order)) {
+            /* @var $model CountryModel */
+            $model = $this->getModel('country');
+            $listOrder = $this->getState('order_by', 'name');
+            $listDirection  = $this->getState('order_direction', 'asc');
+            $model->setOrder($listOrder, $listDirection);
+            $model->saveOrdering($order);
+        }
+        exit(json_encode($responce));
 	}
 
-	
 }
