@@ -104,12 +104,6 @@ class plgSystemPlgMycityselector extends JPlugin
             // определяем базовый домен сайта
             $this->defineBaseDomain();
 
-            // передаем в браузер параметры о домене
-            JFactory::getDocument()->addScriptDeclaration(
-                'window.mcs_base_domain="' . $this->baseDomain . '";' . // основной домен сайта, если есть еще и субдомены
-                'window.mcs_cookie_domain="' . $this->cookieDomain . '";' // домен для которого нужно устанавливать кукисы
-            );
-
             // формируем массив городов и определяем наличие поддоменов
             $this->getCitiesList();
             // определяем текущий город
@@ -119,9 +113,10 @@ class plgSystemPlgMycityselector extends JPlugin
             // определяем город по домену
             $this->defineCityByDomain();
             // проверяем соответствие текущего города с текущим адресом (поддоменом или адресом страницы)
-            $this->autoSwitchCity();
+            //$this->autoSwitchCity();
         }
         // запоминаем для модуля, который будет вызван позднее
+
         $this->storeData();
     }
 
@@ -176,7 +171,7 @@ XML;
     /**
      * Загружает все данные текущего модуля (ID и params)
      */
-    private function loadModuleData()// todo move methods to PlgOptionsHelper
+    /*private function loadModuleData()// todo move methods to PlgOptionsHelper
     {
         // сначала пытаемся получить ID из строки запроса (для админки)
         $jInput = JFactory::getApplication()->input;
@@ -212,7 +207,7 @@ XML;
             $this->params->loadString($data['params']); // и его параметры
         }
         $this->modID = $id;
-    }
+    }*/
 
 private function loadData() {
     $this->db = JFactory::getDbo();
@@ -449,6 +444,12 @@ private function loadData() {
     }
 
     private function defineCityByCookie() {
+        if ($this->comParams->get('debug_mode') == 1) {
+            unset($_COOKIE['MCS_CITY_NAME']);
+            unset($_COOKIE['MCS_NOASK']);
+            setcookie('MCS_CITY_NAME','',time() + 3600 * 24 * 30, '/', $this->cookieDomain);
+            setcookie('MCS_NOASK','',time() + 3600 * 24 * 30, '/', $this->cookieDomain);
+        }
         $defaultCity = $this->comParams->get('default_city', 'Москва');
         if ($city = $_COOKIE['MCS_CITY_NAME']) {
             $query = $this->db->getQuery(true)->select('name')->from('#__mycityselector_city')
@@ -460,6 +461,8 @@ private function loadData() {
                 $this->city = '';
             }
 
+        } else {
+            $this->city = '';
         }
     }
 
@@ -479,6 +482,7 @@ private function loadData() {
             'city' => $this->city,
             'cityByDomain' => $this->cityByDomain,
             'params' => $this->params,
+            'comParams' => $this->comParams,
             'citiesList' => $this->citiesList,
         );
         // дублируем в сессию для доступа из отдельных скриптов

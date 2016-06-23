@@ -37,11 +37,13 @@
             initialize();
             ymaps.ready(yandex_geolocation);
             // отображение окна или подсказки
-            if (w.mcs_dialog == 1) {
-                openDialog();
-            } else if (w.mcs_dialog == 2) {
-                $(".question", $module).show(50);
-            }
+/*            if (getCookie('MCS_NOASK') != 1) {
+                if (w.mcs_dialog == 1) {
+                    openDialog();
+                } else if (w.mcs_dialog == 2) {
+                    $(".question", $module).show(50);
+                }
+            }*/
         });
     }, 50);
 
@@ -147,8 +149,16 @@
                 // Выведем в консоль данные, полученные в результате геокодирования объекта.
                 yaCity = result.geoObjects.get(0).properties.get('metaDataProperty.GeocoderMetaData.AddressDetails.Country.AdministrativeArea.Locality.LocalityName');
                 yaRegion = result.geoObjects.get(0).properties.get('metaDataProperty.GeocoderMetaData.AddressDetails.Country.AdministrativeArea.AdministrativeAreaName');
-                console.log('Определен город: '+yaCity);
-                console.log('Определен регион: '+yaRegion);
+                console.log('Определен город: ' + yaCity);
+                console.log('Определен регион: ' + yaRegion);
+                if (getCookie('MCS_NOASK') != 1) {
+                    if (w.mcs_dialog == 1) {
+                        openDialog();
+                    } else if (w.mcs_dialog == 2) {
+                        $("#yaCity",$module).html(yaCity);
+                        $(".question", $module).show(50);
+                    }
+                }
             })
         }
     }
@@ -212,7 +222,9 @@
         var cityName = $link.attr("data-city");
         if (cityName.length > 0) {
             // => сохраняем в cookie название выбранного города
-            setCookie(cityName);
+            //setCookie(cityName);
+            setCookie('MCS_CITY_NAME', cityName);
+            setCookie('MCS_NOASK', 1);
             // => выделяем выбранный город
             $(".link", $dialog).removeClass('active');
             $link.addClass('active');
@@ -308,22 +320,30 @@
 
 
     /**
-     * Сохранение текущего города в cookie
-     * @param {String} cityName
+     * Сохранение параметров в cookie
+     * @param {String} cookie name
+     * @param {String} cookie value
      */
-    function setCookie(cityName) {
+    function setCookie(name, cookieval) {
         var domain = (window.mcs_cookie_domain) ? window.mcs_cookie_domain : "";
         if (domain != "") {
             var exdate = new Date();
             exdate.setDate(exdate.getDate() + 30);
             exdate = exdate.toUTCString();
-            var value = ( window.encodeURIComponent ? window.encodeURIComponent(cityName) : cityName );
-            var cookie = "MCS_CITY_NAME=" + value + "; expires=" + exdate + ";domain={$domain};path=/";
+            var value = ( window.encodeURIComponent ? window.encodeURIComponent(cookieval) : cookieval );
+            var cookie = name + "=" + value + "; expires=" + exdate + ";domain={$domain};path=/";
             document.cookie = cookie.replace('{$domain}', domain);
             if (domain.substring(0, 1) == ".") {
                 document.cookie = cookie.replace('{$domain}', domain.substring(1, domain.length - 1));
             }
         }
+    }
+
+    function getCookie(name) {
+        var matches = document.cookie.match(new RegExp(
+            "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+        ));
+        return matches ? decodeURIComponent(matches[1]) : undefined;
     }
 
 

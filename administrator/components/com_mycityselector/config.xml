@@ -2,6 +2,15 @@
 <config>
     <fieldset name="component">
         <field
+                name="debug_mode"
+                type="radio"
+                class="btn-group btn-group-yesno"
+                label="COM_MYCITYSELECTOR_DEBUG"
+                default="0" >
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+        <field
                 name="basedomain"
                 type="text"
                 label="COM_MYCITYSELECTOR_BASE_DOMAIN"
@@ -36,6 +45,15 @@
                 default="1" >
             <option value="1">COM_MYCITYSELECTOR_LET1</option>
             <option value="2">COM_MYCITYSELECTOR_LET2</option>
+        </field>
+        <field
+                name="autoswitch_city"
+                type="radio"
+                class="btn-group btn-group-yesno"
+                label="COM_MYCITYSELECTOR_AUTOSWITCH_CITY"
+                default="1" >
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
         </field>
 
     </fieldset>

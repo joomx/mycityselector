@@ -14,6 +14,11 @@ class MyCitySelectorModule
      */
     private $params = null;
 
+    /**
+     * @var JRegistry Объект параметров компонента
+     */
+    private $comParams = null;
+
 
     /**
      * Инициализация модуля
@@ -36,27 +41,26 @@ class MyCitySelectorModule
             return;
 
         } else {
-            $parameters = JComponentHelper::getParams('com_mycityselector');
+            $this->params = plgSystemPlgMycityselector::$mcs_buffer['params'];
+            $this->comParams = plgSystemPlgMycityselector::$mcs_buffer['comParams'];
             // => берем данные из настроек компонента
-            $modID = JModuleHelper::getModule('mod_mycityselector')->id;
-            //$http = $MCS_BUFFER['http'];
-            $http = 'http'; //TODO добавить метод определения http/https
-            $baseDomain = $parameters->get('basedomain');
-            $cookieDomain = $parameters->get('basedomain');
-            $currentCity = \plgSystemPlgMycityselector::$mcs_buffer['cityByDomain'] ? \plgSystemPlgMycityselector::$mcs_buffer['cityByDomain'] : $parameters->get('default_city');
-            $this->params = $params = $MCS_BUFFER['params'];
-            //$citiesList = $MCS_BUFFER['citiesList'];
-            $citiesList = \plgSystemPlgMycityselector::$mcs_buffer['citiesList'];
+            $modID = plgSystemPlgMycityselector::$mcs_buffer['mod_id'];
+            $http = plgSystemPlgMycityselector::$mcs_buffer['http'];
+            $baseDomain = plgSystemPlgMycityselector::$mcs_buffer['base_domain'];
+            $cookieDomain = plgSystemPlgMycityselector::$mcs_buffer['cookie_domain'];
+            $currentCity = plgSystemPlgMycityselector::$mcs_buffer['cityByDomain'] ? plgSystemPlgMycityselector::$mcs_buffer['cityByDomain'] : $this->comParams->get('default_city');
+            $citiesList = plgSystemPlgMycityselector::$mcs_buffer['citiesList'];
             $hasGroups = (count($citiesList) > 1);
             // => путь до файла шаблона
-            //$layoutPath = JModuleHelper::getLayoutPath('mod_mycityselector', $params->get('layout', 'default'));
-            $layoutPath = JModuleHelper::getLayoutPath('mod_mycityselector', 'default');
+            $layoutPath = JModuleHelper::getLayoutPath('mod_mycityselector', $this->params->get('layout', 'default'));
             // => URL до папки с шаблоном
             $myUrl = JURI::base() . str_replace(JPATH_BASE . '/', '', dirname($layoutPath)) . '/';
             // => подключаем файл шаблона
 
             // адрес возврата при редиректе на поддомен
             $returnUrl = JUri::getInstance()->toString();
+            // передаем параметры в JS
+            $this->transferParamsToJS();
             require $layoutPath;
         }
 
@@ -126,6 +130,18 @@ class MyCitySelectorModule
             require_once JPATH_ROOT . '/modules/mod_mycityselector/MCSTranslit.php';
         }
         return MCSTranslit::convert($str);
+    }
+    private function transferParamsToJS() {
+        $script = '';
+        if ($this->comParams->get('let_select', '1') == '1') {
+            $script = 'window.mcs_dialog=1;'; // отобразить окно выбора города
+        } else {
+            $script = 'window.mcs_dialog=2;'; // отобразить предложение о смене города
+        }
+
+        $script .= 'window.mcs_base_domain="' . plgSystemPlgMycityselector::$mcs_buffer['basedomain'] . '";' . // основной домен сайта, если есть еще и субдомены
+                    'window.mcs_cookie_domain="' . plgSystemPlgMycityselector::$mcs_buffer['cookie_domain'] . '";'; // домен для которого нужно устанавливать кукисы
+        JFactory::getDocument()->addScriptDeclaration($script);
     }
 
 }

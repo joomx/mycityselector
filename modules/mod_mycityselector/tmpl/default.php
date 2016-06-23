@@ -26,7 +26,7 @@ $this->addScript('https://api-maps.yandex.ru/2.1/?lang=ru_RU');
 	<?= $this->get('text_before') ?>
 	<a class="city" href="javascript:void(0)" title="Выбрать другой город"><?= $currentCity ?></a>
 	<?= $this->get('text_after') ?>
-	<div class="question" style="display:none;">Не ваш город?&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" class="close">x</a></div>
+	<div class="question" style="display:none;">Ваш город  <span id="yaCity"></span> &nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" class="close">x</a></div>
 </div><?php
 
 
