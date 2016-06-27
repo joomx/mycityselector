@@ -56,10 +56,11 @@
 }
 
 .mcs-dialog {
+    box-sizing: border-box;
 	position: fixed;
 	z-index: 9000;
 	top: 20%;
-	left: 50%;
+	left: 30%;
 	width: 360px;
 	margin-left: -200px;
 	height: auto;
@@ -76,7 +77,7 @@
     text-decoration: none;
 }
 .mcs-dialog.has-groups {
-    width: 500px;
+    width: 70%;
 }
 .mcs-dialog .close {
 	position: absolute;
@@ -97,10 +98,12 @@
     border-bottom: 1px solid #bababa;
 }
 .mcs-dialog .groups {
-    width: 118px;
+    width: 200px;
     float: left;
     margin: 0;
     padding: 10px 0 10px 20px;
+    overflow-y: scroll;
+    height: 300px;
 }
 .mcs-dialog .group {
 	margin: 0 0 6px 0;
@@ -121,7 +124,7 @@
 .mcs-dialog.has-groups .cities {
     border-left: 1px solid #bababa;
     width: 340px !important;
-    margin-left: 150px;
+    margin-left: 220px;
     padding: 10px 0 10px 10px;
 }
 .mcs-dialog .cities.hidden {

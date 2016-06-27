@@ -37,13 +37,13 @@
             initialize();
             ymaps.ready(yandex_geolocation);
             // отображение окна или подсказки
-/*            if (getCookie('MCS_NOASK') != 1) {
-                if (w.mcs_dialog == 1) {
-                    openDialog();
-                } else if (w.mcs_dialog == 2) {
-                    $(".question", $module).show(50);
-                }
-            }*/
+            /*            if (getCookie('MCS_NOASK') != 1) {
+             if (w.mcs_dialog == 1) {
+             openDialog();
+             } else if (w.mcs_dialog == 2) {
+             $(".question", $module).show(50);
+             }
+             }*/
         });
     }, 50);
 
@@ -66,10 +66,14 @@
             // клик по названию текущего города
             $(".city", $module).on('click', openDialog);
             // . клик по кнопке закрыть на tooltip
-            $(".question .close", $module).on('click', function () {
-                $(".question", $module).hide(50);
-                return false;
+            $(".question .close", $module).on('click', closePopUp);
+            // . клик по кнопке да на tooltip
+            $("#mcs-button-yes", $module).on('click', function () {
+                autoSwitchToDetectedCity(yaCity)
             });
+            // . клик по кнопке нет на tooltip
+            $("#mcs-button-no", $module).on('click', openDialog);
+
             // . кнопка закрытия диалога
             $('.close', $dialog).on('click', closeDialog);
             // . клик по затемнению
@@ -155,7 +159,7 @@
                     if (w.mcs_dialog == 1) {
                         openDialog();
                     } else if (w.mcs_dialog == 2) {
-                        $("#yaCity",$module).html(yaCity);
+                        $("#yaCity", $module).html(yaCity);
                         $(".question", $module).show(50);
                     }
                 }
@@ -191,6 +195,11 @@
         $dialog.css('display', 'none');
         return false;
     }
+    function closePopUp() {
+        setCookie('MCS_NOASK', 1);
+        $(".question", $module).hide(50);
+        return false;
+    }
 
 
     /**
@@ -199,7 +208,8 @@
      * @param {string} city Название города
      */
     function autoSwitchToDetectedCity(city) {
-        if ($dialog.css('display') == 'none' && w.mcs_yandexgeo === true) {
+        //if ($dialog.css('display') == 'none' && w.mcs_yandexgeo === true) {
+        if ($dialog.css('display') == 'none') {
             // ищем город в списке
             $(".link", $dialog).each(function (index, link) {
                 if ($(link).data("city") == city) {
@@ -282,6 +292,16 @@
         }
 
         return false;
+    }
+
+    /**
+     * Делает редирект на город по его названию на русском языке.
+     * @param {string} Название выбранного города
+     */
+    function redirectToCity(name) {
+
+
+        return tryRedirect();
     }
 
 

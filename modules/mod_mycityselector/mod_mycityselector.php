@@ -140,7 +140,8 @@ class MyCitySelectorModule
         }
 
         $script .= 'window.mcs_base_domain="' . plgSystemPlgMycityselector::$mcs_buffer['basedomain'] . '";' . // основной домен сайта, если есть еще и субдомены
-                    'window.mcs_cookie_domain="' . plgSystemPlgMycityselector::$mcs_buffer['cookie_domain'] . '";'; // домен для которого нужно устанавливать кукисы
+                    'window.mcs_cookie_domain="' . plgSystemPlgMycityselector::$mcs_buffer['cookie_domain'] . '";'. // домен для которого нужно устанавливать кукисы
+                    'window.mcs_http="'.plgSystemPlgMycityselector::$mcs_buffer['http'].'";';
         JFactory::getDocument()->addScriptDeclaration($script);
     }
 

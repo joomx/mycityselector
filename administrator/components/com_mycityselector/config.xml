@@ -34,7 +34,7 @@
                 type="radio"
                 class="btn-group btn-group-yesno"
                 label="COM_MYCITYSELECTOR_BASEIP"
-                default="1" >
+                default="yandexgeo" >
             <option value="yandexgeo">JYES</option>
             <option value="none">JNO</option>
         </field>
