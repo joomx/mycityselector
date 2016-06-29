@@ -34,6 +34,7 @@
             <menu link="option=com_mycityselector" img="class:module">COM_MYCITYSELECTOR_COUNTRIES</menu>
             <menu link="option=com_mycityselector&amp;controller=region" img="class:module">COM_MYCITYSELECTOR_REGIONS</menu>
             <menu link="option=com_mycityselector&amp;controller=city" img="class:module">COM_MYCITYSELECTOR_CITIES</menu>
+            <menu link="option=com_mycityselector&amp;controller=fields" img="class:module">COM_MYCITYSELECTOR_FIELDS</menu>
         </submenu>
 
         <files folder="admin"><filename>admin-scripts.js</filename><filename>admin-style.css</filename><filename>com_mycityselector.xml</filename><folder>controllers</folder><folder>helpers</folder><folder>images</folder><filename>index.html</filename><filename>install.sql</filename><filename>installer.php</filename><folder>language</folder><filename>license.txt</filename><folder>models</folder><filename>mycityselector.php</filename><filename>uninstall.sql</filename><folder>views</folder></files>
