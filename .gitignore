@@ -10,6 +10,7 @@
 /language/en-GB/en-GB.lib_fof.ini
 /administrator/language/en-GB/en-GB.com_mycityselector.sys.ini
 /administrator/language/en-GB/en-GB.com_mycityselector.ini
+/administrator/language
 /.gitignore
 /.htaccess
 /administrator/cache/*
