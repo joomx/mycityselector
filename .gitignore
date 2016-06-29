@@ -1,3 +1,15 @@
+/plugins/system/updatenotification
+/plugins/system/stats
+/includes
+/images/headers
+/images/sampledata
+/images/banners
+/cli
+/components/com_modules
+/language/en-GB/en-GB.com_mycityselector.sys.ini
+/language/en-GB/en-GB.lib_fof.ini
+/administrator/language/en-GB/en-GB.com_mycityselector.sys.ini
+/administrator/language/en-GB/en-GB.com_mycityselector.ini
 /.gitignore
 /.htaccess
 /administrator/cache/*

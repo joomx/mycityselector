@@ -574,7 +574,7 @@ private function loadData() {
     /**
      * Добавляет на страницу js callback функцию
      * @param $body
-     * @return mixed
+     * @return string
      */
     private function injectJSCallbackFunction($body){
         $callback = trim($this->params->get('js_callback'));
@@ -583,8 +583,5 @@ private function loadData() {
         }
         return $body;
     }
-
-
-
 
 }
