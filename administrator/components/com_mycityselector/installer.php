@@ -2,7 +2,6 @@
 /**
  * Скрипт установки
  *
- * @devnode https://docs.joomla.org/J3.x:Creating_a_simple_module/Adding_an_install-uninstall-update_script_file
  */
 defined('_JEXEC') or exit(header("HTTP/1.0 404 Not Found") . '404 Not Found');
 

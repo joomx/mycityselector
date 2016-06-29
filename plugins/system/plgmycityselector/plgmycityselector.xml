@@ -17,7 +17,7 @@
 	]]>
 	</description>
 	<scriptfile>installer.php</scriptfile>
-	<files><filename>ext_plugin_mini.png</filename><folder>helpers</folder><filename>installer.php</filename><filename>plg_mcs.xml</filename><filename plugin="plgmycityselector">plgmycityselector.php</filename></files>
+	<files><filename>ext_plugin_mini.png</filename><folder>helpers</folder><filename>installer.php</filename><filename plugin="plgmycityselector">plgmycityselector.php</filename><filename>plgmycityselector.xml</filename></files>
     <!-- TODO EXAMPLE OF UPDATE FILE:  https://github.com/eddieajau/joomla-extension-skeleton/blob/master/manifest.xml -->
 	<!--updateservers>
 		<server type="extension" priority="1" name="MyCitySelector Update Site">http://www.kutsevalov.name/wp-content/uploads/works/mycityselector/mcs_upd.xml</server>
