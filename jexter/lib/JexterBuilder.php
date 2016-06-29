@@ -235,11 +235,11 @@ class JexterBuilder {
                     $file = ['tag' => 'folder', 'attr' => [], 'value' => $name]; // if directory
                 } else {
                     // if file
+                    removeFileNotes($file);
                     if (substr($name, -4, 4) == '.xml') {
                         $mainfest = $name;
                     }
                     $file = ['tag' => 'filename', 'attr' => [], 'value' => $name];
-                    removeFileNotes($file); 
                 }
             }
             out("done\n", "green");
@@ -267,11 +267,11 @@ class JexterBuilder {
                     $file = ['tag' => 'folder', 'attr' => [], 'value' => $name]; // if directory
                 } else {
                     // if file
+                    removeFileNotes($file);
                     if (substr($name, -4, 4) == '.xml') {
                         $mainfest = $name;
                     }
                     $file = ['tag' => 'filename', 'attr' => [], 'value' => $name];
-                    removeFileNotes($file); 
                 }
             }
             out("done\n", "green");
