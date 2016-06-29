@@ -23,9 +23,9 @@ class FieldsModel extends JModelList
      */
     private $table = '#__mycityselector_fields';
 
-    private $table_fieldvalues = '#__mycityselector_fieldvalues';
+    private $table_fieldvalues = '#__mycityselector_field_values';
 
-    private $table_valuecities = '#__mycityselector_valuecities';
+    private $table_valuecities = '#__mycityselector_value_cities';
 
     /**
      * Prefix for fields names PREFIX[field_name]

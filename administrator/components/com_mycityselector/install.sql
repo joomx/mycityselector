@@ -20,20 +20,21 @@ CREATE TABLE `#__mycityselector_fields` (
   `published` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
-CREATE TABLE `#__mycityselector_fieldvalues` (
+
+CREATE TABLE `#__mycityselector_field_values` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `field_id` int(11) NOT NULL,
   `value` text,
   `default` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
-CREATE TABLE `#__mycityselector_valuecities` (
+
+CREATE TABLE `#__mycityselector_value_cities` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `fieldvalue_id` int(11) NOT NULL,
   `city_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
-
 
 INSERT INTO `#__mycityselector_country` (`id`, `name`, `subdomain`, `status`, `ordering`) VALUES
   (1, 'Россия', 'russia', 1, 1),
