@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form>
+    <fields name="Field">
+        <fieldset name="edit">
+            <field name="cities" label="COM_MYCITYSELECTOR_SELECTED_CITIES" type="sql" multiple="true" class="chzn-done"
+                   value_field="name"
+                   query="SELECT id as value, name FROM #__mycityselector_city WHERE `status`=1 ORDER BY name;">
+            </field>
+            <field name="value" label="COM_MYCITYSELECTOR_CONTENT" type="editor"/>
+        </fieldset>
+    </fields>
+</form>

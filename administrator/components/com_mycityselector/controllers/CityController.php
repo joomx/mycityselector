@@ -10,6 +10,7 @@ defined('_JEXEC') or die(header('HTTP/1.0 403 Forbidden') . 'Restricted access')
 require_once __DIR__ . '/../helpers/form/formHelper.php';
 require_once __DIR__ . '/../helpers/mvc/JxController.php';
 require_once __DIR__ . '/../helpers/mvc/JxView.php';
+require_once 'DefaultController.php';
 
 use adamasantares\jxmvc\JxController;
 use adamasantares\jxmvc\JxView;
@@ -38,6 +39,7 @@ class CityController extends JxController {
             'default' => JText::_('COM_MYCITYSELECTOR_COUNTRIES'), //'country'
             'region' => JText::_('COM_MYCITYSELECTOR_REGIONS'),
             'city' => JText::_('COM_MYCITYSELECTOR_CITIES'),
+            'fields' => JText::_('COM_MYCITYSELECTOR_FIELDS')
         ];
         if (JFactory::getConfig()->get('debug') == 1) {
             $sidebar['dev'] = 'DEV TOOLS';

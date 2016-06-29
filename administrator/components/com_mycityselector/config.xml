@@ -55,6 +55,16 @@
             <option value="1">JYES</option>
             <option value="0">JNO</option>
         </field>
+        <field
+                name="text_before"
+                type="text"
+                label="COM_MYCITYSELECTOR_TEXT_BEFORE"
+                description="COM_MYCITYSELECTOR_TEXT_BEFORE" />
+        <field
+                name="text_after"
+                type="text"
+                label="COM_MYCITYSELECTOR_TEXT_AFTER"
+                description="COM_MYCITYSELECTOR_TEXT_AFTER" />
 
     </fieldset>
 

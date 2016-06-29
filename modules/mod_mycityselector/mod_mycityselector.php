@@ -111,8 +111,8 @@ class MyCitySelectorModule
         if (isset($MCS_BUFFER[$param])) {
             $default = $MCS_BUFFER[$param];
         } else {
-            if (is_object($this->params)) {
-                $default = $this->params->get($param, $default);
+            if (is_object($this->comParams)) {
+                $default = $this->comParams->get($param, $default);
             }
         }
         return $default;

@@ -42,4 +42,10 @@
     width: 14px;
     height: 14px;
 }
+.field-values .editor {
+    width: 550px;
+}
+.field-values label {
+    float: left;
+}
 

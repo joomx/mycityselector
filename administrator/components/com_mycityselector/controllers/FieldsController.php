@@ -14,7 +14,8 @@ require_once __DIR__ . '/../helpers/mvc/JxView.php';
 use adamasantares\jxmvc\JxController;
 use adamasantares\jxmvc\JxView;
 
-class DefaultController extends JxController {
+class FieldsController extends JxController
+{
 
 
     /**
@@ -59,16 +60,16 @@ class DefaultController extends JxController {
         //TODO Добавить проверку прав доступа
 //        if ($canDo->get('core.admin') || $canDo->get('core.options'))
 //        {
-            JToolbarHelper::preferences('com_mycityselector');
+        JToolbarHelper::preferences('com_mycityselector');
 //            JToolbarHelper::divider();
 //        }
         JToolBarHelper::custom('drop', 'delete', 'delete', JText::_('COM_MYCITYSELECTOR_ITEM_DELETE'));
-        $model = $this->getModel('country'); /* @var $model CountryModel */ // (./models/[$modelName].php)
+        $model = $this->getModel('fields');
         // sorting
         $this->setStateFromRequest('order_by', $model->filter_fields);
         $listOrder = $this->getState('order_by', 'name');
         $this->setStateFromRequest('order_direction', ['asc', 'desc']);
-        $listDirection  = $this->getState('order_direction', 'asc');
+        $listDirection = $this->getState('order_direction', 'asc');
         $model->setOrder($listOrder, $listDirection);
         $this->render('list', [
             'items' => $model->getItems(),
@@ -76,7 +77,7 @@ class DefaultController extends JxController {
             'listOrder' => $listOrder,
             'listDirection' => $listDirection
         ]);
-	}
+    }
 
 
     /**
@@ -84,7 +85,8 @@ class DefaultController extends JxController {
      */
     public function actionAdd()
     {
-        $model = $this->getModel('country'); /* @var $model CountryModel */
+        $model = $this->getModel('country');
+        /* @var $model CountryModel */
         $data = $model->getDefaultData();
         JToolBarHelper::title(JText::_('COM_MYCITYSELECTOR_NAME') . ' - ' . JText::_('COM_MYCITYSELECTOR_ITEM_ADDING'), 'big-ico');
         JToolBarHelper::apply('save');
@@ -95,17 +97,18 @@ class DefaultController extends JxController {
             'model' => $model,
             'data' => $data,
         ]);
-	}
+    }
 
 
     /**
      * Edit form for item
-     * @param   boolean  $cache   If true, the view output will be cached
-     * @param   array    $urlParams  An array of safe url parameters and their variable types, for valid values see {@link JFilterInput::clean()}.
+     * @param   boolean $cache If true, the view output will be cached
+     * @param   array $urlParams An array of safe url parameters and their variable types, for valid values see {@link JFilterInput::clean()}.
      */
     public function actionUpdate()
     {
-		$model = $this->getModel('country'); /* @var $model CountryModel */
+        $model = $this->getModel('fields');
+        /* @var $model CountryModel */
         $id = intval($this->input->getCmd('id'));
         if (!empty($_POST['cid'])) {
             $id = intval($_POST['cid'][0]);
@@ -125,7 +128,7 @@ class DefaultController extends JxController {
             JToolBarHelper::addNew();
             $this->render('not_found', []);
         }
-	}
+    }
 
 
     /**
@@ -162,7 +165,7 @@ class DefaultController extends JxController {
     {
         $page = 0;
         $url = '';
-        $model = $this->getModel('country'); /* @var $model CountryModel */
+        $model = $this->getModel('fields');
         $id = $model->saveItem($_POST);
         if (!$id) {
             // error
@@ -190,29 +193,13 @@ class DefaultController extends JxController {
     public function actionDrop()
     {
         $page = $this->input->getCmd('page', 0);
-		$country	= $this->getModel('country'); /* @var $model CountryModel */
-        $region	= $this->getModel('region');
-        $city	= $this->getModel('city');
-        if (!empty($_POST['cid'])) {
-            foreach ($_POST['cid'] as $cid) {
-                $regions = $region->getItems($cid, false);
-                if (!empty($regions)) {
-                    // drop cities
-                    $keys = [];
-                    foreach ($regions as $fields) {
-                        $keys[] = $fields['id'];
-                    }
-                    $city->dropByRegions($keys);
-                    // drop regions
-                    $region->dropItems($keys);
-                }
-            }
-            // drop countries
-            $country->dropItems($_POST['cid']);
-            $this->setMessage(JText::_('COM_MYCITYSELECTOR_MESSAGE_DELETED'));
-        }
+        $fields = $this->getModel('fields');
+        // drop fields
+        $fields->dropItems($_POST['cid']);
+        $this->setMessage(JText::_('COM_MYCITYSELECTOR_MESSAGE_DELETED'));
+
         $this->redirect('index.php?option=' . $this->_component . '&controller=' . $this->_id . '&page=' . $page);
-	}
+    }
 
 
     /**
@@ -221,12 +208,13 @@ class DefaultController extends JxController {
     public function actionPublish()
     {
         $page = $this->input->getCmd('page', 0);
-		$model	= $this->getModel('country'); /* @var $model CountryModel */
+        $model = $this->getModel('country');
+        /* @var $model CountryModel */
         if (!empty($_POST['cid'])) {
             $model->publishItems($_POST['cid'], 1);
         }
         $this->redirect('index.php?option=' . $this->_component . '&controller=' . $this->_id . '&page=' . $page);
-	}
+    }
 
 
     /**
@@ -235,12 +223,13 @@ class DefaultController extends JxController {
     public function actionUnPublish()
     {
         $page = $this->input->getCmd('page', 0);
-		$model	= $this->getModel('country'); /* @var $model CountryModel */
+        $model = $this->getModel('country');
+        /* @var $model CountryModel */
         if (!empty($_POST['cid'])) {
             $model->publishItems($_POST['cid'], 0);
         }
         $this->redirect('index.php?option=' . $this->_component . '&controller=' . $this->_id . '&page=' . $page);
-	}
+    }
 
 
     /**
@@ -254,11 +243,14 @@ class DefaultController extends JxController {
             /* @var $model CountryModel */
             $model = $this->getModel('country');
             $listOrder = $this->getState('order_by', 'name');
-            $listDirection  = $this->getState('order_direction', 'asc');
+            $listDirection = $this->getState('order_direction', 'asc');
             $model->setOrder($listOrder, $listDirection);
             $model->saveOrdering($order);
         }
         exit(json_encode($responce));
-	}
+    }
+    public function actionGetForm() {
+        $this->render('form');
+    }
 
 }
