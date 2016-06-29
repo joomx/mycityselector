@@ -14,6 +14,27 @@ CREATE TABLE IF NOT EXISTS `#__mycityselector_country` (
   `ordering` int(11) NULL
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
+CREATE TABLE `#__mycityselector_fields` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) DEFAULT NULL,
+  `published` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+CREATE TABLE `#__mycityselector_fieldvalues` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `field_id` int(11) NOT NULL,
+  `value` text,
+  `default` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+CREATE TABLE `#__mycityselector_valuecities` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `fieldvalue_id` int(11) NOT NULL,
+  `city_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+
+
 INSERT INTO `#__mycityselector_country` (`id`, `name`, `subdomain`, `status`, `ordering`) VALUES
   (1, 'Россия', 'russia', 1, 1),
   (2, 'Беларусь', 'belarus', 1, 2),
