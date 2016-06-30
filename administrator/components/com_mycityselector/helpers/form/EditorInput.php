@@ -71,7 +71,7 @@ class EditorInput extends \JFormFieldEditor {
      * Renders and returns HTML code of field
      * @return string HTML
      */
-    public function render()
+    public function render($id = null, $data=null)
     {
         return $this->renderField();
     }

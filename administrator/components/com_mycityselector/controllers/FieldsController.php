@@ -84,7 +84,7 @@ class FieldsController extends JxController
      */
     public function actionAdd()
     {
-        $model = $this->getModel('country');
+        $model = $this->getModel('fields');
         /* @var $model CountryModel */
         $data = $model->getDefaultData();
         JToolBarHelper::title(JText::_('COM_MYCITYSELECTOR_NAME') . ' - ' . JText::_('COM_MYCITYSELECTOR_ITEM_ADDING'), 'big-ico');
