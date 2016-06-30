@@ -12,7 +12,6 @@ defined('_JEXEC') or exit(header("HTTP/1.0 404 Not Found") . '404 Not Found');
 
 // загружаем jquery
 $this->addJQuery();
-
 // подлючаем файлы стилей и скриптов ($myUrl - это URL до директории, в которой находится текущий шаблон)
 $this->addScript($myUrl . 'default.js');
 $this->addStyle($myUrl . 'default.css');

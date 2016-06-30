@@ -25,9 +25,7 @@ class MyCitySelectorModule
      */
     public function __construct()
     {
-        if (!class_exists('plgSystemPlgMycityselector')) {
-
-
+        if (!class_exists('McsData')) {
             $find = JFactory::getDbo()
                 ->setQuery("SELECT COUNT(*) AS `cnt` FROM `#__extensions` WHERE `element`='plgmycityselector'")
                 ->loadResult();
@@ -35,11 +33,9 @@ class MyCitySelectorModule
                 $err = 'Плагин MyCitySelector не активен!';
             } else {
                 $err = 'Плагин MyCitySelector не установлен!';
-
             }
             echo '<span style="color:red;">' . $err . '</span>';
             return;
-
         } else {
             $this->params = plgSystemPlgMycityselector::$mcs_buffer['params'];
             $this->comParams = plgSystemPlgMycityselector::$mcs_buffer['comParams'];
@@ -50,18 +46,15 @@ class MyCitySelectorModule
             $cookieDomain = plgSystemPlgMycityselector::$mcs_buffer['cookie_domain'];
             $currentCity = plgSystemPlgMycityselector::$mcs_buffer['cityByDomain'] ? plgSystemPlgMycityselector::$mcs_buffer['cityByDomain'] : $this->comParams->get('default_city');
             $citiesList = plgSystemPlgMycityselector::$mcs_buffer['citiesList'];
-            $hasGroups = (count($citiesList) > 1);
-            // => путь до файла шаблона
-            $layoutPath = JModuleHelper::getLayoutPath('mod_mycityselector', $this->params->get('layout', 'default'));
-            // => URL до папки с шаблоном
-            $myUrl = JURI::base() . str_replace(JPATH_BASE . '/', '', dirname($layoutPath)) . '/';
-            // => подключаем файл шаблона
 
-            // адрес возврата при редиректе на поддомен
-            $returnUrl = JUri::getInstance()->toString();
+            //$hasGroups = (count($citiesList) > 1); // todo не нужен вроде
+
+            $layoutPath = JModuleHelper::getLayoutPath('mod_mycityselector', $this->params->get('layout', 'default')); // => путь до файла шаблона
+            $myUrl = JURI::base() . str_replace(JPATH_BASE . '/', '', dirname($layoutPath)) . '/'; // => URL до папки с шаблоном
+            // => подключаем файл шаблона
             // передаем параметры в JS
             $this->transferParamsToJS();
-            require $layoutPath;
+            require($layoutPath);
         }
 
     }
@@ -132,7 +125,6 @@ class MyCitySelectorModule
         return MCSTranslit::convert($str);
     }
     private function transferParamsToJS() {
-        $script = '';
         if ($this->comParams->get('let_select', '1') == '1') {
             $script = 'window.mcs_dialog=1;'; // отобразить окно выбора города
         } else {

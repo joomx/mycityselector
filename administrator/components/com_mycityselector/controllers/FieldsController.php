@@ -17,7 +17,6 @@ use adamasantares\jxmvc\JxView;
 class FieldsController extends JxController
 {
 
-
     /**
      * @inheritdoc
      */
@@ -249,6 +248,8 @@ class FieldsController extends JxController
         }
         exit(json_encode($responce));
     }
+
+
     public function actionGetForm() {
         $this->render('form');
     }

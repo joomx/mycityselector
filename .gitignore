@@ -11,6 +11,9 @@
 /administrator/language/en-GB/en-GB.com_mycityselector.sys.ini
 /administrator/language/en-GB/en-GB.com_mycityselector.ini
 /administrator/language
+/language/en-GB/en-GB.com_mycityselector.ini
+/language/en-GB/en-GB.mod_mycityselector.ini
+/language/en-GB/en-GB.mod_mycityselector.sys.ini
 /.gitignore
 /.htaccess
 /administrator/cache/*

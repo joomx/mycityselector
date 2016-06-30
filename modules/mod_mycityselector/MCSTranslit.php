@@ -1,5 +1,7 @@
 <?php
 
+// TODO пока не пойму, нужен ли он еще или нет
+
 class MCSTranslit {
 
     private static $letters = array(
