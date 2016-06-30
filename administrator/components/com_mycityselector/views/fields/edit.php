@@ -15,7 +15,7 @@
 defined('_JEXEC') or die(header('HTTP/1.0 403 Forbidden') . 'Restricted access');
 jimport('joomla.form.field');
 JHtml::_('formbehavior.chosen', 'select');
-$form = &JForm::getInstance('main', dirname(__FILE__) . '/form.xml');
+$form = JForm::getInstance('main', dirname(__FILE__) . '/form.xml');
 
 use adamasantares\jxforms\JxField;
 
@@ -48,7 +48,7 @@ use adamasantares\jxforms\JxField;
         ]) ?>
         <div class="field-values">
             <?php
-            if (sizeof($data['fieldValues']) > 0) { ?>
+            if (isset($data['fieldValues']) && (sizeof($data['fieldValues']) > 0)) { ?>
                 <div>
                     <label><?= JText::_('COM_MYCITYSELECTOR_DEFAULTVALUE') ?></label>
                     <?php
@@ -88,8 +88,9 @@ use adamasantares\jxforms\JxField;
                 ?>
                 <div>
                     <?php
-                    $form->setFieldAttribute('value', 'name', 'valuedefault_' . $fieldValue['id'], 'Field');
-                    $field = $form->getField('valuedefault_' . $fieldValue['id'], 'Field');
+                    $id = str_replace([' ', '.'], '', microtime());
+                    $form->setFieldAttribute('value', 'name', 'valuedefault_' . $id, 'Field');
+                    $field = $form->getField('valuedefault_' . $id, 'Field');
                     ?>
                     <label><?= JText::_('COM_MYCITYSELECTOR_DEFAULTVALUE') ?></label>
                     <?= $field->input ?>

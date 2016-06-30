@@ -97,7 +97,7 @@ class TextInput extends \JFormFieldText {
      * Renders and returns HTML code of field
      * @return string HTML
      */
-    public function render()
+    public function render($id = null, $data=null)
     {
         $html = $this->renderField();
         if (!empty($this->_config['inline']) && $this->_config['inline'] === true) { // inline style
