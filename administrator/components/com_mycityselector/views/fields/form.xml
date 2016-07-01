@@ -6,7 +6,7 @@
                    value_field="name"
                    query="SELECT id as value, name FROM #__mycityselector_city WHERE `status`=1 ORDER BY name;">
             </field>
-            <field name="value" label="COM_MYCITYSELECTOR_CONTENT" type="editor"/>
+            <field name="value" label="COM_MYCITYSELECTOR_CONTENT" type="editor" height="200px" width="100%" />
         </fieldset>
     </fields>
 </form>

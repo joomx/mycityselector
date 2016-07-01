@@ -53,10 +53,10 @@ JHtml::_('behavior.multiselect');
             } else {
                 foreach ($items as $i => $item) {
                     $id = $item['id'];
-                    $isPublished = ($item['status'] == 1);
+                    $isPublished = ($item['published'] == 1);
                     ?><tr class="item-row <?= ($i % 2 > 0) ? 'even' : 'odd' ?>">
                         <td class="order nowrap center" width="10px">
-                            <?= $this->orderingRow($listOrder, $id, $item['ordering']) ?>
+                            <?php /* $this->orderingRow($listOrder, $id, $item['ordering']) */?>
                         </td>
                         <td class="center">
                             <input type="checkbox" id="cb<?= $i ?>" name="cid[]" value="<?= $id ?>" onclick="Joomla.isChecked(this.checked);">

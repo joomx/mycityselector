@@ -302,9 +302,9 @@ class FieldsModel extends JModelList
             $isExists = $id > 0 ? $this->_db->setQuery("SELECT `id` FROM `{$this->table}` WHERE `id`={$id}")->execute() : false;
             if ($isExists === false || $isExists->num_rows == 0) {
                 // create
-                $maxOrder = $this->_db->setQuery("SELECT max(`ordering`) FROM `{$this->table}`")->loadRow();
-                $fields[] = 'ordering';
-                $values[] = empty($maxOrder[0]) ? 1 : $maxOrder[0] + 1;
+                //$maxOrder = $this->_db->setQuery("SELECT max(`ordering`) FROM `{$this->table}`")->loadRow();
+                //$fields[] = 'ordering';
+                //$values[] = empty($maxOrder[0]) ? 1 : $maxOrder[0] + 1;
                 $query = $this->_db->getQuery(true)->insert($this->table)->columns($fields)->values(implode(',', $values));
                 $result = $this->_db->setQuery($query)->execute();
                 if ($result) {
@@ -403,6 +403,7 @@ class FieldsModel extends JModelList
         }
         foreach ($keys as $i => $key) {
             $keys[$i] = intval($key);
+            $this->deleteFieldValue(intval($key));
         }
         $keys = implode(',', $keys);
         $this->_db->setQuery("DELETE FROM `{$this->table}` WHERE `id` IN ({$keys})")->execute();
@@ -464,6 +465,19 @@ class FieldsModel extends JModelList
                 $this->_db->setQuery("UPDATE `{$this->table}` SET `ordering` = {$orderNum} WHERE `id` = {$id}")->execute();
             }
             $i++;
+        }
+    }
+    public function deleteFieldValue($id) {
+        $query = $this->_db->getQuery(true)->select('id')->from($this->table_fieldvalues)->where('id='.$this->_db->quote($id));
+        $isExist = $this->_db->setQuery($query)->execute();
+        if ($isExist === false || $isExist->num_rows == 0) {
+            return true;
+        } else {
+            $query = $this->_db->getQuery(true)->delete($this->table_fieldvalues)->where('id='.$this->_db->quote($id));
+            $this->_db->setQuery($query)->execute();
+            $query = $this->_db->getQuery(true)->delete($this->table_valuecities)->where('fieldvalue_id='.$this->_db->quote($id));
+            $this->_db->setQuery($query)->execute();
+            return true;
         }
     }
 

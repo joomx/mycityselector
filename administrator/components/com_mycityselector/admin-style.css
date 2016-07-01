@@ -43,9 +43,26 @@
     height: 14px;
 }
 .field-values .editor {
-    width: 550px;
+    width: 74%;
+    padding-left: 1%;
 }
-.field-values label {
+.field-values label,.field-values .cities {
     float: left;
+    width: 25%;
+}
+.field-values button {
+    width: 100%;
+    height: 40px;
+}
+.field-values select {
+    width: 100%;
+}
+.field-values .field-value {
+    border: #f0f0f0 solid 3px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+.field-values .control-buttons {
+    margin-top: 10px;
 }
 
