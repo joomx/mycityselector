@@ -19,7 +19,7 @@
                 name="default_city"
                 type="sql"
                 label="COM_MYCITYSELECTOR_DEFAULTCITY"
-                query="SELECT name as value FROM #__mycityselector_city;" />
+                query="SELECT name as default_city, subdomain as value FROM #__mycityselector_city WHERE status = 1;" />
         <field
                 name="subdomain_cities"
                 type="radio"
