@@ -127,14 +127,16 @@ $regions = ['Республика Адыгея
 $db->setQuery("TRUNCATE #__mycityselector_region"); // remove regions
 $db->execute();
 $i = 1;
+$j = 1;
 foreach ($regions as $regionsCountry) {
     $regionsCountry = explode("\n", $regionsCountry);
     sort($regionsCountry);
     foreach ($regionsCountry as $region) {
         out("  {$region}\n", 'light_blue');
         $name = $db->escape($region);
-        $db->setQuery("INSERT INTO #__mycityselector_region (`country_id`, `name`, `subdomain`) VALUES ({$i}, '{$name}', '')");
+        $db->setQuery("INSERT INTO #__mycityselector_region (`country_id`, `name`, `subdomain`,`ordering`) VALUES ({$i}, '{$name}', '',{$j})");
         $db->execute();
+        $j++;
     }
     $i++;
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="module" version="3.2" method="upgrade" client="site">
 	<name>My City Selector MOD</name>
-	<creationDate>Jun 2016</creationDate>
+	<creationDate>Jul 2016</creationDate>
 	<author>Konstantin Kutsevalov</author>
 	<authorEmail>konstantin@kutsevalov.name</authorEmail>
 	<authorUrl>http://www.kutsevalov.name/2013/08/12/modul-vibora-goroda-dlya-joomla/</authorUrl>
@@ -15,7 +15,7 @@
 	</div>
 	]]></description>
 
-    <files><filename>MCSTranslit.php</filename><filename>ext-params.css</filename><filename>ext-params.js.php</filename><filename>ext_mod_mini.png</filename><filename>jquery.tablednd.min.js</filename><filename module="mod_mycityselector">mod_mycityselector.php</filename><filename>mod_mycityselector.xml</filename><folder>tmpl</folder><filename>yandex-geo.php</filename></files>
+    <files><filename>MCSTranslit.php</filename><filename>ext_mod_mini.png</filename><folder>language</folder><filename module="mod_mycityselector">mod_mycityselector.php</filename><filename>mod_mycityselector.xml</filename><folder>tmpl</folder><filename>yandex-geo.php</filename></files>
 
     <languages>
         <language tag="en-GB">language/en-GB/en-GB.mod_mycityselector.sys.ini</language>
@@ -32,14 +32,8 @@
             <fieldset name="advanced">
                 <field name="layout" type="modulelayout" label="MOD_MYCITYSELECTOR_TEMPLATE" description="Шаблон который будет использован модулем"/>
                 <field name="moduleclass_sfx" type="text" label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL" description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC"/>
-                <field name="text_before"
-                       type="textarea"
-                       label="MOD_MYCITYSELECTOR_TEXT_BEFORE"
-                       description="MOD_MYCITYSELECTOR_TEXT_BEFORE" rows="5" cols="50"/>
-                <field name="text_after"
-                       type="textarea"
-                       label="MOD_MYCITYSELECTOR_TEXT_AFTER"
-                       description="MOD_MYCITYSELECTOR_TEXT_AFTER" rows="5" cols="50"/>
+                <field name="text_before" type="textarea" label="MOD_MYCITYSELECTOR_TEXT_BEFORE" description="MOD_MYCITYSELECTOR_TEXT_BEFORE" rows="5" cols="50"/>
+                <field name="text_after" type="textarea" label="MOD_MYCITYSELECTOR_TEXT_AFTER" description="MOD_MYCITYSELECTOR_TEXT_AFTER" rows="5" cols="50"/>
                 <field name="cache" type="list" default="0" label="COM_MODULES_FIELD_CACHING_LABEL" description="COM_MODULES_FIELD_CACHING_DESC">
                     <option value="1">JGLOBAL_USE_GLOBAL</option>
                     <option value="0">COM_MODULES_FIELD_VALUE_NOCACHING</option>

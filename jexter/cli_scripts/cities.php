@@ -126,6 +126,7 @@ $regions = ['Республика Адыгея' => ['Майкоп'],
 //ksort($regions);
 $db->setQuery("TRUNCATE #__mycityselector_city"); // remove regions
 $db->execute();
+$i = 1;
 foreach ($regions as $regionName => $region) {
     if (!empty($region)) {
         foreach ($region as $city) {
@@ -134,8 +135,9 @@ foreach ($regions as $regionName => $region) {
             $country_id = $db->loadRow()[1];
             $name = $db->escape(trim($city));
             out("  {$name}\n", 'light_blue');
-            $db->setQuery("INSERT INTO #__mycityselector_city (`country_id`,`region_id`, `name`, `subdomain`, `status`) VALUES ({$country_id},'{$regionId}', '{$name}', '', '1')");
+            $db->setQuery("INSERT INTO #__mycityselector_city (`country_id`,`region_id`, `name`, `subdomain`, `status`, `ordering`) VALUES ({$country_id},'{$regionId}', '{$name}', '', '1',{$i})");
             $db->execute();
+            $i++;
         }
     }
 }
