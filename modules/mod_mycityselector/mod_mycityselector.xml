@@ -30,7 +30,7 @@
 				<field name="dialog_title" type="text" default="Пожалуйста, выберите ваш город" label="Заголовок окна" description="Заголовок окна выбора города"/>
 			</fieldset>
             <fieldset name="advanced">
-                <field name="layout" type="modulelayout" label="MOD_MYCITYSELECTOR_TEMPLATE" description="Шаблон который будет использован модулем"/>
+                <field name="layout" type="modulelayout" template="default" label="MOD_MYCITYSELECTOR_TEMPLATE" description="Шаблон который будет использован модулем"/>
                 <field name="moduleclass_sfx" type="text" label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL" description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC"/>
                 <field name="text_before" type="textarea" label="MOD_MYCITYSELECTOR_TEXT_BEFORE" description="MOD_MYCITYSELECTOR_TEXT_BEFORE" rows="5" cols="50"/>
                 <field name="text_after" type="textarea" label="MOD_MYCITYSELECTOR_TEXT_AFTER" description="MOD_MYCITYSELECTOR_TEXT_AFTER" rows="5" cols="50"/>

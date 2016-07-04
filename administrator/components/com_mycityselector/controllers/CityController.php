@@ -113,6 +113,7 @@ class CityController extends JxController {
             }
         }
         $this->render('edit', [
+            'model' => $model,
             'data' => $data
         ]);
 	}

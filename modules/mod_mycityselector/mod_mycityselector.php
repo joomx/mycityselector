@@ -37,7 +37,7 @@ class MyCitySelectorModule
             echo '<span style="color:red;">' . $err . '</span>';
             return;
         } else {
-            $this->params = plgSystemPlgMycityselector::$mcs_buffer['params'];
+            /*$this->params = plgSystemPlgMycityselector::$mcs_buffer['params'];
             $this->comParams = plgSystemPlgMycityselector::$mcs_buffer['comParams'];
             // => берем данные из настроек компонента
             $modID = plgSystemPlgMycityselector::$mcs_buffer['mod_id'];
@@ -45,11 +45,11 @@ class MyCitySelectorModule
             $baseDomain = plgSystemPlgMycityselector::$mcs_buffer['base_domain'];
             $cookieDomain = plgSystemPlgMycityselector::$mcs_buffer['cookie_domain'];
             $currentCity = plgSystemPlgMycityselector::$mcs_buffer['cityByDomain'] ? plgSystemPlgMycityselector::$mcs_buffer['cityByDomain'] : $this->comParams->get('default_city');
-            $citiesList = plgSystemPlgMycityselector::$mcs_buffer['citiesList'];
+            $citiesList = plgSystemPlgMycityselector::$mcs_buffer['citiesList'];*/
 
             //$hasGroups = (count($citiesList) > 1); // todo не нужен вроде
 
-            $layoutPath = JModuleHelper::getLayoutPath('mod_mycityselector', $this->params->get('layout', 'default')); // => путь до файла шаблона
+            $layoutPath = JModuleHelper::getLayoutPath('mod_mycityselector', McsData::get('layout', 'default')); // => путь до файла шаблона
             $myUrl = JURI::base() . str_replace(JPATH_BASE . '/', '', dirname($layoutPath)) . '/'; // => URL до папки с шаблоном
             // => подключаем файл шаблона
             // передаем параметры в JS
@@ -125,15 +125,15 @@ class MyCitySelectorModule
         return MCSTranslit::convert($str);
     }
     private function transferParamsToJS() {
-        if ($this->comParams->get('let_select', '1') == '1') {
+        if (McsData::get('let_select', '1') == '1') {
             $script = 'window.mcs_dialog=1;'; // отобразить окно выбора города
         } else {
             $script = 'window.mcs_dialog=2;'; // отобразить предложение о смене города
         }
 
-        $script .= 'window.mcs_base_domain="' . plgSystemPlgMycityselector::$mcs_buffer['basedomain'] . '";' . // основной домен сайта, если есть еще и субдомены
-                    'window.mcs_cookie_domain="' . plgSystemPlgMycityselector::$mcs_buffer['cookie_domain'] . '";'. // домен для которого нужно устанавливать кукисы
-                    'window.mcs_http="'.plgSystemPlgMycityselector::$mcs_buffer['http'].'";';
+        $script .= 'window.mcs_base_domain="' . McsData::get('basedomain') . '";' . // основной домен сайта, если есть еще и субдомены
+                    'window.mcs_cookie_domain="' . McsData::get('cookieDomain') . '";'. // домен для которого нужно устанавливать кукисы
+                    'window.mcs_http="'.McsData::get('http').'";';
         JFactory::getDocument()->addScriptDeclaration($script);
     }
 

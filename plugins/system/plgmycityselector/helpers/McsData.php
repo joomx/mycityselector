@@ -129,27 +129,18 @@ class McsData {
         self::$isUserHasSelected = empty($_COOKIE['MCS_CITY_CODE']) ? false : true; // if cookies exists then used has selected a city
 
         // current city
-        self::$city = self::detectCurrentCity();
+        self::detectCurrentCity();
 
         if ($allData) {
             // countries
             $query = $db->getQuery(true)->select('*')->from('#__mycityselector_country')->where('status = 1');
-            $rows = $db->setQuery($query)->loadAssocList();
-            foreach ($rows as $row) {
-                self::$countries[ $row['subdomain'] ] = $row; // subdomain as index
-            }
+            self::$countries = $db->setQuery($query)->loadAssocList('subdomain'); // subdomain as index
             // provinces
             $query = $db->getQuery(true)->select('*')->from('#__mycityselector_region')->where('status = 1');
-            $rows = $db->setQuery($query)->loadAssocList();
-            foreach ($rows as $row) {
-                self::$provinces[ $row['subdomain'] ] = $row;
-            }
+            self::$provinces = $db->setQuery($query)->loadAssocList('subdomain');
             // cities
             $query = $db->getQuery(true)->select('*')->from('#__mycityselector_city')->where('status = 1');
-            $rows = $db->setQuery($query)->loadAssocList();
-            foreach ($rows as $row) {
-                self::$cities[ $row['subdomain'] ] = $row;
-            }
+            self::$cities = $db->setQuery($query)->loadAssocList('subdomain');
         }
     }
 
@@ -245,7 +236,7 @@ class McsData {
         if (empty(self::$city)) {
             if (!empty(self::$compSettings) && self::$compSettings->get('default_city')) {
                 $city = self::$compSettings->get('default_city');
-                if (self::$cities[$city]) {
+                if (isset(self::$cities[$city])) {
                     self::$city = $city;
                     self::$cityName = self::$cities[$city]['name'];
                 }
