@@ -19,6 +19,21 @@ $form = JForm::getInstance('main', dirname(__FILE__) . '/form.xml');
 
 use adamasantares\jxforms\JxField;
 
+$options['placeholder_text_multiple'] = JText::_('JGLOBAL_SELECT_SOME_OPTIONS');
+$options['placeholder_text_single'] = JText::_('JGLOBAL_SELECT_AN_OPTION');
+$options['no_results_text'] = JText::_('JGLOBAL_SELECT_NO_RESULTS_MATCH');
+$options_str = json_encode($options);
+
+JFactory::getDocument()->addScriptDeclaration(
+    "
+		/*jQuery(document).ready(function (){
+			jQuery('chzn-done').chosen(" . $options_str . ");
+		});*/
+		choosen_opt = " . $options_str . ";
+	"
+);
+
+
 ?>
 <div id="j-sidebar-container" class="span2">
     <?= $sidebar ?>
@@ -49,7 +64,7 @@ use adamasantares\jxforms\JxField;
         <div class="field-values">
             <?php
             if (isset($data['fieldValues']) && (sizeof($data['fieldValues']) > 0)) { ?>
-                <div>
+                <div class="field-value">
                     <label><?= JText::_('COM_MYCITYSELECTOR_DEFAULTVALUE') ?></label>
                     <?php
                     $default = array_shift($data['fieldValues']);
@@ -64,14 +79,21 @@ use adamasantares\jxforms\JxField;
                 <?php
                 foreach ($data['fieldValues'] as $fieldValue) {
                     ?>
-                    <div>
+                    <div class="field-value">
                         <?php
                         $form = JForm::getInstance('main', dirname(__FILE__) . '/form.xml');
                         $form->setFieldAttribute('cities', 'name', 'cities_' . $fieldValue['id'], 'Field');
 
                         $field = $form->getField('cities_' . $fieldValue['id'], 'Field');
                         $field->setValue($fieldValue['cities']);
-                        echo $field->input;
+                        ?>
+                        <div class="cities">
+                            <?= $field->input; ?>
+                            <div class="control-buttons">
+                                <button class="delete-field-value" id="<?= $fieldValue['id'] ?>" onclick="return false"><?= JText::_('COM_MYCITYSELECTOR_DELETE_VALUE') ?></button>
+                            </div>
+                        </div>
+                        <?php
                         $form->setFieldAttribute('cities_' . $fieldValue['id'], 'name', 'cities', 'Field');
 
                         $form->setFieldAttribute('value', 'name', 'value_' . $fieldValue['id'], 'Field');
@@ -86,7 +108,7 @@ use adamasantares\jxforms\JxField;
                 }
             } else {
                 ?>
-                <div>
+                <div class="field-value">
                     <?php
                     $id = str_replace([' ', '.'], '', microtime());
                     $form->setFieldAttribute('value', 'name', 'valuedefault_' . $id, 'Field');

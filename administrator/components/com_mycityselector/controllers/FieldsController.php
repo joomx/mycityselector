@@ -85,7 +85,7 @@ class FieldsController extends JxController
     public function actionAdd()
     {
         $model = $this->getModel('fields');
-        /* @var $model CountryModel */
+        /* @var $model fieldsModel */
         $data = $model->getDefaultData();
         JToolBarHelper::title(JText::_('COM_MYCITYSELECTOR_NAME') . ' - ' . JText::_('COM_MYCITYSELECTOR_ITEM_ADDING'), 'big-ico');
         JToolBarHelper::apply('save');
@@ -107,7 +107,7 @@ class FieldsController extends JxController
     public function actionUpdate()
     {
         $model = $this->getModel('fields');
-        /* @var $model CountryModel */
+        /* @var $model fieldsModel */
         $id = intval($this->input->getCmd('id'));
         if (!empty($_POST['cid'])) {
             $id = intval($_POST['cid'][0]);
@@ -187,7 +187,7 @@ class FieldsController extends JxController
 
 
     /**
-     * Drop country
+     * Drop field
      */
     public function actionDrop()
     {
@@ -207,8 +207,7 @@ class FieldsController extends JxController
     public function actionPublish()
     {
         $page = $this->input->getCmd('page', 0);
-        $model = $this->getModel('country');
-        /* @var $model CountryModel */
+        $model = $this->getModel('fields');
         if (!empty($_POST['cid'])) {
             $model->publishItems($_POST['cid'], 1);
         }
@@ -222,8 +221,7 @@ class FieldsController extends JxController
     public function actionUnPublish()
     {
         $page = $this->input->getCmd('page', 0);
-        $model = $this->getModel('country');
-        /* @var $model CountryModel */
+        $model = $this->getModel('fields');
         if (!empty($_POST['cid'])) {
             $model->publishItems($_POST['cid'], 0);
         }
@@ -239,8 +237,8 @@ class FieldsController extends JxController
         $responce = ['status' => '200', 'debug_get' => $_GET];
         $order = empty($_GET['order']) ? [] : $_GET['order'];
         if (!empty($order)) {
-            /* @var $model CountryModel */
-            $model = $this->getModel('country');
+            /* @var $model fieldsModel */
+            $model = $this->getModel('fields');
             $listOrder = $this->getState('order_by', 'name');
             $listDirection = $this->getState('order_direction', 'asc');
             $model->setOrder($listOrder, $listDirection);
@@ -252,6 +250,13 @@ class FieldsController extends JxController
 
     public function actionGetForm() {
         $this->render('form');
+    }
+
+    public function actionDeleteFieldValue() {
+        $model = $this->getModel('fields');
+        $id = JFactory::getApplication()->input->get('id');
+        $model->deleteFieldValue($id);
+
     }
 
 }
