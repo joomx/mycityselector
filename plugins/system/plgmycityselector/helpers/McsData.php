@@ -20,24 +20,6 @@ class McsData {
     private static $modSettings = null;
 
     /**
-     * All countries from table
-     * @var array
-     */
-    private static $countries = [];
-
-    /**
-     * All provinces from table
-     * @var array
-     */
-    private static $provinces = []; // todo rename regions to provinces
-
-    /**
-     * All cities from table
-     * @var array
-     */
-    private static $cities = [];
-
-    /**
      * Code of current city (subdomain)
      * @var string
      */
@@ -103,45 +85,26 @@ class McsData {
     }
 
 
-    public static function load($allData=false)
+    public static function load()
     {
-        $db = JFactory::getDbo();
-
         // load component settings
         self::$compSettings = JComponentHelper::getParams('com_mycityselector');
-
         // load module settings (todo there is one problem with modulehelper, it always returns params only for first module, but user may has several modules)
         $module = JModuleHelper::getModule('mod_mycityselector');
         self::$modSettings = new JRegistry($module->params);
         self::$moduleId = $module->id;
-
         // cookie domain
         if (self::$compSettings->get('subdomain_cities') == '1') {
             self::$cookieDomain = '.' . self::$compSettings->get('basedomain');
         } else {
             self::$cookieDomain = self::$compSettings->get('basedomain');
         }
-
         // http || https ?
         self::$http = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] == 443) ?
             'https://' : 'http://';
-
         self::$isUserHasSelected = empty($_COOKIE['MCS_CITY_CODE']) ? false : true; // if cookies exists then used has selected a city
-
         // current city
         self::detectCurrentCity();
-
-        if ($allData) {
-            // countries
-            $query = $db->getQuery(true)->select('*')->from('#__mycityselector_country')->where('status = 1');
-            self::$countries = $db->setQuery($query)->loadAssocList('subdomain'); // subdomain as index
-            // provinces
-            $query = $db->getQuery(true)->select('*')->from('#__mycityselector_region')->where('status = 1');
-            self::$provinces = $db->setQuery($query)->loadAssocList('subdomain');
-            // cities
-            $query = $db->getQuery(true)->select('*')->from('#__mycityselector_city')->where('status = 1');
-            self::$cities = $db->setQuery($query)->loadAssocList('subdomain');
-        }
     }
 
 
@@ -150,35 +113,6 @@ class McsData {
      */
     private static function detectCurrentCity()
     {
-        // @devnote TODO KD: не уловил идею, зачем нужен debug?
-        if (self::get('debug_mode') == '1') {
-            unset($_COOKIE['MCS_CITY_NAME']);
-            unset($_COOKIE['MCS_NOASK']);
-            setcookie('MCS_CITY_NAME', '', time()-10, '/', self::$cookieDomain);
-            setcookie('MCS_NOASK', '', time()-10, '/', self::$cookieDomain);
-        }
-
-        // @devnote TODO KD проверь мой алгоритм, может я что-то упустил из виду?
-        // @devnote === Алгоритм ===
-        // @devnote Если есть поддомены то:
-        // @devnote     Если мы сейчас на поддомене то:
-        // @devnote         Проверяем текущий поддомен и ищем соответствующий ему город
-        // @devnote         Если соответствия город-поддомен не найдено то
-        // @devnote             Устанавливаем город по умолчанию. end.
-        // @devnote         Если соответствие найдено то
-        // @devnote             Устанавливаем город как текущий. end.
-        // @devnote     Если мы сейчас на базовом домене, то:
-        // @devnote         Если "автопереключение" активно, то берем текущий домен из кукисов (redirect будет в плагине). end.
-        // @devnote         Если "автопереключение" не активно, то ставим город по умолчанию. end.
-        // @devnote Если нет поддоменов то:
-        // @devnote     Пытаемся прочитать город из кукисов или берем город по умолчанию. end.
-        // @devnote
-        // @devnote TODO Нужно подумать над опцией 'autoswitch_city', мне кажется, что правильнее было бы делать
-        // @devnote перебрасывание на уже выбранный город (из кукисов) не только с базового домена, а вообще,
-        // @devnote с любого поддомена тоже. То есть если автопереключение выключено, то текущий город == текущий домен (не важно какой).
-        // @devnote А если включено, то текущий город = город в кукисах и автоматический переход на соотв. поддомен.
-
-
         if (self::get('subdomain_cities') == '1') {
             // check by current subdomain
             if (!empty(self::$compSettings) && self::$compSettings->get('basedomain')) { // check base domain
@@ -198,24 +132,26 @@ class McsData {
                 }
             }
             $subDomain = str_replace([$baseDomain, '.'], ['', ''], $_SERVER['HTTP_HOST']);
-            if ($subDomain != 'www') {
+            if (!empty($subDomain) && $subDomain != 'www') {
                 self::$isBaseDomain = false;
-                if (isset(self::$cities[$subDomain])) {
+                $city = self::findCity($subDomain);
+                if ($city) {
                     self::$city = $subDomain;
-                    self::$cityName = self::$cities[$subDomain]['name'];
+                    self::$cityName = $city['name'];
                 } // else :pointDefault:
             } else {
                 // this is the BASE domain
                 // check current city by cookies but only if autoswitch is disabled.
                 if (self::get('autoswitch_city') == '1' && !empty($_COOKIE['MCS_CITY_CODE'])) { // new cookie key
-                    if (isset(self::$cities[$_COOKIE['MCS_CITY_CODE']])) {
+                    $city = self::findCity($_COOKIE['MCS_CITY_CODE']);
+                    if ($city) {
                         // compare with default city
                         if (!empty(self::$compSettings) && self::$compSettings->get('default_city')) {
                             $default = self::$compSettings->get('default_city');
                             if ($default != $_COOKIE['MCS_CITY_CODE']) {
                                 // need redirect to right subdomain
                                 self::$city = $_COOKIE['MCS_CITY_CODE'];
-                                self::$cityName = self::$cities[$_COOKIE['MCS_CITY_CODE']]['name'];
+                                self::$cityName = $city['name'];
                                 self::$needRedirectTo = self::get('http') . self::$city . '.' . self::get('basedomain') . '/';
                             }
                         }
@@ -224,9 +160,10 @@ class McsData {
             }
         } else {
             if (!empty($_COOKIE['MCS_CITY_CODE'])) { // new cookie key
-                if (isset(self::$cities[$_COOKIE['MCS_CITY_CODE']])) {
+                $city = self::findCity($_COOKIE['MCS_CITY_CODE']);
+                if ($city) {
                     self::$city = $_COOKIE['MCS_CITY_CODE'];
-                    self::$cityName = self::$cities[$_COOKIE['MCS_CITY_CODE']]['name'];
+                    self::$cityName = $city['name'];
                 } // else :pointDefault:
             }
         }
@@ -235,16 +172,32 @@ class McsData {
         // get default city of base domain (default_city from comp options)
         if (empty(self::$city)) {
             if (!empty(self::$compSettings) && self::$compSettings->get('default_city')) {
-                $city = self::$compSettings->get('default_city');
-                if (isset(self::$cities[$city])) {
-                    self::$city = $city;
-                    self::$cityName = self::$cities[$city]['name'];
+                $city = self::findCity( self::$compSettings->get('default_city') );
+                if ($city) {
+                    self::$city = $city['subdomain'];
+                    self::$cityName = $city['name'];
                 }
             }
         }
 
         // set cookies
         setcookie('MCS_CITY_CODE', self::$city, time() + 3600 * 24 * 30, '/', self::$cookieDomain);
+    }
+
+
+    private static function findCity($code)
+    {
+        $city = null;
+        if (!empty($code)) {
+            $db = JFactory::getDbo();
+            $code = $db->quote('%' . $code . '%');
+            $query = $db->getQuery(true)->select('*')->from('#__mycityselector_city')->where("`subdomain` LIKE {$code}");
+            $city = $db->setQuery($query)->loadAssocList();
+            if (!empty($city)) {
+                $city = $city[0];
+            }
+        }
+        return $city;
     }
 
 }

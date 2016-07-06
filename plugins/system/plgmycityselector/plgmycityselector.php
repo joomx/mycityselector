@@ -24,40 +24,19 @@ class plgSystemPlgMycityselector extends JPlugin
     function __construct(&$subject, $params)
     {
         parent::__construct($subject, $params);
-        $doc = JFactory::getDocument();
         $jInput = JFactory::getApplication()->input;
-
-        if (isset($_GET['mcs']) && $_GET['mcs'] == 'clscookie') {
+        if (isset($_GET['mcs']) && $_GET['mcs'] == 'cls') {
             unset($_COOKIE['MCS_CITY_CODE']);
         }
-
+        // load data and settings
+        McsData::load();
         // check for "backend mode" and "frontend edit mode"
         $this->editMode = ($jInput->get('view') == 'form' && $jInput->get('layout') == 'edit');
         if (!$this->editMode && JFactory::getApplication()->getName() != 'administrator') {
-            // load data and settings
-            McsData::load(true);
             // check for redirect
             if (McsData::get('needRedirectTo')) {
                 exit(header('Location: ' . McsData::get('needRedirectTo')));
             }
-            $baseIP = McsData::get('baseip', 'none');
-            if (McsData::get('isUserHasSelected')) {
-                $doc->addScriptDeclaration('window.mcs_dialog=0;');
-            } else {
-                if (McsData::get('let_select', '1') == '1') {
-                    $doc->addScriptDeclaration('window.mcs_dialog=1;'); // show dialog window
-                } else {
-                    $doc->addScriptDeclaration('window.mcs_dialog=2;'); // show question for change city
-                }
-                // Yandex geolocation
-                if ($baseIP == 'yandexgeo') {
-                    $doc->addScriptDeclaration('window.mcs_yandexgeo=true;');
-                }
-            }
-
-        } else {
-            // backend or frontend edit mode. No actions, only settings load (except cities).
-            McsData::load(false); // load all settings and cities
         }
     }
 

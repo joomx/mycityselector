@@ -93,55 +93,6 @@
     }
 
 
-    /*function yandex_geolocation(){
-     // проверяем, нужно ли сделать запрос на yandex.geolocation
-     if (w.mcs_yandexgeo && w.mcs_yandexgeo === true) {
-     // пробуем получить доступ к geolocation
-     console.log("MCS: try to use geolocation.");
-     if (navigator.geolocation) {
-     navigator.geolocation.getCurrentPosition(
-     function(position){ // success
-     console.log("MCS: latitude " + position.coords.latitude + ", longitude " + position.coords.longitude);
-     // отправляем запрос на определение города по координатам
-     $.ajax({
-     "url": "/modules/mod_mycityselector/yandex-geo.php",
-     "dataType": "json",
-     "type": "post",
-     "data": {
-     "key": "sv84ts934pesgs037cw0bynh23z0-203c0-039c9ru",
-     "lat": position.coords.latitude, // широта
-     "lon": position.coords.longitude // долгота
-     }
-     }).done(function(data){
-     if (typeof(data.error) != "undefined") {
-     if (data.error == 0) {
-     console.log('MSC: city was defined as ' + data.description + ", " + data.name);
-     // пытаемся переключиться на полученный город
-     autoSwitchToDetectedCity(data.name);
-     } else if (data.error == 1) {
-     console.error("MCS: wrong coordinates.");
-     } else if (data.error == 2) {
-     console.error("MCS: error on request to yandex.");
-     } else {
-     console.error("MCS: error on city detection.");
-     }
-     } else {
-     console.error("MCS: error on city detection.");
-     }
-     }).fail(function(xhr, err){
-     console.error("MCS: error", err);
-     });
-     },
-     function(err){ // fail
-     console.error("MCS: error " + err.code + ' - ' + err.message);
-     }
-     );
-     } else {
-     console.log("MCS: Geolocation is not supported by this browser.");
-     }
-     }
-     }*/
-
     function yandex_geolocation() {
         if (ymaps.geolocation) {
             ymaps.geolocation.get({

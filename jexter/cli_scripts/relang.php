@@ -29,10 +29,10 @@ out("   site/ru-RU.com_mycityselector.sys.ini\n", "cyan");
 // module
 out("   module/ru-RU.mod_mycityselector.ini\n", "cyan");
 @copy($root.'/modules/mod_mycityselector/language/ru-RU/ru-RU.mod_mycityselector.ini', $root.'/language/ru-RU/ru-RU.mod_mycityselector.ini');
-out("   module/ru-RU.com_mycityselector.sys.ini\n", "cyan");
+out("   module/ru-RU.mod_mycityselector.sys.ini\n", "cyan");
 @copy($root.'/modules/mod_mycityselector/language/ru-RU/ru-RU.mod_mycityselector.sys.ini', $root.'/language/ru-RU/ru-RU.mod_mycityselector.sys.ini');
 
-out("   module/en-GB.mod_mycityselector.sys.ini\n", "cyan");
+out("   module/en-GB.mod_mycityselector.ini\n", "cyan");
 @copy($root.'/modules/mod_mycityselector/language/en-GB/en-GB.mod_mycityselector.ini', $root.'/language/en-GB/en-GB.mod_mycityselector.ini');
-out("   module/en-GB.com_mycityselector.sys.ini\n", "cyan");
+out("   module/en-GB.mod_mycityselector.sys.ini\n", "cyan");
 @copy($root.'/modules/mod_mycityselector/language/en-GB/en-GB.mod_mycityselector.sys.ini', $root.'/language/en-GB/en-GB.mod_mycityselector.sys.ini');

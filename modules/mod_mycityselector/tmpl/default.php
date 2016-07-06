@@ -19,6 +19,7 @@ $this->addStyle($myUrl . 'default.css');
 // подключаем YandexGeoLocation
 $this->addScript('https://api-maps.yandex.ru/2.1/?lang=ru_RU');
 
+// TODO var_dump($citiesList); // этот массив может быть разным в зависимости от настроек модуля, нужно переписать шаблоны так, чтобы они учитывали это
 
 // Drop-down меню
 ?><div class="mcs-module<?= $this->get('moduleclass_sfx') ?>">

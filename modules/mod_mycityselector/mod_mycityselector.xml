@@ -27,7 +27,12 @@
 	<config>
 		<fields name="params">
 			<fieldset name="basic">
-				<field name="dialog_title" type="text" default="Пожалуйста, выберите ваш город" label="Заголовок окна" description="Заголовок окна выбора города"/>
+				<field name="dialog_title" type="text" default="Пожалуйста, выберите ваш город" label="MOD_MYCITYSELECTOR_TEXT_DIALOG_TITLE" description=""/>
+                <field name="cities_list_type" type="list" default="0" label="MOD_MYCITYSELECTOR_TEXT_LIST_TYPE" description="">
+                    <option value="0">MOD_MYCITYSELECTOR_TEXT_LIST_FLAT</option>
+                    <option value="1">MOD_MYCITYSELECTOR_TEXT_LIST_REGIONS</option>
+                    <option value="2">MOD_MYCITYSELECTOR_TEXT_LIST_COUNTRIES</option>
+                </field>
 			</fieldset>
             <fieldset name="advanced">
                 <field name="layout" type="modulelayout" template="default" label="MOD_MYCITYSELECTOR_TEMPLATE" description="Шаблон который будет использован модулем"/>

@@ -6,24 +6,56 @@
 defined('_JEXEC') or exit(header("HTTP/1.0 404 Not Found") . '404 Not Found');
 
 
+/**
+ * Singleton
+ * Class MyCitySelectorModule
+ */
 class MyCitySelectorModule
 {
 
     /**
-     * @var JRegistry|null Объект параметров модуля
+     * @var MyCitySelectorModule|null
      */
-    private $params = null;
+    private static $instance = null;
 
     /**
-     * @var JRegistry Объект параметров компонента
+     * @var string
      */
-    private $comParams = null;
+    private $error = '';
+
+    /**
+     * Template path
+     * @var string
+     */
+    private $layout = null;
+
+    /**
+     * Variables for template
+     * @var array
+     */
+    private $variables = [];
 
 
     /**
-     * Инициализация модуля
+     * @return MyCitySelectorModule
      */
-    public function __construct()
+    public static function run()
+    {
+        if (self::$instance === null) {
+            self::$instance = new self();
+        }
+        if (empty(self::$instance->error)) {
+            self::$instance->render();
+        } else {
+            echo self::$instance->error;
+        }
+    }
+
+
+    /**
+     * init
+     */
+    private function __construct()
     {
         if (!class_exists('McsData')) {
             $find = JFactory::getDbo()
@@ -34,34 +66,93 @@ class MyCitySelectorModule
             } else {
                 $err = 'Плагин MyCitySelector не установлен!';
             }
-            echo '<span style="color:red;">' . $err . '</span>';
+            $this->error = '<span style="color:red;">' . $err . '</span>';
             return;
-        } else {
-            /*$this->params = plgSystemPlgMycityselector::$mcs_buffer['params'];
-            $this->comParams = plgSystemPlgMycityselector::$mcs_buffer['comParams'];
-            // => берем данные из настроек компонента
-            $modID = plgSystemPlgMycityselector::$mcs_buffer['mod_id'];
-            $http = plgSystemPlgMycityselector::$mcs_buffer['http'];
-            $baseDomain = plgSystemPlgMycityselector::$mcs_buffer['base_domain'];
-            $cookieDomain = plgSystemPlgMycityselector::$mcs_buffer['cookie_domain'];
-            $currentCity = plgSystemPlgMycityselector::$mcs_buffer['cityByDomain'] ? plgSystemPlgMycityselector::$mcs_buffer['cityByDomain'] : $this->comParams->get('default_city');
-            $citiesList = plgSystemPlgMycityselector::$mcs_buffer['citiesList'];*/
-
-            //$hasGroups = (count($citiesList) > 1); // todo не нужен вроде
-
-            $layoutPath = JModuleHelper::getLayoutPath('mod_mycityselector', McsData::get('layout', 'default')); // => путь до файла шаблона
-            $myUrl = JURI::base() . str_replace(JPATH_BASE . '/', '', dirname($layoutPath)) . '/'; // => URL до папки с шаблоном
-            // => подключаем файл шаблона
-            // передаем параметры в JS
-            $this->transferParamsToJS();
-            require($layoutPath);
         }
 
+        $citiesList = $this->loadCities();
+        $this->layout = JModuleHelper::getLayoutPath('mod_mycityselector', McsData::get('layout', 'default'));
+        $this->variables = [
+            'modID' => $this->get('moduleId'),
+            'params' => $this->get('modSettings'),
+            'comParams' => $this->get('compSettings'),
+            'http' => $this->get('http'),
+            'baseDomain' => $this->get('basedomain'),
+            'cookieDomain' => $this->get('cookieDomain'),
+            'city' => $this->get('city'),
+            'cityCode' => $this->get('cityName'),
+            'layoutUrl' => JURI::base() . str_replace(JPATH_BASE . '/', '', dirname($this->layout)) . '/',
+            'citiesList' => $citiesList
+        ];
+
+        $dialog = '0';
+        $yandex = 'false';
+        if (!McsData::get('isUserHasSelected')) {
+            $dialog = (McsData::get('let_select', '1') == '1') ? '1' : '2';
+            if ($this->get('baseip', 'none') == 'yandexgeo') { // Yandex geolocation
+                $yandex = 'true';
+            }
+        }
+        $script = "window.mcs_dialog={$dialog};"
+            . 'window.mcs_base_domain="' . McsData::get('basedomain') . '";'
+            . 'window.mcs_cookie_domain="' . McsData::get('cookieDomain') . '";'
+            . 'window.mcs_http="' . McsData::get('http') . '";'
+            . "window.mcs_yandexgeo={$yandex};";
+        JFactory::getDocument()->addScriptDeclaration($script);
+    }
+
+
+    /**
+     * Load all cities
+     */
+    private function loadCities()
+    {
+        $listType = $this->get('cities_list_type', '0'); // 0 - cities only, 1 - provinces + cities, 2 - countries + provinces + cities
+        $data = [
+            'type' => $listType,
+            'list' => []
+        ];
+        $db = JFactory::getDbo();
+        $query = $db->getQuery(true)->select('*')->from('#__mycityselector_city')->where('status = 1');
+        $cities = $db->setQuery($query)->loadAssocList('subdomain');
+        if ($listType == '0') {
+            // [code => cityName, code => cityName, ... ]
+            foreach ($cities as $city) {
+                $data['list'][ $city['subdomain'] ] = $city['name'];
+            }
+        } else if ($listType == '1') {
+            // [province => [code => cityName, code => cityName, ... ], province => [...], ...]
+            $query = $db->getQuery(true)->select('*')->from('#__mycityselector_region')->where('status = 1');
+            $provinces = $db->setQuery($query)->loadAssocList('subdomain');
+            foreach ($provinces as $province) {
+                $data['list'][$province['name']] = [];
+                foreach ($cities as $city) {
+                    $data['list'][$province['name']][ $city['subdomain'] ] = $city['name'];
+                }
+            }
+        } else {
+            // [country => [province => [code => cityName, code => cityName, ... ], province => [...], ...], country => [...], ...]
+            $query = $db->getQuery(true)->select('*')->from('#__mycityselector_country')->where('status = 1');
+            $countries = $db->setQuery($query)->loadAssocList('subdomain'); // subdomain as index
+            $query = $db->getQuery(true)->select('*')->from('#__mycityselector_region')->where('status = 1');
+            $provinces = $db->setQuery($query)->loadAssocList('subdomain');
+            foreach ($countries as $country) {
+                $data['list'][$country] = [];
+                foreach ($provinces as $province) {
+                    $data['list'][$country['name']][$province['name']] = [];
+                    foreach ($cities as $city) {
+                        $data['list'][$country['name']][$province['name']][ $city['subdomain'] ] = $city['name'];
+                    }
+                }
+            }
+        }
+        return $data;
     }
 
 
     /**
      * Inject jQuery framework for Joomla 2.5
+     * Uses in template as $this->addJQuery()
      */
     public function addJQuery()
     {
@@ -75,7 +166,8 @@ class MyCitySelectorModule
 
 
     /**
-     * Alias для JDocument::addScript
+     * Alias for JDocument::addScript
+     * Uses in template as $this->addScript()
      */
     public function addScript($url, $type = "text/javascript", $defer = false, $async = false)
     {
@@ -84,7 +176,8 @@ class MyCitySelectorModule
 
 
     /**
-     * Alias для JDocument::addStyleSheet
+     * Alias for JDocument::addStyleSheet
+     * Uses in template as $this->addStyle()
      */
     public function addStyle($url, $type = 'text/css', $media = null, $attribs = array())
     {
@@ -93,53 +186,29 @@ class MyCitySelectorModule
 
 
     /**
-     * Метод для доступа к параметрам модуля или другим данным, вроде списка городов
-     *
-     * @param String $param Название параметра
+     * Short alias for McsData::get()
+     * @param String $name
      * @param String $default
-     * @return String
+     * @return mixed
      */
-    public function get($param, $default = '')
+    public function get($name, $default = '')
     {
-        if (isset($MCS_BUFFER[$param])) {
-            $default = $MCS_BUFFER[$param];
-        } else {
-            if (is_object($this->comParams)) {
-                $default = $this->comParams->get($param, $default);
-            }
-        }
-        return $default;
+        return McsData::get($name, $default);
     }
 
 
-    /**
-     * Переводит названия городов в транслит, чтобы формировать идентификаторы для js
-     * @param String $str Строка для транслитерации
-     * @return String
-     */
-    public function translit($str)
+    public function render()
     {
-        if (!class_exists('MCSTranslit')) {
-            require_once JPATH_ROOT . '/modules/mod_mycityselector/MCSTranslit.php';
-        }
-        return MCSTranslit::convert($str);
-    }
-    private function transferParamsToJS() {
-        if (McsData::get('let_select', '1') == '1') {
-            $script = 'window.mcs_dialog=1;'; // отобразить окно выбора города
-        } else {
-            $script = 'window.mcs_dialog=2;'; // отобразить предложение о смене города
-        }
+        // init variables
+        foreach ($this->variables as $varName => $varValue) {
 
-        $script .= 'window.mcs_base_domain="' . McsData::get('basedomain') . '";' . // основной домен сайта, если есть еще и субдомены
-                    'window.mcs_cookie_domain="' . McsData::get('cookieDomain') . '";'. // домен для которого нужно устанавливать кукисы
-                    'window.mcs_http="'.McsData::get('http').'";';
-        JFactory::getDocument()->addScriptDeclaration($script);
+        }
+        // include template file
+        include($this->layout);
     }
 
 }
 
-// ===================================================
 
-// === Start module ===
-new MyCitySelectorModule();
+// Start module
+MyCitySelectorModule::run();
