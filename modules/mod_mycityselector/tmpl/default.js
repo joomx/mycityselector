@@ -87,7 +87,9 @@
             // . клик по городу из диалога
             $('.mcs-dialog .link').on('click', selectCity);
             // . клик по группе
-            $('.mcs-dialog .groups .group a').on('click', selectGroup);
+            $('.mcs-dialog .provinces a').on('click', selectGroup);
+            $('.mcs-dialog .country a').on('click', selectCountry);
+            $('.mcs-dialog .quick-search input').on('input',mcsQuickSearch);
             console.log('MCS started');
         }
     }
@@ -127,7 +129,7 @@
         if ($(".cities.active", $dialog).length == 0) {
             // делаем активной первую группу
             var $cities = $(".cities", $dialog),
-                $groups = $(".groups .group", $dialog);
+                $groups = $(".provinces .province", $dialog);
             if ($groups.length == 0) {
                 $cities.removeClass("hidden").addClass("active");
             } else {
@@ -146,6 +148,7 @@
         $dialog.css('display', 'none');
         return false;
     }
+
     function closePopUp() {
         setCookie('MCS_NOASK', 1);
         $(".question", $module).hide(50);
@@ -210,11 +213,47 @@
      */
     function selectGroup() {
         $(".cities", $dialog).addClass('hidden'); // => прячем все города
-        $(".group a", $dialog).removeClass('active'); // => сбрасываем активную группу
+        $(".province a", $dialog).removeClass('active'); // => сбрасываем активную группу
         $(this).addClass('active'); // => выделяем группу
         var group = $(this).attr('data-group'); // => читаем идентификатор выбранной группы
         $(".cities.group-" + group, $dialog).removeClass('hidden'); // => отображаем блок городов
         return false;
+    }
+
+    /**
+     * Переключает страны
+     */
+    function selectCountry() {
+        $(".provinces", $dialog).addClass('hidden'); // Прячем все регионы
+        $(".country a", $dialog).removeClass('active'); // => сбрасываем активную группу
+        $(this).addClass('active'); // => выделяем группу
+        var group = $(this).attr('data-group'); // => читаем идентификатор выбранной группы
+        $(".provinces-" + group, $dialog).removeClass('hidden');
+        return false;
+    }
+
+    function mcsQuickSearch() {
+        var val = this.value.toLowerCase();
+        var city;
+        if (val != '') {
+            $(".countries", $dialog).addClass('hidden');
+            $(".provinces", $dialog).addClass('hidden');
+            $(".cities", $dialog).addClass('hidden');
+            $(".city", $dialog).addClass('hidden');
+            $(".city a.link", $dialog).each(function (index, data) {
+                city = $(data).attr('data-city');
+                if (city.toLowerCase().indexOf(val) != -1) {
+                    $(data).parent().removeClass('hidden');
+                    $(data).parent().parent().removeClass('hidden');
+                }
+            })
+        } else {
+            $(".countries", $dialog).removeClass('hidden');
+            $($(".provinces", $dialog)[0]).removeClass('hidden');
+            $(".cities", $dialog).addClass('hidden');
+            $($(".cities", $dialog)[0]).removeClass('hidden');
+            $(".city", $dialog).removeClass('hidden');
+        }
     }
 
 

@@ -1,11 +1,12 @@
 <?php
+
 /**
  * Class McsData
  *
  * like a STRUCT
  */
-
-class McsData {
+class McsData
+{
 
     /**
      * Component's settings
@@ -75,13 +76,13 @@ class McsData {
     public static function get($name, $default = null)
     {
         if (!empty(self::${$name})) {
-            $value = self::${$name};
-        } else if (!empty(self::$compSettings) && self::$compSettings->get($name)) {
-            $value = self::$compSettings->get($name);
-        } else if (!empty(self::$modSettings) && self::$modSettings->get($name)) {
-            $value = self::$modSettings->get($name);
+            return self::${$name};
+        } else if (!empty(self::$compSettings) && self::$compSettings->get($name) !== null) {
+            return self::$compSettings->get($name);
+        } else if (!empty(self::$modSettings) && self::$modSettings->get($name) !== null) {
+            return self::$modSettings->get($name);
         }
-        return empty($value) ? $default : $value;
+        return $default;
     }
 
 
@@ -172,7 +173,7 @@ class McsData {
         // get default city of base domain (default_city from comp options)
         if (empty(self::$city)) {
             if (!empty(self::$compSettings) && self::$compSettings->get('default_city')) {
-                $city = self::findCity( self::$compSettings->get('default_city') );
+                $city = self::findCity(self::$compSettings->get('default_city'));
                 if ($city) {
                     self::$city = $city['subdomain'];
                     self::$cityName = $city['name'];

@@ -72,6 +72,9 @@ class MyCitySelectorModule
 
         $citiesList = $this->loadCities();
         $this->layout = JModuleHelper::getLayoutPath('mod_mycityselector', McsData::get('layout', 'default'));
+        $this->layoutCountry = JModuleHelper::getLayoutPath('mod_mycityselector', 'country');
+        $this->layoutProvince = JModuleHelper::getLayoutPath('mod_mycityselector', 'province');
+        $this->layoutCity = JModuleHelper::getLayoutPath('mod_mycityselector', 'city');
         $this->variables = [
             'modID' => $this->get('moduleId'),
             'params' => $this->get('modSettings'),
@@ -82,9 +85,19 @@ class MyCitySelectorModule
             'city' => $this->get('city'),
             'cityCode' => $this->get('cityName'),
             'layoutUrl' => JURI::base() . str_replace(JPATH_BASE . '/', '', dirname($this->layout)) . '/',
-            'citiesList' => $citiesList
+            'citiesList' => $citiesList,
+            'cities_list_type' => $this->get('cities_list_type', '1'),
+            'returnUrl' => JUri::getInstance()->toString()
         ];
-
+        if ($this->variables['cities_list_type'] > 1 ) { // Нужно узнать какой регион выбран, иначе в шаблоне придется перебирать весь массив
+            $db = JFactory::getDbo();
+            $query = $db->getQuery(true)->select('a.subdomain')->from('#__mycityselector_region a')
+                ->leftJoin('#__mycityselector_city b on a.id = b.region_id')
+                ->where('a.status = 1 AND b.status = 1 AND b.subdomain ='. $db->quote($this->variables['city']));
+            $this->variables['province'] = $db->setQuery($query)->loadResult();
+        } else {
+            $this->variables['province'] = null;
+        }
         $dialog = '0';
         $yandex = 'false';
         if (!McsData::get('isUserHasSelected')) {
@@ -107,43 +120,44 @@ class MyCitySelectorModule
      */
     private function loadCities()
     {
-        $listType = $this->get('cities_list_type', '0'); // 0 - cities only, 1 - provinces + cities, 2 - countries + provinces + cities
+        $listType = $this->get('cities_list_type', '1'); // 0 - cities only, 1 - provinces + cities, 2 - countries + provinces + cities
         $data = [
             'type' => $listType,
             'list' => []
         ];
         $db = JFactory::getDbo();
-        $query = $db->getQuery(true)->select('*')->from('#__mycityselector_city')->where('status = 1');
-        $cities = $db->setQuery($query)->loadAssocList('subdomain');
+
+
         if ($listType == '0') {
             // [code => cityName, code => cityName, ... ]
-            foreach ($cities as $city) {
-                $data['list'][ $city['subdomain'] ] = $city['name'];
-            }
+            $query = $db->getQuery(true)->select('name, subdomain')->from('#__mycityselector_city')->where('status = 1')->order('ordering');
+            $data['list'] = $db->setQuery($query)->loadAssocList('subdomain', 'name');
         } else if ($listType == '1') {
             // [province => [code => cityName, code => cityName, ... ], province => [...], ...]
-            $query = $db->getQuery(true)->select('*')->from('#__mycityselector_region')->where('status = 1');
-            $provinces = $db->setQuery($query)->loadAssocList('subdomain');
+            $query = $db->getQuery(true)->select('a.name as province_name, a.subdomain as province_subdomain, b.name as city_name, b.subdomain as city_subdomain')
+                ->from('#__mycityselector_region a')
+                ->leftJoin('#__mycityselector_city b on a.id = b.region_id')->where('a.status = 1 AND b.status = 1')
+                ->order('a.ordering, b.ordering');
+            $provinces = $db->setQuery($query)->loadAssocList();
             foreach ($provinces as $province) {
-                $data['list'][$province['name']] = [];
-                foreach ($cities as $city) {
-                    $data['list'][$province['name']][ $city['subdomain'] ] = $city['name'];
-                }
+                //$data['list'][$province['province_subdomain']] = [];
+                $data['list'][$province['province_subdomain']]['name'] = $province['province_name'];
+                $data['list'][$province['province_subdomain']]['list'][$province['city_subdomain']] = $province['city_name'];
             }
         } else {
             // [country => [province => [code => cityName, code => cityName, ... ], province => [...], ...], country => [...], ...]
-            $query = $db->getQuery(true)->select('*')->from('#__mycityselector_country')->where('status = 1');
-            $countries = $db->setQuery($query)->loadAssocList('subdomain'); // subdomain as index
-            $query = $db->getQuery(true)->select('*')->from('#__mycityselector_region')->where('status = 1');
-            $provinces = $db->setQuery($query)->loadAssocList('subdomain');
-            foreach ($countries as $country) {
-                $data['list'][$country] = [];
-                foreach ($provinces as $province) {
-                    $data['list'][$country['name']][$province['name']] = [];
-                    foreach ($cities as $city) {
-                        $data['list'][$country['name']][$province['name']][ $city['subdomain'] ] = $city['name'];
-                    }
-                }
+            $query = $db->getQuery(true)->select('a.name as country_name, a.subdomain as country_subdomain,
+                   b.name as province_name, b.subdomain as province_subdomain,c.name as city_name, c.subdomain as city_subdomain')
+                ->from('#__mycityselector_country a')
+                ->leftJoin('#__mycityselector_region b on a.id = b.country_id')
+                ->leftJoin('#__mycityselector_city c on b.id = c.region_id')
+                ->where('a.status = 1 AND b.status = 1 AND c.status = 1')
+                ->order('a.ordering, b.ordering, c.ordering');
+            $result = $db->setQuery($query)->loadAssocList();
+            foreach($result as $item) {
+                $data['list'][$item['country_subdomain']]['list'][$item['province_subdomain']]['list'][$item['city_subdomain']] = $item['city_name'];
+                $data['list'][$item['country_subdomain']]['name'] = $item['country_name'];
+                $data['list'][$item['country_subdomain']]['list'][$item['province_subdomain']]['name'] = $item['province_name'];
             }
         }
         return $data;
