@@ -1,7 +1,7 @@
 My City Selector Joomla Extension
 =================================
 
-|       Joomla | 3.x             |
+|       Joomla | 3.x.x           |
 |--------------|-----------------|
 | Package      | comp + mod + pl |
 | Version      | 2.0.0 alpha     |
