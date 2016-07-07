@@ -1,7 +1,7 @@
 My City Selector Joomla Extension
 =================================
 
-|       Joomla | 2.5 - 3.x       |
+|       Joomla | 3.x.x           |
 |--------------|-----------------|
 | Package      | comp + mod + pl |
 | Version      | 2.0.0 alpha     |
@@ -19,4 +19,4 @@ My City Selector - это расширение для CMS Joomla, позволя
 
 ## Как это работает?
 
-TODO новая инструкция, парам парам, турум пум пум.
+TODO новая инструкция
