@@ -72,9 +72,6 @@ class MyCitySelectorModule
 
         $citiesList = $this->loadCities();
         $this->layout = JModuleHelper::getLayoutPath('mod_mycityselector', McsData::get('layout', 'default'));
-        $this->layoutCountry = JModuleHelper::getLayoutPath('mod_mycityselector', 'country');
-        $this->layoutProvince = JModuleHelper::getLayoutPath('mod_mycityselector', 'province');
-        $this->layoutCity = JModuleHelper::getLayoutPath('mod_mycityselector', 'city');
         $this->variables = [
             'modID' => $this->get('moduleId'),
             'params' => $this->get('modSettings'),
@@ -87,7 +84,10 @@ class MyCitySelectorModule
             'layoutUrl' => JURI::base() . str_replace(JPATH_BASE . '/', '', dirname($this->layout)) . '/',
             'citiesList' => $citiesList,
             'cities_list_type' => $this->get('cities_list_type', '1'),
-            'returnUrl' => JUri::getInstance()->toString()
+            'returnUrl' => JUri::getInstance()->toString(),
+            'layoutCountry' => JModuleHelper::getLayoutPath('mod_mycityselector', '__country'), // for partial templates use "__" prefix.
+            'layoutProvince' => JModuleHelper::getLayoutPath('mod_mycityselector', '__province'),
+            'layoutCity' => JModuleHelper::getLayoutPath('mod_mycityselector', '__city')
         ];
         if ($this->variables['cities_list_type'] > 1 ) { // Нужно узнать какой регион выбран, иначе в шаблоне придется перебирать весь массив
             $db = JFactory::getDbo();
@@ -126,8 +126,6 @@ class MyCitySelectorModule
             'list' => []
         ];
         $db = JFactory::getDbo();
-
-
         if ($listType == '0') {
             // [code => cityName, code => cityName, ... ]
             $query = $db->getQuery(true)->select('name, subdomain')->from('#__mycityselector_city')->where('status = 1')->order('ordering');
@@ -215,7 +213,7 @@ class MyCitySelectorModule
     {
         // init variables
         foreach ($this->variables as $varName => $varValue) {
-
+            $$varName = $varValue;
         }
         // include template file
         include($this->layout);
