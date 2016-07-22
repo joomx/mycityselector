@@ -41,7 +41,7 @@ INSERT INTO `#__mycityselector_country` (`id`, `name`, `subdomain`, `status`, `o
   (2, 'Беларусь', 'belarus', 1, 2),
   (3, 'Україна', 'ukraine', 1, 3);
 
-CREATE TABLE IF NOT EXISTS `#__mycityselector_region` (
+CREATE TABLE IF NOT EXISTS `#__mycityselector_province` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `country_id` int(11) DEFAULT NULL,
   `name` varchar(50) NOT NULL,
@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS `#__mycityselector_region` (
 ) ENGINE=MyISAM AUTO_INCREMENT=120 DEFAULT CHARSET=utf8;
 
 
-INSERT INTO `#__mycityselector_region` VALUES
+INSERT INTO `#__mycityselector_province` VALUES
 (1,1,'Алтайский край','altajskij-kraj',1,1),
 (2,1,'Амурская область','amurskaya-oblast',1,2),
 (3,1,'Архангельская область','arhangelskaya-oblast',1,3),
@@ -177,7 +177,7 @@ INSERT INTO `#__mycityselector_region` VALUES
 CREATE TABLE IF NOT EXISTS `#__mycityselector_city` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `country_id` int(11) DEFAULT NULL,
-  `region_id` int(11) DEFAULT NULL,
+  `province_id` int(11) DEFAULT NULL,
   `name` varchar(50) NOT NULL,
   `subdomain` varchar(50) NOT NULL,
   `status` tinyint(4) NOT NULL,

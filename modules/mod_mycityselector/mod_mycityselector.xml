@@ -2,7 +2,7 @@
 <extension type="module" version="3.2" method="upgrade" client="site">
 	<name>My City Selector MOD</name>
 	<creationDate>Jul 2016</creationDate>
-	<author>Konstantin Kutsevalov</author>
+	<author>Konstantin Kutsevalov &amp; Vladislav Smolenskiy</author>
 	<authorEmail>konstantin@kutsevalov.name</authorEmail>
 	<authorUrl>http://www.kutsevalov.name/2013/08/12/modul-vibora-goroda-dlya-joomla/</authorUrl>
 	<copyright>All rights reserved</copyright>
@@ -15,7 +15,7 @@
 	</div>
 	]]></description>
 
-    <files><filename>MCSTranslit.php</filename><filename>ext_mod_mini.png</filename><folder>language</folder><filename module="mod_mycityselector">mod_mycityselector.php</filename><filename>mod_mycityselector.xml</filename><folder>tmpl</folder><filename>yandex-geo.php</filename></files>
+    <files><filename>ext_mod_mini.png</filename><folder>language</folder><filename module="mod_mycityselector">mod_mycityselector.php</filename><filename>mod_mycityselector.xml</filename><folder>tmpl</folder></files>
 
     <languages>
         <language tag="en-GB">language/en-GB/en-GB.mod_mycityselector.sys.ini</language>
@@ -30,7 +30,7 @@
 				<field name="dialog_title" type="text" default="Пожалуйста, выберите ваш город" label="MOD_MYCITYSELECTOR_TEXT_DIALOG_TITLE" description=""/>
                 <field name="cities_list_type" type="list" default="0" label="MOD_MYCITYSELECTOR_TEXT_LIST_TYPE" description="">
                     <option value="0">MOD_MYCITYSELECTOR_TEXT_LIST_FLAT</option>
-                    <option value="1">MOD_MYCITYSELECTOR_TEXT_LIST_REGIONS</option>
+                    <option value="1">MOD_MYCITYSELECTOR_TEXT_LIST_PROVINCES</option>
                     <option value="2">MOD_MYCITYSELECTOR_TEXT_LIST_COUNTRIES</option>
                 </field>
 			</fieldset>

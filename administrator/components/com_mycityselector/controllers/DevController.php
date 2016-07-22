@@ -2,7 +2,7 @@
 /**
  * MyCitySelector
  * @author Konstantin Kutsevalov
- * @version 1.0.0
+ * @version 2.0.0
  */
 
 defined('_JEXEC') or die(header('HTTP/1.0 403 Forbidden') . 'Restricted access');
@@ -36,7 +36,7 @@ class DevController extends JxController {
     {
         $sidebar = [
             'default' => JText::_('COM_MYCITYSELECTOR_COUNTRIES'), //'country'
-            'region' => JText::_('COM_MYCITYSELECTOR_REGIONS'),
+            'province' => JText::_('COM_MYCITYSELECTOR_PROVINCES'),
             'city' => JText::_('COM_MYCITYSELECTOR_CITIES'),
         ];
         if (JFactory::getConfig()->get('debug') == 1) {

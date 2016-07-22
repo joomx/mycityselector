@@ -135,7 +135,7 @@ foreach ($regions as $regionName => $region) {
             $country_id = $db->loadRow()[1];
             $name = $db->escape(trim($city));
             out("  {$name}\n", 'light_blue');
-            $db->setQuery("INSERT INTO #__mycityselector_city (`country_id`,`region_id`, `name`, `subdomain`, `status`, `ordering`) VALUES ({$country_id},'{$regionId}', '{$name}', '', '1',{$i})");
+            $db->setQuery("INSERT INTO #__mycityselector_city (`country_id`,`province_id`, `name`, `subdomain`, `status`, `ordering`) VALUES ({$country_id},'{$regionId}', '{$name}', '', '1',{$i})");
             $db->execute();
             $i++;
         }

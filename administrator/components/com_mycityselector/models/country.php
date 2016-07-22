@@ -2,7 +2,7 @@
 /**
  * MyCitySelector
  * @author Konstantin Kutsevalov
- * @version 1.0.0
+ * @version 2.0.0
  */
 
 defined('_JEXEC') or die(header('HTTP/1.0 403 Forbidden') . 'Restricted access');
@@ -145,7 +145,7 @@ class CountryModel extends JModelList {
      * Returns table's fields
      * @return string
      */
-    public function getDefaultData()
+    public function getDefaultRecordValues()
     {
         $data = [];
         foreach ($this->fields as $key => $params) {

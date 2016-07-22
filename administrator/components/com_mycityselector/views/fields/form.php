@@ -2,7 +2,7 @@
 /**
  * MyCitySelector
  * @author Konstantin Kutsevalov
- * @version 1.0.0
+ * @version 2.0.0
  *
  * @formatter:off
  *
@@ -23,6 +23,16 @@ $mt = str_replace([' ','.'],'',microtime());
 ?>
 <div class="field-value">
     <?php
+    // TODO я не уверен, но может попробовать это?
+    //$editor =& JEditor::getInstance();
+    //$params = array( 'smilies'=> '0' ,
+    //    'style'  => '1' ,
+    //    'layer'  => '0' ,
+    //    'table'  => '0' ,
+    //    'clear_entities'=>'0'
+    //);
+    //echo $editor->display( 'desc', '', '400', '400', '20', '20', false, $params );
+
     $form->setFieldAttribute('cities', 'name', 'cities_'.$mt, 'Field');
     $field = $form->getField('cities_'.$mt, 'Field');
     ?>

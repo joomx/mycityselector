@@ -2,7 +2,7 @@
 /**
  * MyCitySelector
  * @author Konstantin Kutsevalov
- * @version 1.0.0
+ * @version 2.0.0
  *
  * @formatter:off
  */
@@ -45,7 +45,7 @@ use adamasantares\jxforms\JxField;
         ]) ?>
 
         <input type="hidden" name="<?= $model->getFieldName('country_id') ?>" value="<?= $data['country_id'] ?>" />
-        <input type="hidden" name="<?= $model->getFieldName('region_id') ?>" value="<?= $data['region_id'] ?>" />
+        <input type="hidden" name="<?= $model->getFieldName('province_id') ?>" value="<?= $data['province_id'] ?>" />
         <input type="hidden" name="<?= $model->getFieldName('id') ?>" value="<?= $data['id'] ?>" />
 
         <?= $this->formControllerName() ?>

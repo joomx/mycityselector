@@ -70,6 +70,14 @@ class pkg_mycityselectorInstallerScript {
      */
     function postflight($route, JAdapterInstance $adapter)
     {
+        // Set the big value for plugin ordering and activate it
+        // general plugin
+        $qu = "UPDATE `#__extensions` SET `ordering`=9990, `enabled`=1 WHERE `element`='plgmycityselector' AND `type`='plugin'";
+        JFactory::getDBO()->setQuery($qu)->execute();
+        // editor button plugin
+        $qu = "UPDATE `#__extensions` SET `ordering`=9991, `enabled`=1 WHERE `element`='mcsinsert' AND `type`='plugin'";
+        JFactory::getDBO()->setQuery($qu)->execute();
+
 
         // здесь мы проверяем факт установки всех элементов пакеты
         // компонент, модуль, плагин

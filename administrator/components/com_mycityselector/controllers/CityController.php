@@ -2,7 +2,7 @@
 /**
  * MyCitySelector
  * @author Konstantin Kutsevalov
- * @version 1.0.0
+ * @version 2.0.0
  */
 
 defined('_JEXEC') or die(header('HTTP/1.0 403 Forbidden') . 'Restricted access');
@@ -37,7 +37,7 @@ class CityController extends JxController {
     {
         $sidebar = [
             'default' => JText::_('COM_MYCITYSELECTOR_COUNTRIES'), //'country'
-            'region' => JText::_('COM_MYCITYSELECTOR_REGIONS'),
+            'province' => JText::_('COM_MYCITYSELECTOR_PROVINCES'),
             'city' => JText::_('COM_MYCITYSELECTOR_CITIES'),
             'fields' => JText::_('COM_MYCITYSELECTOR_FIELDS')
         ];
@@ -58,21 +58,21 @@ class CityController extends JxController {
         JToolBarHelper::publishList();
         JToolBarHelper::unpublishList();
         JToolBarHelper::custom('drop', 'delete', 'delete', JText::_('COM_MYCITYSELECTOR_ITEM_DELETE'));
-        $regionId = intval($this->input->getCmd('region_id'));
-        $model = $this->getModel('city', ['region_id' => $regionId]); /* @var $model CityModel */	// (./models/[$modelName].php)
+        $provinceId = intval($this->input->getCmd('province_id'));
+        $model = $this->getModel('city', ['province_id' => $provinceId]); /* @var $model CityModel */	// (./models/[$modelName].php)
         // sorting
         $this->setStateFromRequest('order_by', $model->filter_fields);
         $listOrder = $this->getState('order_by', 'name');
         $this->setStateFromRequest('order_direction', ['asc', 'desc']);
         $listDirection  = $this->getState('order_direction', 'asc');
         $model->setOrder($listOrder, $listDirection);
-        // country & region names
-        $region = $this->getModel('region')->getItem($regionId);
-        if (empty($region)) {
+        // country & province names
+        $province = $this->getModel('province')->getItem($provinceId);
+        if (empty($province)) {
             return $this->render('not_found');
         }
-        $regionName = $region['name'];
-        $country = $this->getModel('country')->getItem($region['country_id']);
+        $provinceName = $province['name'];
+        $country = $this->getModel('country')->getItem($province['country_id']);
         if (empty($country)) {
             return $this->render('not_found');
         }
@@ -84,7 +84,7 @@ class CityController extends JxController {
             'listOrder' => $listOrder,
             'listDirection' => $listDirection,
             'countryName' => $countryName,
-            'regionName' => $regionName,
+            'provinceName' => $provinceName,
         ]);
 	}
 

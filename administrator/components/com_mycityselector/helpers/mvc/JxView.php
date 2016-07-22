@@ -201,8 +201,10 @@ class JxView
      * Renders view
      * @param string $viewFile
      * @param array $variables
+     * @param bool $return
+     * @return mixed
      */
-    public function render($viewFile, $variables = [])
+    public function render($viewFile, $variables = [], $return = false)
     {
         // define variables
         if (is_array($variables) && !empty($variables)) {
@@ -211,7 +213,10 @@ class JxView
             }
         }
         // render
+        if ($return) ob_start();
         include($viewFile);
+        if ($return) return ob_get_clean();
+        return;
     }
 
 

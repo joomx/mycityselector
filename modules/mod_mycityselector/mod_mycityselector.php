@@ -91,8 +91,8 @@ class MyCitySelectorModule
         ];
         if ($this->variables['cities_list_type'] > 1 ) { // Нужно узнать какой регион выбран, иначе в шаблоне придется перебирать весь массив
             $db = JFactory::getDbo();
-            $query = $db->getQuery(true)->select('a.subdomain')->from('#__mycityselector_region a')
-                ->leftJoin('#__mycityselector_city b on a.id = b.region_id')
+            $query = $db->getQuery(true)->select('a.subdomain')->from('#__mycityselector_province a')
+                ->leftJoin('#__mycityselector_city b on a.id = b.province_id')
                 ->where('a.status = 1 AND b.status = 1 AND b.subdomain ='. $db->quote($this->variables['city']));
             $this->variables['province'] = $db->setQuery($query)->loadResult();
         } else {
@@ -133,8 +133,8 @@ class MyCitySelectorModule
         } else if ($listType == '1') {
             // [province => [code => cityName, code => cityName, ... ], province => [...], ...]
             $query = $db->getQuery(true)->select('a.name as province_name, a.subdomain as province_subdomain, b.name as city_name, b.subdomain as city_subdomain')
-                ->from('#__mycityselector_region a')
-                ->leftJoin('#__mycityselector_city b on a.id = b.region_id')->where('a.status = 1 AND b.status = 1')
+                ->from('#__mycityselector_province a')
+                ->leftJoin('#__mycityselector_city b on a.id = b.province_id')->where('a.status = 1 AND b.status = 1')
                 ->order('a.ordering, b.ordering');
             $provinces = $db->setQuery($query)->loadAssocList();
             foreach ($provinces as $province) {
@@ -147,8 +147,8 @@ class MyCitySelectorModule
             $query = $db->getQuery(true)->select('a.name as country_name, a.subdomain as country_subdomain,
                    b.name as province_name, b.subdomain as province_subdomain,c.name as city_name, c.subdomain as city_subdomain')
                 ->from('#__mycityselector_country a')
-                ->leftJoin('#__mycityselector_region b on a.id = b.country_id')
-                ->leftJoin('#__mycityselector_city c on b.id = c.region_id')
+                ->leftJoin('#__mycityselector_province b on a.id = b.country_id')
+                ->leftJoin('#__mycityselector_city c on b.id = c.province_id')
                 ->where('a.status = 1 AND b.status = 1 AND c.status = 1')
                 ->order('a.ordering, b.ordering, c.ordering');
             $result = $db->setQuery($query)->loadAssocList();

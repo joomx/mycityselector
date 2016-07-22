@@ -3,8 +3,7 @@
 	<name>My City Selector</name>
 	<packagename>mycityselector</packagename>
 	<creationDate>{cdate}</creationDate>
-	<author>Konstantin Kutsevalov</author>
-	<contributor>Vladislav Smolenskiy</contributor>
+	<author>Konstantin Kutsevalov &amp; Vladislav Smolenskiy</author>
 	<authorEmail>konstantin@kutsevalov.name</authorEmail>
 	<authorUrl>http://www.kutsevalov.name/2013/08/12/modul-vibora-goroda-dlya-joomla/</authorUrl>
 	<copyright>All rights reserved</copyright>

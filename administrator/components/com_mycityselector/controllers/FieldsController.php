@@ -2,7 +2,7 @@
 /**
  * MyCitySelector
  * @author Konstantin Kutsevalov
- * @version 1.0.0
+ * @version 2.0.0
  */
 
 defined('_JEXEC') or die(header('HTTP/1.0 403 Forbidden') . 'Restricted access');
@@ -36,7 +36,7 @@ class FieldsController extends JxController
     {
         $sidebar = [
             'default' => JText::_('COM_MYCITYSELECTOR_COUNTRIES'), //'country'
-            'region' => JText::_('COM_MYCITYSELECTOR_REGIONS'),
+            'province' => JText::_('COM_MYCITYSELECTOR_PROVINCES'),
             'city' => JText::_('COM_MYCITYSELECTOR_CITIES'),
             'fields' => JText::_('COM_MYCITYSELECTOR_FIELDS')
         ];
@@ -80,13 +80,33 @@ class FieldsController extends JxController
 
 
     /**
+     * List of items for popup window from editor
+     */
+    public function actionPopup()
+    {
+        $total = 0;
+        $isSearch = isset($_GET['query']);
+        $model = $this->getModel('fields');
+        $items = $model->searchItems(@$_GET['query'], $total);
+        $html = $this->render('list_popup', [
+            'isSearch' => $isSearch,
+            'items' => $items,
+            'pagination' => $model->getPagination($total, false),
+        ], $isSearch);
+        if ($isSearch) {
+            exit(json_encode(['status' => '200', 'html' => $html]));
+        }
+    }
+
+
+    /**
      * Add new item
      */
     public function actionAdd()
     {
         $model = $this->getModel('fields');
         /* @var $model fieldsModel */
-        $data = $model->getDefaultData();
+        $data = $model->getDefaultRecordValues();
         JToolBarHelper::title(JText::_('COM_MYCITYSELECTOR_NAME') . ' - ' . JText::_('COM_MYCITYSELECTOR_ITEM_ADDING'), 'big-ico');
         JToolBarHelper::apply('save');
         JToolBarHelper::save('saveandclose');
@@ -256,7 +276,7 @@ class FieldsController extends JxController
         $model = $this->getModel('fields');
         $id = JFactory::getApplication()->input->get('id');
         $model->deleteFieldValue($id);
-
+        exit(json_encode(['status' => '200']));
     }
 
 }

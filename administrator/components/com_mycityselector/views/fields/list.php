@@ -2,7 +2,7 @@
 /**
  * MyCitySelector
  * @author Konstantin Kutsevalov
- * @version 1.0.0
+ * @version 2.0.0
  */
 
 defined('_JEXEC') or die(header('HTTP/1.0 403 Forbidden') . 'Restricted access');
@@ -79,8 +79,8 @@ JHtml::_('behavior.multiselect');
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="<?= $this->url('index', ['country_id' => $id], 'region') ?>" title="">
-                                            <span class="icon-forward-circle"></span> <?= JText::_('COM_MYCITYSELECTOR_REGIONS') ?>
+                                        <a href="<?= $this->url('index', ['country_id' => $id], 'province') ?>" title="">
+                                            <span class="icon-forward-circle"></span> <?= JText::_('COM_MYCITYSELECTOR_PROVINCES') ?>
                                         </a>
                                     </li>
                                     <li role="separator" class="divider"></li>

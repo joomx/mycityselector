@@ -2,7 +2,7 @@
 /**
  * MyCitySelector
  * @author Konstantin Kutsevalov
- * @version 1.0.0
+ * @version 2.0.0
  */
 
 defined('_JEXEC') or die(header('HTTP/1.0 403 Forbidden') . 'Restricted access');
@@ -52,7 +52,7 @@ class CityModel extends JModelList {
     /**
      * @var int
      */
-    private $regionId = 0;
+    private $provinceId = 0;
 
     /**
      * @var string
@@ -73,8 +73,8 @@ class CityModel extends JModelList {
         if (empty($config['filter_fields'])) {
             $config['filter_fields'] = ['ordering', 'id', 'name', 'status'];
         }
-        if (!empty($config['region_id'])) {
-            $this->regionId = intval($config['region_id']);
+        if (!empty($config['province_id'])) {
+            $this->provinceId = intval($config['province_id']);
         }
 		parent::__construct($config);
         $fields = $this->_db->getTableColumns($this->table, false);
@@ -185,22 +185,22 @@ class CityModel extends JModelList {
 
     /**
      * Returns items (records)
-     * @param int $regionId
+     * @param int $provinceId
      * @param bool $limit
      * @return array
      */
-    public function getItems($regionId = null, $limit = true)
+    public function getItems($provinceId = null, $limit = true)
     {
-        if (empty($regionId)) {
-            $regionId = $this->regionId;
+        if (empty($provinceId)) {
+            $provinceId = $this->provinceId;
         } else {
-            $regionId = intval($regionId);
+            $provinceId = intval($provinceId);
         }
 		$page = intval($this->input->getCmd('page', '0'));
 		$start = intval($this->pageLimit * $page);
         $query = $this->getListQuery();
-        if ($regionId != 0) {
-            $query->where("region_id={$regionId}");
+        if ($provinceId != 0) {
+            $query->where("province_id={$provinceId}");
         }
         $query->order($this->ordering . ' ' . $this->direction);
         if ($limit) {
@@ -315,10 +315,10 @@ class CityModel extends JModelList {
 
 
     /**
-     * Drop cities by region id
+     * Drop cities by province id
      * @param $keys
      */
-    public function dropByRegions($keys)
+    public function dropByProvinces($keys)
     {
         if (!is_array($keys)) {
             $keys = [$keys];
@@ -327,24 +327,24 @@ class CityModel extends JModelList {
             $keys[$i] = intval($key);
         }
         $keys = implode(',', $keys);
-        $this->_db->setQuery("DELETE FROM `{$this->table}` WHERE `region_id` IN ({$keys})")->execute();
+        $this->_db->setQuery("DELETE FROM `{$this->table}` WHERE `province_id` IN ({$keys})")->execute();
     }
 
 
     /**
-     * @param int $regionId
+     * @param int $provinceId
      * @return string (JPagination)
      */
-    public function getPagination($regionId = null)
+    public function getPagination($provinceId = null)
     {
-        if (empty($regionId)) {
-            $regionId = $this->regionId;
+        if (empty($provinceId)) {
+            $provinceId = $this->provinceId;
         } else {
-            $regionId = intval($regionId);
+            $provinceId = intval($provinceId);
         }
         $html = '';
         $page = intval($this->input->getCmd('page', 0));
-        $this->_db->setQuery("SELECT COUNT(*) AS `val` FROM `{$this->table}`".($regionId == 0 ? '' : " WHERE `region_id` = {$regionId}"));
+        $this->_db->setQuery("SELECT COUNT(*) AS `val` FROM `{$this->table}`".($provinceId == 0 ? '' : " WHERE `province_id` = {$provinceId}"));
         $count = $this->_db->loadResult();
         if ($count > 0) {
             $url = $_SERVER['REQUEST_URI'];

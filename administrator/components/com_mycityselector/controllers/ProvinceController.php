@@ -2,7 +2,7 @@
 /**
  * MyCitySelector
  * @author Konstantin Kutsevalov
- * @version 1.0.0
+ * @version 2.0.0
  */
 
 defined('_JEXEC') or die(header('HTTP/1.0 403 Forbidden') . 'Restricted access');
@@ -14,7 +14,7 @@ require_once __DIR__ . '/../helpers/mvc/JxView.php';
 use adamasantares\jxmvc\JxController;
 use adamasantares\jxmvc\JxView;
 
-class RegionController extends JxController {
+class ProvinceController extends JxController {
 
 
     /**
@@ -36,7 +36,7 @@ class RegionController extends JxController {
     {
         $sidebar = [
             'default' => JText::_('COM_MYCITYSELECTOR_COUNTRIES'), //'country'
-            'region' => JText::_('COM_MYCITYSELECTOR_REGIONS'),
+            'province' => JText::_('COM_MYCITYSELECTOR_PROVINCES'),
             'city' => JText::_('COM_MYCITYSELECTOR_CITIES'),
         ];
         if (JFactory::getConfig()->get('debug') == 1) {
@@ -51,7 +51,7 @@ class RegionController extends JxController {
      */
     public function actionIndex()
     {
-        JToolBarHelper::title(JText::_('COM_MYCITYSELECTOR_REGION'), 'big-ico');
+        JToolBarHelper::title(JText::_('COM_MYCITYSELECTOR_PROVINCE'), 'big-ico');
         JToolBarHelper::addNew();
         JToolBarHelper::publishList();
         JToolBarHelper::unpublishList();
@@ -63,7 +63,7 @@ class RegionController extends JxController {
         }
         $countryName = $country['name'];
         $countryId = $country['id'];
-        $model = $this->getModel('region', ['country_id' => $countryId]); /* @var $model RegionModel */	// (./models/[$modelName].php)
+        $model = $this->getModel('province', ['country_id' => $countryId]); /* @var $model ProvinceModel */	// (./models/[$modelName].php)
         // sorting
         $this->setStateFromRequest('order_by', $model->filter_fields);
         $listOrder = $this->getState('order_by', 'name');
@@ -87,8 +87,8 @@ class RegionController extends JxController {
      */
     public function actionAdd()
     {
-        $model = $this->getModel('region'); /* @var $model RegionModel */
-        $data = $model->getDefaultData();
+        $model = $this->getModel('province'); /* @var $model ProvinceModel */
+        $data = $model->getDefaultRecordValues();
         JToolBarHelper::title(JText::_('COM_MYCITYSELECTOR_NAME') . ' - ' . JText::_('COM_MYCITYSELECTOR_ITEM_ADDING'), 'big-ico');
         JToolBarHelper::apply('save');
         JToolBarHelper::save('saveandclose');
@@ -108,7 +108,7 @@ class RegionController extends JxController {
      */
     public function actionUpdate()
     {
-		$model = $this->getModel('region'); /* @var $model RegionModel */
+		$model = $this->getModel('province'); /* @var $model ProvinceModel */
         $id = intval($this->input->getCmd('id'));
         if (!empty($_POST['cid'])) {
             $id = intval($_POST['cid'][0]);
@@ -165,7 +165,7 @@ class RegionController extends JxController {
     {
         $page = 0;
         $url = '';
-        $model = $this->getModel('region'); /* @var $model RegionModel */
+        $model = $this->getModel('province'); /* @var $model ProvinceModel */
         $id = $model->saveItem($_POST);
         if (!$id) {
             // error
@@ -193,11 +193,11 @@ class RegionController extends JxController {
     public function actionDrop()
     {
         $page = $this->input->getCmd('page', 0);
-		$region	= $this->getModel('region'); /* @var $model RegionModel */
+		$province	= $this->getModel('province'); /* @var $model ProvinceModel */
         $city	= $this->getModel('city');
         if (!empty($_POST['cid'])) {
-            $city->dropByRegions($_POST['cid']);
-            $region->dropItems($_POST['cid']);
+            $city->dropByProvinces($_POST['cid']);
+            $province->dropItems($_POST['cid']);
             $this->setMessage(JText::_('COM_MYCITYSELECTOR_MESSAGE_DELETED'));
         }
         $this->redirect('index.php?option=' . $this->_component . '&controller=' . $this->_id . '&page=' . $page);
@@ -210,7 +210,7 @@ class RegionController extends JxController {
     public function actionPublish()
     {
         $page = $this->input->getCmd('page', 0);
-		$model	= $this->getModel('region'); /* @var $model RegionModel */
+		$model	= $this->getModel('province'); /* @var $model ProvinceModel */
         if (!empty($_POST['cid'])) {
             $model->publishItems($_POST['cid'], 1);
         }
@@ -224,7 +224,7 @@ class RegionController extends JxController {
     public function actionUnPublish()
     {
         $page = $this->input->getCmd('page', 0);
-		$model	= $this->getModel('region'); /* @var $model RegionModel */
+		$model	= $this->getModel('province'); /* @var $model ProvinceModel */
         if (!empty($_POST['cid'])) {
             $model->publishItems($_POST['cid'], 0);
         }
@@ -240,7 +240,7 @@ class RegionController extends JxController {
         $responce = ['status' => '200', 'debug_get' => $_GET];
         $order = empty($_GET['order']) ? [] : $_GET['order'];
         if (!empty($order)) {
-            $model = $this->getModel('region'); /* @var $model RegionModel */
+            $model = $this->getModel('province'); /* @var $model ProvinceModel */
             $listOrder = $this->getState('order_by', 'name');
             $listDirection  = $this->getState('order_direction', 'asc');
             $model->setOrder($listOrder, $listDirection);

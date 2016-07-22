@@ -806,7 +806,7 @@ plugins/quickicon
 plugins/installer
 plugins/search
 plugins/content
-plugins/editors-xtd
+/plugins/editors-xtd/module
 plugins/vmshipment
 plugins/vmpayment
 plugins/vmuserfield

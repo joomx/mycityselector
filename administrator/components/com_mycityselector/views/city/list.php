@@ -2,7 +2,7 @@
 /**
  * MyCitySelector
  * @author Konstantin Kutsevalov
- * @version 1.0.0
+ * @version 2.0.0
  */
 
 defined('_JEXEC') or die(header('HTTP/1.0 403 Forbidden') . 'Restricted access');
@@ -12,7 +12,7 @@ defined('_JEXEC') or die(header('HTTP/1.0 403 Forbidden') . 'Restricted access')
 /* @var $listOrder string */
 /* @var $listDirection string */
 /* @var $countryName string */
-/* @var $regionName string */
+/* @var $provinceName string */
 
 JHtml::_('behavior.multiselect');
 
@@ -30,7 +30,7 @@ if ($listOrder == 'a.ordering') {
 <div id="j-main-container" class="span10">
     <div id="system-message-container"><?= $this->getMessage() ?></div>
     <form action="index.php" method="post" name="adminForm" class="admin-form com_mycityselector" id="adminForm">
-        <h3><?= $countryName ?> / <?= $regionName ?> / <?= JText::_('COM_MYCITYSELECTOR_CITIES') ?></h3>
+        <h3><?= $countryName ?> / <?= $provinceName ?> / <?= JText::_('COM_MYCITYSELECTOR_CITIES') ?></h3>
         <hr/>
         <div class="pagination"><?= $pagination ?></div>
         <hr/>

@@ -1,31 +1,81 @@
 /**
  * MyCitySelector
  * @author Konstantin Kutsevalov
- * @version 1.0.0
+ * @version 2.0.0
  */
 
 jQuery(function($){
-    function deleteHandler(button) {
-        var id = $(button).attr('id');
-        $.get('index.php?option=com_mycityselector&controller=fields&task=DeleteFieldValue&id='+id, function(){
-            $(button).parent().parent().parent().remove();
-        })
+
+    function deleteContentFieldHandler() {
+        $.ajax({
+            "url": "index.php",
+            "type": "get",
+            "dataType": "json",
+            "data": {
+                "option": "com_mycityselector",
+                "controller": "fields",
+                "task": "DeleteFieldValue",
+                "id": $(this).attr('id'),
+                "_$btn": $(this)
+            }
+        }).done(function(json) {
+            if (json && json.status == "200") {
+                this._$btn.closest(".field-value").remove();
+            } else {
+                alert("Произошла ошибка :( не смог удалить поле.")
+            }
+        }).fail(function(xhr, err) {
+            alert("Произошла ошибка :(\n" + err);
+        });
     }
-    $('#addform').click(function(){
-        $.get('index.php?option=com_mycityselector&controller=fields&task=getform&format=raw',function(data){
-            $(data).insertBefore('#addform');
+
+    $('#addform').on("click", function() {
+        $.get("index.php?option=com_mycityselector&controller=fields&task=getform&format=raw", function(data) {
+            var $form = $(data);
+            $form.insertBefore("#addform");
             $(".chzn-done").chosen(choosen_opt);
-            tinymce.init({
-                selector: 'textarea'
-            });
-            $('.delete-field-value').click(function() {
-                deleteHandler(this);
-            });
+
+            // TODO может использоваться другой редактор, нужно это как-то проверять
+            // или еще проще, это возвращать код инициализации в ответе с сервера
+            tinymce.init({"selector": "textarea", "height" : "200", "width": "100%"});
+
+            $('.delete-field-value', $form).on("click", deleteContentFieldHandler);
         })
     });
-    $('.delete-field-value').click(function() {
-        deleteHandler(this);
-    });
-    // todo put your code here
+
+    $('.delete-field-value').on("click", deleteContentFieldHandler);
+
+    // for editor popup window
+    if ($("#fast-search-content").length > 0) {
+        var $queryString = $("#query_string"),
+            fsXHR = null;
+        $queryString.on("keyup", function() {
+            var query = $queryString.val(),
+                lastQuery = $queryString.data("last_value") | "";
+            if (query != lastQuery || query == "") {
+                $queryString.data("last_value", query); // remember last search value
+                if (fsXHR) fsXHR.abort();
+                $.ajax({
+                    "url": "index.php",
+                    "type": "get",
+                    "dataType": "json",
+                    "data": {
+                        "option": "com_mycityselector",
+                        "controller": "fields",
+                        "task": "Popup",
+                        "query": query
+                    }
+                }).done(function(json) {
+                    if (json && json.status == "200") {
+                        $("#items-list-table tbody").replaceWith(json.html);
+                    } else {
+                        alert("Произошла ошибка :(")
+                    }
+                }).fail(function(xhr, err) {
+                    alert("Произошла ошибка :(\n" + err);
+                });
+            }
+        });
+    }
 
 });

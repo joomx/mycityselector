@@ -186,6 +186,37 @@ class McsData
     }
 
 
+    /**
+     * TODO еще пилю
+     * Returns cities from DB by condition
+     * @param array $excludes
+     * @return array
+     */
+    public static function getCities($excludes = [])
+    {
+        $db = JFactory::getDbo();
+        if (!empty($excludes)) {
+            $where = ' `name` NOT IN (';
+            foreach ($excludes as $name) {
+                $where .= $db->quote($name);
+            }
+            $where .= ')';
+        }
+        if (empty($where)) {
+            $where = '1 = 1';
+        }
+
+        //exit($where);
+
+        $query = $db->getQuery(true)->select('*')->from('#__mycityselector_city')->where($where);
+        return $db->setQuery($query)->loadAssocList();
+    }
+
+
+    /**
+     * @param $code
+     * @return mixed|null
+     */
     private static function findCity($code)
     {
         $city = null;
@@ -199,6 +230,36 @@ class McsData
             }
         }
         return $city;
+    }
+
+
+    /**
+     * Search Item (city or province of cities)
+     * @param $name
+     * @return mixed|null
+     */
+    public static function getTypeByName($name)
+    {
+        $type = null;
+        if (!empty($name)) {
+            $db = JFactory::getDbo();
+            $name = $db->quote('%' . $name . '%');
+            $query = $db->getQuery(true)->select('id')->from('#__mycityselector_city')->where("`name` LIKE {$name}");
+            if (!empty($db->setQuery($query)->loadAssocList())) {
+                $type = 'city';
+            } else {
+                $query = $db->getQuery(true)->select('id')->from('#__mycityselector_province')->where("`name` LIKE {$name}");
+                if (!empty($db->setQuery($query)->loadAssocList())) {
+                    $type = 'province';
+                } else {
+                    $query = $db->getQuery(true)->select('id')->from('#__mycityselector_country')->where("`name` LIKE {$name}");
+                    if (!empty($db->setQuery($query)->loadAssocList())) {
+                        $type = 'country';
+                    }
+                }
+            }
+        }
+        return $type;
     }
 
 }

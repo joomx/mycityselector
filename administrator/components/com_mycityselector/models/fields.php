@@ -2,7 +2,7 @@
 /**
  * MyCitySelector
  * @author Konstantin Kutsevalov
- * @version 1.0.0
+ * @version 2.0.0
  */
 
 defined('_JEXEC') or die(header('HTTP/1.0 403 Forbidden') . 'Restricted access');
@@ -70,7 +70,7 @@ class FieldsModel extends JModelList
     /**
      * @var array
      */
-    private $fieldValues = [];
+    private $fieldValues = []; // TODO не используется?
 
 
     /**
@@ -158,7 +158,7 @@ class FieldsModel extends JModelList
      * Returns table's fields
      * @return string
      */
-    public function getDefaultData()
+    public function getDefaultRecordValues()
     {
         $data = [];
         foreach ($this->fields as $key => $params) {
@@ -191,9 +191,7 @@ class FieldsModel extends JModelList
      */
     public function getValidateRules()
     {
-        // TODO rules
-        return [
-        ];
+        return [];
     }
 
     /**
@@ -223,6 +221,28 @@ class FieldsModel extends JModelList
             return $this->_db->setQuery($query, $start, $this->pageLimit)->loadAssocList();
         }
         return $this->_db->setQuery($query)->loadAssocList();
+    }
+
+
+    /**
+     * Search
+     * @param string $queryString
+     * @param bool $total By ref
+     * @return array
+     */
+    public function searchItems($queryString, &$total = 0)
+    {
+        $page = intval($this->input->getCmd('page', '0'));
+        $start = intval($this->pageLimit * $page);
+        $query = $this->getListQuery();
+        $query->order($this->ordering . ' ' . $this->direction);
+        $queryString = $this->_db->quote('%'.$queryString.'%');
+        $query->where("`name` LIKE {$queryString}");
+        $result = $this->_db->setQuery($query, $start, $this->pageLimit)->loadAssocList();
+        // total count for pagination
+        $total = $this->_db->setQuery("SELECT COUNT(*) AS `val` FROM `{$this->table}` WHERE `name` LIKE {$queryString}")
+            ->loadResult();
+        return $result;
     }
 
 
@@ -334,6 +354,7 @@ class FieldsModel extends JModelList
     /**
      * Сохраняет значение одного поля, создает если не существовало.
      * @param $data array
+     * @param $cities array
      */
     private function saveFieldValueAndCities($data, $cities = [])
     {
@@ -349,7 +370,6 @@ class FieldsModel extends JModelList
             $query = $this->_db->getQuery(true)->insert($this->table_fieldvalues)->set($pairFieldValue);
             $this->_db->setQuery($query)->execute();
             $this->saveValueCities($this->_db->insertid(), $cities);
-            return true;
         } else {
             //update
             foreach ($data as $key => $value) {
@@ -358,10 +378,16 @@ class FieldsModel extends JModelList
             $query = $this->_db->getQuery(true)->update($this->table_fieldvalues)->set($pairFieldValue)->where(['id = ' . $data['id']]);
             $this->_db->setQuery($query)->execute();
             $this->saveValueCities($data['id'], $cities, true);
-            return;
         }
     }
 
+
+    /**
+     * @param $id
+     * @param array $cities
+     * @param bool $update
+     * @return mixed|void
+     */
     private function saveValueCities($id, $cities = [], $update = false)
     {
         if ($update) {
@@ -413,12 +439,14 @@ class FieldsModel extends JModelList
     /**
      * @return string (JPagination)
      */
-    public function getPagination()
+    public function getPagination($count = null, $showTotal = true)
     {
         $html = '';
         $page = intval($this->input->getCmd('page', 0));
-        $this->_db->setQuery("SELECT COUNT(*) AS `val` FROM `{$this->table}`");
-        $count = $this->_db->loadResult();
+        if (empty($count)) {
+            $this->_db->setQuery("SELECT COUNT(*) AS `val` FROM `{$this->table}`");
+            $count = $this->_db->loadResult();
+        }
         if ($count > 0) {
             $url = $_SERVER['REQUEST_URI'];
             if (strpos($url, '?') === false) {
@@ -437,7 +465,9 @@ class FieldsModel extends JModelList
                     $html .= '<a href="' . $url . 'page=' . $i . '">' . ($i + 1) . '</a> &nbsp;';
                 }
             }
-            $html .= '<br/>Total ' . $count . ' items';
+            if ($showTotal) {
+                $html .= '<br/>Total ' . $count . ' items';
+            }
             $html .= '<input type="hidden" name="page" value="' . $page . '"/>';
         }
         return $html;

@@ -239,9 +239,11 @@ class JxController {
      * Renders view
      * @param string $viewName
      * @param array $variables
+     * @param bool $return
      * @throws \Exception
+     * @return mixed
      */
-    public function render($viewName, $variables = [])
+    public function render($viewName, $variables = [], $return = false)
     {
         $viewFile = $this->root . '/views/' . $this->_id . '/' . $viewName . '.php';
         if (!is_file($viewFile)) {
@@ -249,7 +251,7 @@ class JxController {
         }
         $view = new JxView($this);
         $variables['sidebar'] = $this->sidebarMenu; // add sidebar
-        $view->render($viewFile, $variables);
+        return $view->render($viewFile, $variables, $return);
     }
 
     /**

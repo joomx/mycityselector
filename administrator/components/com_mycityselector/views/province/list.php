@@ -2,7 +2,7 @@
 /**
  * MyCitySelector
  * @author Konstantin Kutsevalov
- * @version 1.0.0
+ * @version 2.0.0
  */
 
 defined('_JEXEC') or die(header('HTTP/1.0 403 Forbidden') . 'Restricted access');
@@ -23,7 +23,7 @@ JHtml::_('behavior.multiselect');
     <div id="system-message-container"><?= $this->getMessage() ?></div>
 
     <form action="index.php" method="post" name="adminForm" class="admin-form <?= $this->getComponentName() ?>" id="adminForm">
-        <h3><?= $countryName ?> / <?= JText::_('COM_MYCITYSELECTOR_REGIONS') ?></h3>
+        <h3><?= $countryName ?> / <?= JText::_('COM_MYCITYSELECTOR_PROVINCES') ?></h3>
         <hr/>
         <div class="pagination"><?= $pagination ?></div>
         <hr/>
@@ -65,7 +65,7 @@ JHtml::_('behavior.multiselect');
                         <a href="<?= $this->url('update', ['id' => $id]) ?>" title=""><?= $item['name'] ?></a>
                     </td>
                     <td align="left">
-                        <a href="<?= $this->url('index', ['region_id' => $id], 'city') ?>" title="">
+                        <a href="<?= $this->url('index', ['province_id' => $id], 'city') ?>" title="">
                             <?= JText::_('COM_MYCITYSELECTOR_CITIES') ?>
                         </a>
                     </td>

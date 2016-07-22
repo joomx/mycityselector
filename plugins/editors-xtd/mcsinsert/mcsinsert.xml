@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="3.1" type="plugin" group="editors-xtd" method="upgrade">
+	<name>plg_editors-xtd_mcsinsert</name>
+	<author>Konstantin Kutsevalov &amp; Vladislav Smolenskiy</author>
+	<creationDate>Jul 2016</creationDate>
+	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
+	<authorEmail>konstantin@kutsevalov.name</authorEmail>
+	<authorUrl>www.kutsevalov.name</authorUrl>
+	<version>2.0.0</version>
+	<description><![CDATA[
+	<h3 class="description-module-header">My City Selector</h3>
+	<div class="description-module" style="text-align:left;">
+		Данный плагин является частью расширения "MyCitySelector".
+	</div>
+	]]></description>
+	<files><filename plugin="mcsinsert">mcsinsert.php</filename><filename>mcsinsert.xml</filename></files>
+</extension>

@@ -2,7 +2,7 @@
 /**
  * MyCitySelector
  * @author Konstantin Kutsevalov
- * @version 1.0.0
+ * @version 2.0.0
  */
 
 defined('_JEXEC') or die(header('HTTP/1.0 403 Forbidden') . 'Restricted access');
@@ -36,7 +36,7 @@ class DefaultController extends JxController {
     {
         $sidebar = [
             'default' => JText::_('COM_MYCITYSELECTOR_COUNTRIES'), //'country'
-            'region' => JText::_('COM_MYCITYSELECTOR_REGIONS'),
+            'province' => JText::_('COM_MYCITYSELECTOR_PROVINCES'),
             'city' => JText::_('COM_MYCITYSELECTOR_CITIES'),
             'fields' => JText::_('COM_MYCITYSELECTOR_FIELDS')
         ];
@@ -85,7 +85,7 @@ class DefaultController extends JxController {
     public function actionAdd()
     {
         $model = $this->getModel('country'); /* @var $model CountryModel */
-        $data = $model->getDefaultData();
+        $data = $model->getDefaultRecordValues();
         JToolBarHelper::title(JText::_('COM_MYCITYSELECTOR_NAME') . ' - ' . JText::_('COM_MYCITYSELECTOR_ITEM_ADDING'), 'big-ico');
         JToolBarHelper::apply('save');
         JToolBarHelper::save('saveandclose');
@@ -191,20 +191,20 @@ class DefaultController extends JxController {
     {
         $page = $this->input->getCmd('page', 0);
 		$country	= $this->getModel('country'); /* @var $model CountryModel */
-        $region	= $this->getModel('region');
+        $province	= $this->getModel('province');
         $city	= $this->getModel('city');
         if (!empty($_POST['cid'])) {
             foreach ($_POST['cid'] as $cid) {
-                $regions = $region->getItems($cid, false);
-                if (!empty($regions)) {
+                $provinces = $province->getItems($cid, false);
+                if (!empty($provinces)) {
                     // drop cities
                     $keys = [];
-                    foreach ($regions as $fields) {
+                    foreach ($provinces as $fields) {
                         $keys[] = $fields['id'];
                     }
-                    $city->dropByRegions($keys);
-                    // drop regions
-                    $region->dropItems($keys);
+                    $city->dropByRrovince($keys);
+                    // drop provinces
+                    $province->dropItems($keys);
                 }
             }
             // drop countries

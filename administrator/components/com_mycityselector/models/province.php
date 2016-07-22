@@ -2,7 +2,7 @@
 /**
  * MyCitySelector
  * @author Konstantin Kutsevalov
- * @version 1.0.0
+ * @version 2.0.0
  */
 
 defined('_JEXEC') or die(header('HTTP/1.0 403 Forbidden') . 'Restricted access');
@@ -11,19 +11,19 @@ defined('_JEXEC') or die(header('HTTP/1.0 403 Forbidden') . 'Restricted access')
 jimport('joomla.application.component.modellist');
 
 
-class RegionModel extends JModelList {
+class ProvinceModel extends JModelList {
 
     /**
      * Table name
      * @var string
      */
-    private $table = '#__mycityselector_region';
+    private $table = '#__mycityselector_province';
 
     /**
      * Prefix for fields names PREFIX[field_name]
      * @var string
      */
-    private $fieldPrefix = 'Region';
+    private $fieldPrefix = 'Province';
 
     /**
      * Primary key of table
@@ -152,7 +152,7 @@ class RegionModel extends JModelList {
      * Returns table's fields
      * @return string
      */
-    public function getDefaultData()
+    public function getDefaultRecordValues()
     {
         $data = [];
         foreach ($this->fields as $key => $params) {

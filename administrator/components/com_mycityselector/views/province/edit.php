@@ -2,7 +2,7 @@
 /**
  * MyCitySelector
  * @author Konstantin Kutsevalov
- * @version 1.0.0
+ * @version 2.0.0
  *
  * @formatter:off
  *
@@ -22,7 +22,7 @@ use adamasantares\jxforms\JxField;
 </div>
 <div id="j-main-container" class="span10">
 
-    <h3><?= JText::_('COM_MYCITYSELECTOR_REGION') ?></h3>
+    <h3><?= JText::_('COM_MYCITYSELECTOR_PROVINCE') ?></h3>
 
     <div id="system-message-container"><?= $this->getMessage() ?></div>
 

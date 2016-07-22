@@ -59,12 +59,17 @@ class plgSystemPlgMycityselector extends JPlugin
      */
     public function onAfterRender()
     {
-        if (!$this->editMode && !JFactory::getApplication()->getName() == 'administrator') { // не делаем замену блоков в админке и в режиме редактирования статьи
+        $currentCityName = McsData::get('cityName');
+        $currentCityCode = McsData::get('city');
+        $isAdmin = (JFactory::getApplication()->getName() == 'administrator');
+        if (!$this->editMode && !$isAdmin) { // не делаем замену блоков в админке и в режиме редактирования статьи
             $body = $this->getPageBody();
-            $body = CitiesTagsHelper::parseCitiesTags($body, $this->city, $this->citiesList); // парсим контент
-
-            // TODO замена тегов по контенту в таблице
-
+            $body = CitiesTagsHelper::parseCitiesTags($body, $currentCityCode, $currentCityName);
+            $this->setPageBody($body);
+        } else if ($isAdmin && @$_GET['option'] == 'com_installer' && @$_GET['view'] == 'manage') {
+            // just for hide package elements from "Extensions/Manage" list.
+            // Sometimes users uninstall not a package but one of extension of package.
+            $body = $this->removePackageElements($this->getPageBody());
             $this->setPageBody($body);
         }
         return true;
@@ -96,6 +101,31 @@ class plgSystemPlgMycityselector extends JPlugin
             // joomla 2.5
             JResponse::setBody($body);
         }
+    }
+
+
+    /**
+     * Deletes rows of package elements from Extensions/Manage list
+     * @param $body
+     * @return mixed
+     */
+    private function removePackageElements($body)
+    {
+        if (preg_match('/<table[^>]+id="manageList"[^>]*>(.*)<\/table>/isU', $body, $table)) {
+            if (preg_match('/<tbody[^>]*>(.*)<\/tbody>/isU', $table[1], $tbody)) {
+                if (preg_match_all('/(<tr[^>]*>.*<\/tr>)/isU', $tbody[1], $trows)) {
+                    foreach ($trows[1] as $trow) {
+                        if (preg_match('/my\s*city\s*selector/i', $trow)) {
+                            if (stripos($trow, 'Package') === false) {
+                                // remove this row
+                                $body = str_replace($trow, '', $body);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return $body;
     }
 
 }
