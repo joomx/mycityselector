@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+    <fieldset name="component">
+        <field
+                name="debug_mode"
+                type="radio"
+                class="btn-group btn-group-yesno"
+                label="COM_MYCITYSELECTOR_DEBUG"
+                default="0" >
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+        <field
+                name="basedomain"
+                type="text"
+                label="COM_MYCITYSELECTOR_BASE_DOMAIN"
+                description="COM_MYCITYSELECTOR_BASE_DOMAIN_DESCRIPTION" />
+        <field
+                name="default_city"
+                type="sql"
+                label="COM_MYCITYSELECTOR_DEFAULTCITY"
+                query="SELECT name as default_city, subdomain as value FROM #__mycityselector_city WHERE status = 1;" />
+        <field
+                name="subdomain_cities"
+                type="radio"
+                class="btn-group btn-group-yesno"
+                label="COM_MYCITYSELECTOR_SUBDOMAINCITIES"
+                default="1" >
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+        <field
+                name="baseip"
+                type="radio"
+                class="btn-group btn-group-yesno"
+                label="COM_MYCITYSELECTOR_BASEIP"
+                default="yandexgeo" >
+            <option value="yandexgeo">JYES</option>
+            <option value="none">JNO</option>
+        </field>
+        <field
+                name="let_select"
+                type="radio"
+                label="COM_MYCITYSELECTOR_LETSELECT"
+                default="1" >
+            <option value="1">COM_MYCITYSELECTOR_LET1</option>
+            <option value="2">COM_MYCITYSELECTOR_LET2</option>
+        </field>
+        <field
+                name="autoswitch_city"
+                type="radio"
+                class="btn-group btn-group-yesno"
+                label="COM_MYCITYSELECTOR_AUTOSWITCH_CITY"
+                default="1" >
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+        <field
+                name="cities_list_type"
+                type="radio"
+                label="COM_MYCITYSELECTOR_CITIES_LIST_TYPE"
+                default="1" >
+            <option value="0">COM_MYCITYSELECTOR_CITIES_LIST_TYPE_0</option>
+            <option value="1">COM_MYCITYSELECTOR_CITIES_LIST_TYPE_1</option>
+            <option value="2">COM_MYCITYSELECTOR_CITIES_LIST_TYPE_2</option>
+        </field>
+    </fieldset>
+
+    <fieldset name="permissions" label="JCONFIG_PERMISSIONS_LABEL" description="JCONFIG_PERMISSIONS_DESC">
+        <field name="rules"
+               type="rules"
+               label="JCONFIG_PERMISSIONS_LABEL"
+               filter="rules"
+               validate="rules"
+               component="com_users"
+               section="component" />
+    </fieldset>
+</config>
