@@ -1,38 +1,30 @@
 <?php
 
-JLoader::import('modules.mod_mycityselector.MCSTranslit', JPATH_ROOT);
-
 /**
- * Cities Tags Helper
+ * Content Helper
  */
-class CitiesTagsHelper {
+class McsContentHelper {
 
     /**
-     * Замена спец. тегов
+     * Парсинг спец. тегов
      * @param $body
-     * @param $currentCityCode
-     * @param $currentCityName
-     * @return mixed
+     * @return array
      */
-    public static function parseCitiesTags($body, $currentCityCode, $currentCityName)
+    public static function parseCitiesTags($body)
     {
-        // сложность в том, что в визуальном редакторе метки обрамляются тегами
-        for ($i = 3; $i--;) { // надеюсь, что больше трех оберточных тегов не будет
-            $body = preg_replace('/<span[^>]+>(\[city\s+[^\]]+\])<\/span>/usU', '$1', $body);
-            $body = preg_replace('/<span>(\[\/city\s*\])<\/span>/sU', '$1', $body);
-            $body = preg_replace('/<p[^>]+>(\[city\s+[^\]]+\])<\/p>/usU', '$1', $body);
-            $body = preg_replace('/<p>(\[\/city\s*\])<\/p>/sU', '$1', $body);
-        }
-        // заменяем теги вида [city Name, Name, Name]
+        $tags = [];
+        $body = self::filterWrappedTags($body);
+        // ищем теги вида [city Name, Name, Name]
         if (preg_match_all('/\[city\s+([^\]]+)\](.+)\[\/city\s*\]/isU', $body, $res)) {
             // в цикле перебираем найденные куски
-            $isCityFound = false;
+            $isCityFound = false; // флаг: был ли найден
             foreach ($res[1] as $i => $city) { // цикл по названиям городов из результата regexp
                 // $res[0][$i] - весь найденный блок
                 // $res[1][$i] - название города
                 // $res[2][$i] - контент блока
-                // иногда бывает внутри блока перенос параграфа, например так: <p><span.cityContent>ляляля</p><p>тополя</span></p> браузер это не переваривает и давится
-                // поэтому заменяем это дело внутри блока на <br/>
+                // иногда бывает внутри блока перенос параграфа,
+                // например так: <p><span.cityContent>ляляля</p><p>тополя</span></p> браузер
+                // это не переваривает и давится, поэтому заменяем это дело внутри блока на <br/>
                 $content = $res[2][$i];
                 $content = preg_replace('/<\/p>\s*<p>/smU', '<br/>', $content);
                 // проверяем какие теги внутри контента, если есть блочные элементы, то оборачиваем в DIV, иначе в SPAN
@@ -73,83 +65,16 @@ class CitiesTagsHelper {
                     unset($newCities);
                 }
 
-
-                if (count($cities) > 1) {
-                    // формируем групповой блок, если городов > 1
-                    $trcity = 'cities-group'; // группа
-                    if (!isset($json[$trcity])) {
-                        $json[$trcity] = [];
-                    }
-                    $index = count($json[$trcity]);
-                    $json[$trcity][$index] = $content;
-                    // для всех городов в группе, создаем блоки со ссылкой на групповой
-                    $class = '';
-                    $findedInGroup = false;
-                    foreach ($cities as $cval) {
-                        $cval = trim($cval);
-                        if ($cval == '*') {
-                            continue;
-                        } else {
-                            $trcityG = MCSTranslit::convert($cval);
-                        }
-                        if (!isset($json[$trcityG])) {
-                            $json[$trcityG] = [];
-                        }
-                        $indexG = count($json[$trcityG]);
-                        $json[$trcityG][$indexG] = '{{$cities-group}}=' . $index; // ссылка на групповой блок с общим контентом
-                        $class .= ' city-' . $trcityG . '-' . $indexG;
-                        if ($cval == $currentCity) {
-                            $findedInGroup = true; // этот блок для текущего выбранного города, ставим флаг, чтобы не отображался блок [city *]
-                            $isCityFound = true;
-                        }
-                    }
-                    $html = '<' . $tag . ' class="cityContent' . $class . '">';
-                    if ($findedInGroup == true) {
-                        $html .= $content;
-                    }
-                    $html .= '</' . $tag . '>';
-                } else {
-                    // иначе одиночный блок
-                    $cval = trim($cities[0]);
-                    if ($cval == '*') {
-                        $trcity = 'other';
-                    } else {
-                        $trcity = MCSTranslit::convert($cval);
-                    }
-                    if (!isset($json[$trcity])) {
-                        $json[$trcity] = [];
-                    }
-                    $index = count($json[$trcity]);
-                    // $json[ город ][номер блока с текстом ]
-                    $json[$trcity][$index] = $content;
-                    $class = ' city-' . $trcity . '-' . $index;
-                    $html = '<' . $tag . ' class="cityContent' . $class . '">';
-                    if ($cval == $currentCity) {
-                        $isCityFound = true; // этот блок для текущего выбранного города, ставим флаг, чтобы не отображался блок [city *]
-                        $html .= $content;
-                    }
-                    $html .= '</' . $tag . '>';
-                }
+                // заменяем найденные теги на контент соответствующего города
+                $html = 'TODO';
                 $body = str_replace($res[0][$i], $html, $body);
+
             }
-            if ($isCityFound == false && isset($json['other'])) {
-                // если город не был найден, то при наличии блока "прочие", подставляем текст обратно в страницу
-                foreach ($json['other'] as $index => $content) {
-                    $tag = self::isHasBlockTag($content) ? 'div' : 'span';
-                    $body = str_replace(
-                        '<' . $tag . ' class="cityContent city-other-' . $index . '"></' . $tag . '>',
-                        '<' . $tag . ' class="cityContent city-other-' . $index . '">' . $content . '</' . $tag . '>',
-                        $body
-                    );
-                }
-            }
-            // inject json to page
-            $json = '<script type="text/javascript">var citySelectorContents = ' . json_encode($json) . ';</script>';
-            $body = str_replace('</head>', $json . "\n</head>", $body);
+
         }
 
         // todo
-        // заменяем теги вида [msc-ID title] где title не важен для кода, только для пользователя для наглядности
+        // ищем теги вида [msc-ID title] где title не важен для кода, только для пользователя для наглядности
         // не забыть проверять is_published!
         if (preg_match_all('/\[city\s+([^\]]+)\](.+)\[\/city\s*\]/usU', $body, $res)) {
             foreach ($res[1] as $i => $city) { // цикл по названиям городов из результата regexp
@@ -158,8 +83,47 @@ class CitiesTagsHelper {
 
             }
         }
+        return $tags;
+    }
+
+
+    private static function filterWrappedTags($body)
+    {
+        // сложность в том, что в визуальном редакторе метки обрамляются тегами
+        for ($i = 3; $i--;) { // надеюсь, что больше трех оберточных тегов не будет
+            $body = preg_replace('/<span[^>]+>(\[city\s+[^\]]+\])<\/span>/usU', '$1', $body);
+            $body = preg_replace('/<span>(\[\/city\s*\])<\/span>/sU', '$1', $body);
+            $body = preg_replace('/<p[^>]+>(\[city\s+[^\]]+\])<\/p>/usU', '$1', $body);
+            $body = preg_replace('/<p>(\[\/city\s*\])<\/p>/sU', '$1', $body);
+        }
         return $body;
     }
+
+
+    /**
+     * Deletes rows of package elements from Extensions/Manage list
+     * @param $body
+     * @return mixed
+     */
+    public static function removePackageElements($body)
+    {
+        if (preg_match('/<table[^>]+id="manageList"[^>]*>(.*)<\/table>/isU', $body, $table)) {
+            if (preg_match('/<tbody[^>]*>(.*)<\/tbody>/isU', $table[1], $tbody)) {
+                if (preg_match_all('/(<tr[^>]*>.*<\/tr>)/isU', $tbody[1], $trows)) {
+                    foreach ($trows[1] as $trow) {
+                        if (preg_match('/my\s*city\s*selector/i', $trow)) {
+                            if (stripos($trow, 'Package') === false) {
+                                // remove this row
+                                $body = str_replace($trow, '', $body);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return $body;
+    }
+
 
     // OLD CODE
     public static function _parseCitiesTags($body, $currentCity, $citiesList)

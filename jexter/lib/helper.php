@@ -451,6 +451,24 @@ function removeFileNotes($file)
     }
 }
 
+/**
+ * Returns true if a file is manifest
+ * @param $file
+ */
+function isManifest($file)
+{
+    if (is_file($file)) {
+        $xml = simplexml_load_file($file);
+        if (is_object($xml)) {
+            $element = $xml->xpath('/extension');
+            if (!empty($element)) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 
 /**
  * Updates manifest file by passed values

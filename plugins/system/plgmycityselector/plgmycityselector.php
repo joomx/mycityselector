@@ -6,8 +6,7 @@
 defined('_JEXEC') or exit(header("HTTP/1.0 404 Not Found") . '404 Not Found');
 
 JLoader::import('joomla.plugin.plugin');
-JLoader::import('plugins.system.plgmycityselector.helpers.CitiesTagsHelper', JPATH_ROOT);
-JLoader::import('plugins.system.plgmycityselector.helpers.ArticleFormHelper', JPATH_ROOT);
+JLoader::import('plugins.system.plgmycityselector.helpers.ContentHelper', JPATH_ROOT);
 JLoader::import('plugins.system.plgmycityselector.helpers.McsData', JPATH_ROOT);
 
 class plgSystemPlgMycityselector extends JPlugin
@@ -40,19 +39,6 @@ class plgSystemPlgMycityselector extends JPlugin
         }
     }
 
-
-    /**
-     * Event listener for content edit form
-     * Adding our tab in form
-     * @param $form
-     * @param $data
-     * @return bool
-     */
-    function onContentPrepareForm($form, $data) {
-        // TODO ArticleFormHelper::addWidget();
-    }
-
-
     /**
      * Метод для вызова системным триггером.
      * Парсинг контента и "обворачивание" текста городов спец. тегами
@@ -64,12 +50,20 @@ class plgSystemPlgMycityselector extends JPlugin
         $isAdmin = (JFactory::getApplication()->getName() == 'administrator');
         if (!$this->editMode && !$isAdmin) { // не делаем замену блоков в админке и в режиме редактирования статьи
             $body = $this->getPageBody();
-            $body = CitiesTagsHelper::parseCitiesTags($body, $currentCityCode, $currentCityName);
+            $tags = McsContentHelper::parseCitiesTags($body);
+
+            // todo обрабатываем найденные теги $tags
+            // 1. Смотрим, есть ли среди тегов отрицание [city !город]
+            // 1.1 Если есть, заменяем города из тега на другие из базы.
+            // 2. определяем, есть ли среди тегов текущий город
+            // 3.1 Если есть, то заменяем найденные теги на текст, а остальные удаляем из текста
+            // 3.2 Если нет, то удаляем из текста все теги, кроме "[city *]", если он есть
+
             $this->setPageBody($body);
         } else if ($isAdmin && @$_GET['option'] == 'com_installer' && @$_GET['view'] == 'manage') {
             // just for hide package elements from "Extensions/Manage" list.
             // Sometimes users uninstall not a package but one of extension of package.
-            $body = $this->removePackageElements($this->getPageBody());
+            $body = McsContentHelper::removePackageElements($this->getPageBody());
             $this->setPageBody($body);
         }
         return true;
@@ -101,31 +95,6 @@ class plgSystemPlgMycityselector extends JPlugin
             // joomla 2.5
             JResponse::setBody($body);
         }
-    }
-
-
-    /**
-     * Deletes rows of package elements from Extensions/Manage list
-     * @param $body
-     * @return mixed
-     */
-    private function removePackageElements($body)
-    {
-        if (preg_match('/<table[^>]+id="manageList"[^>]*>(.*)<\/table>/isU', $body, $table)) {
-            if (preg_match('/<tbody[^>]*>(.*)<\/tbody>/isU', $table[1], $tbody)) {
-                if (preg_match_all('/(<tr[^>]*>.*<\/tr>)/isU', $tbody[1], $trows)) {
-                    foreach ($trows[1] as $trow) {
-                        if (preg_match('/my\s*city\s*selector/i', $trow)) {
-                            if (stripos($trow, 'Package') === false) {
-                                // remove this row
-                                $body = str_replace($trow, '', $body);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return $body;
     }
 
 }

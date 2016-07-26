@@ -35,7 +35,6 @@ class JexterBuilder {
      */
     public static function run($args)
     {
-        // TODO I think it need to merger $args and $projectConfig...
         $packages = [];
         $jexterConfig = loadMyConfig();
         // load {project}.json
@@ -236,7 +235,7 @@ class JexterBuilder {
                 } else {
                     // if file
                     removeFileNotes($file);
-                    if (substr($name, -4, 4) == '.xml') {
+                    if (substr($name, -4, 4) == '.xml' && isManifest($file)) {
                         $mainfest = $name;
                     }
                     $file = ['tag' => 'filename', 'attr' => [], 'value' => $name];
@@ -268,7 +267,7 @@ class JexterBuilder {
                 } else {
                     // if file
                     removeFileNotes($file);
-                    if (substr($name, -4, 4) == '.xml') {
+                    if (substr($name, -4, 4) == '.xml' && isManifest($file)) {
                         $mainfest = $name;
                     }
                     $file = ['tag' => 'filename', 'attr' => [], 'value' => $name];
@@ -352,7 +351,7 @@ class JexterBuilder {
                     if ($name == $ext['script']) { // if it's main script of plugin
                         $file = ['tag' => 'filename', 'attr' => ['plugin' => $ext['id']], 'value' => $name];
                     } else {
-                        if (substr($name, -4, 4) == '.xml') {
+                        if (substr($name, -4, 4) == '.xml' && isManifest($file)) {
                             $mainfest = $name;
                         }
                         $file = ['tag' => 'filename', 'attr' => [], 'value' => $name];
@@ -424,7 +423,7 @@ class JexterBuilder {
                     if ($name == $ext['script']) { // if it's main script of plugin
                         $file = ['tag' => 'filename', 'attr' => ['module' => $ext['id']], 'value' => $name];
                     } else {
-                        if (substr($name, -4, 4) == '.xml') {
+                        if (substr($name, -4, 4) == '.xml' && isManifest($file)) {
                             $mainfest = $name;
                         }
                         $file = ['tag' => 'filename', 'attr' => [], 'value' => $name];
