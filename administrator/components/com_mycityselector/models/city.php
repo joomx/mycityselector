@@ -149,11 +149,13 @@ class CityModel extends JModelList {
 
     /**
      * Returns field's name for input element
+     * @param string $name
+     * @param bool $nc no check field?
      * @return string
      */
-    public function getFieldName($name)
+    public function getFieldName($name, $nc=false)
     {
-        if (isset($this->fields[$name])) {
+        if (isset($this->fields[$name]) || $nc) {
             return $this->fieldPrefix . '[' . $name . ']';
         }
         return $name;
@@ -206,6 +208,25 @@ class CityModel extends JModelList {
         if ($limit) {
             return $this->_db->setQuery($query, $start, $this->pageLimit)->loadAssocList();
         }
+        return $this->_db->setQuery($query)->loadAssocList();
+	}
+
+
+    /**
+     * Search items (records)
+     * @param string $term
+     * @return array
+     */
+    public function searchItemsByName($term)
+    {
+        if (empty($term) || mb_strlen($term, 'utf8') < 2) {
+            return [];
+        }
+        $term = $this->_db->quote('%' . $term . '%');
+        $query = "SELECT `city`.*, `prv`.`name` AS `province_name`, `cnt`.`name` AS `country_name` FROM `{$this->table}` `city` "
+            . "LEFT JOIN `#__mycityselector_province` `prv` ON `prv`.`id` = `city`.`province_id` "
+            . "LEFT JOIN `#__mycityselector_country` `cnt` ON `cnt`.`id` = `city`.`country_id` "
+            . "WHERE `city`.`name` LIKE {$term} AND `city`.`status` = 1";
         return $this->_db->setQuery($query)->loadAssocList();
 	}
 

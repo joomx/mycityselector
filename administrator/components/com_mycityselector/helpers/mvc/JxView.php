@@ -67,6 +67,48 @@ class JxView
     }
 
     /**
+     * Add JS script file
+     * @param string $url
+     * @param string $type
+     * @param bool $defer
+     * @param bool $async
+     */
+    public function addJs($url, $type = "text/javascript", $defer = false, $async = false)
+    {
+        $this->document->addScript($url, $type, $defer, $async);
+    }
+
+    /**
+     * Add JS declaration
+     * @param string $script Javascript
+     */
+    public function addJsDeclaration($script)
+    {
+        $this->document->addScriptDeclaration($script);
+    }
+
+    /**
+     * Add css file
+     * @param string $url
+     * @param string $type
+     * @param string $media
+     * @param array $attribs
+     */
+    public function addCss($url, $type = 'text/css', $media = null, $attribs = [])
+    {
+        $this->document->addStyleSheet($url, $type, $media, $attribs);
+    }
+
+    /**
+     * Add CSS declaration
+     * @param string $css CSS styles
+     */
+    public function addCssDeclaration($css)
+    {
+        $this->document->addStyleDeclaration($css);
+    }
+
+    /**
      * Creates and returns URL by parameters
      * @param $action
      * @param $controller

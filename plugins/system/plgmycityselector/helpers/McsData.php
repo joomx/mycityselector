@@ -262,4 +262,20 @@ class McsData
         return $type;
     }
 
+    /**
+     * @param $id
+     * @return array
+     */
+    public static function loadContentById($id)
+    {
+        $db = JFactory::getDbo();
+        $id = $db->quote($id);
+        $query = $db->getQuery(true)->select('*')->from('#__mycityselector_field_value')->where("`field_id` = {$id}");
+        $result = $db->setQuery($query)->loadAssocList();
+        if (!empty($result)) {
+            return $result;
+        }
+        return [];
+    }
+
 }

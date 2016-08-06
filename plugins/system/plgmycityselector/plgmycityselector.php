@@ -6,7 +6,7 @@
 defined('_JEXEC') or exit(header("HTTP/1.0 404 Not Found") . '404 Not Found');
 
 JLoader::import('joomla.plugin.plugin');
-JLoader::import('plugins.system.plgmycityselector.helpers.ContentHelper', JPATH_ROOT);
+JLoader::import('plugins.system.plgmycityselector.helpers.McsContentHelper', JPATH_ROOT);
 JLoader::import('plugins.system.plgmycityselector.helpers.McsData', JPATH_ROOT);
 
 class plgSystemPlgMycityselector extends JPlugin
@@ -52,12 +52,35 @@ class plgSystemPlgMycityselector extends JPlugin
             $body = $this->getPageBody();
             $tags = McsContentHelper::parseCitiesTags($body);
 
+// еще нужно понять, чем является список: города, регионы, страны
+            //$type = McsData::getTypeByName($cities[0]);
+            //if ($type == 'city') {
+
+
+
+            //} else if ($type == 'province') {
+
+
+
+            //} else if ($type == 'country') {
+
+
+
+            //}
+
             // todo обрабатываем найденные теги $tags
             // 1. Смотрим, есть ли среди тегов отрицание [city !город]
             // 1.1 Если есть, заменяем города из тега на другие из базы.
             // 2. определяем, есть ли среди тегов текущий город
             // 3.1 Если есть, то заменяем найденные теги на текст, а остальные удаляем из текста
             // 3.2 Если нет, то удаляем из текста все теги, кроме "[city *]", если он есть
+
+
+
+            // заменяем найденные теги на контент соответствующего города
+            //$html = 'TODO';
+            //$body = str_replace($res[0][$i], $html, $body);
+
 
             $this->setPageBody($body);
         } else if ($isAdmin && @$_GET['option'] == 'com_installer' && @$_GET['view'] == 'manage') {

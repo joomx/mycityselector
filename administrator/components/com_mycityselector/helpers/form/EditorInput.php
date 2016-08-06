@@ -18,6 +18,8 @@ class EditorInput extends \JFormFieldEditor {
      */
     private $_config = [];
 
+    private $_mceParams = [];
+
 
     /**
      * Creates text field object
@@ -38,11 +40,13 @@ class EditorInput extends \JFormFieldEditor {
         $jform = new \JForm($name);
         parent::__construct($jform);
         $this->name = $name;
+        $this->id = str_replace(['[', ']'], '_', $name) . rand(1, 1000);
         $this->value = $value;
         $this->_config = array_merge($this->getDefaultConfig(), $config);
         // configure xml
         $xml = '<'.'?xml version="1.0"?'.'>'."\n".'<doc>'
             . '<field name="' . $name . '" '
+            . 'id="' . $this->id . '" '
 			. 'type="editor" '
 			. 'label="' . $label . '" buttons="true" /></doc>';
         $xml = simplexml_load_string($xml);
@@ -61,8 +65,8 @@ class EditorInput extends \JFormFieldEditor {
     {
         return [
             'class' => '',
-            'width' => '800',
-            'height' => '500'
+            'width' => '',
+            'height' => '400'
         ];
     }
 

@@ -78,11 +78,6 @@ JHtml::_('behavior.multiselect');
                                             <span class="icon-edit"></span> <?= JText::_('COM_MYCITYSELECTOR_ITEM_EDIT') ?>
                                         </a>
                                     </li>
-                                    <li>
-                                        <a href="<?= $this->url('index', ['country_id' => $id], 'province') ?>" title="">
-                                            <span class="icon-forward-circle"></span> <?= JText::_('COM_MYCITYSELECTOR_PROVINCES') ?>
-                                        </a>
-                                    </li>
                                     <li role="separator" class="divider"></li>
                                     <li>
                                         <a href="javascript:void(0)" onclick="listItemTask('cb<?= $i ?>', 'drop')">

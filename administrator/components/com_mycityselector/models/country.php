@@ -161,11 +161,13 @@ class CountryModel extends JModelList {
 
     /**
      * Returns field's name for input element
+     * @param string $name
+     * @param bool $nc no check field?
      * @return string
      */
-    public function getFieldName($name)
+    public function getFieldName($name, $nc=false)
     {
-        if (isset($this->fields[$name])) {
+        if (isset($this->fields[$name]) || $nc) {
             return $this->fieldPrefix . '[' . $name . ']';
         }
         return $name;

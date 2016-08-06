@@ -57,12 +57,12 @@ if (!$isSearch) {
                     <td class="left" width="20px"><?= $id ?></td>
                     <td align="left">
                         <a href="#" title="<?= JText::_('COM_MYCITYSELECTOR_INSERT_CODE') ?>"
-                           onclick="window.parent.insertMCS('[msc-<?= $id ?> <?= $name ?>]'); return false;">
+                           onclick="window.parent.insertMCS('[mcs-<?= $id ?> <?= $name ?>]'); return false;">
                             <?= $item['name'] ?>
                         </a>
                     </td>
                     <td class="left" width="100px">
-                        <a href="#" title="" onclick="window.parent.insertMCS('[msc-<?= $id ?> <?= $name ?>]'); return false;">
+                        <a href="#" title="" onclick="window.parent.insertMCS('[mcs-<?= $id ?> <?= $name ?>]'); return false;">
                             <?= JText::_('COM_MYCITYSELECTOR_INSERT_CODE') ?>
                         </a>
                     </td>

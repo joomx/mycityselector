@@ -21,11 +21,11 @@ class FieldsModel extends JModelList
      * Table name
      * @var string
      */
-    private $table = '#__mycityselector_fields';
+    private $table = '#__mycityselector_field';
 
-    private $table_fieldvalues = '#__mycityselector_field_values';
+    private $table_fieldvalues = '#__mycityselector_field_value';
 
-    private $table_valuecities = '#__mycityselector_value_cities';
+    private $table_valuecities = '#__mycityselector_value_city';
 
     /**
      * Prefix for fields names PREFIX[field_name]
@@ -68,9 +68,9 @@ class FieldsModel extends JModelList
     private $direction = 'asc';
 
     /**
-     * @var array
+     * @var string
      */
-    private $fieldValues = []; // TODO не используется?
+    private $lastError = '';
 
 
     /**
@@ -158,6 +158,16 @@ class FieldsModel extends JModelList
      * Returns table's fields
      * @return string
      */
+    public function getLastError()
+    {
+        return $this->lastError;
+    }
+
+
+    /**
+     * Returns table's fields
+     * @return string
+     */
     public function getDefaultRecordValues()
     {
         $data = [];
@@ -174,11 +184,13 @@ class FieldsModel extends JModelList
 
     /**
      * Returns field's name for input element
+     * @param string $name
+     * @param bool $nc no check field?
      * @return string
      */
-    public function getFieldName($name)
+    public function getFieldName($name, $nc=false)
     {
-        if (isset($this->fields[$name])) {
+        if (isset($this->fields[$name]) || $nc) {
             return $this->fieldPrefix . '[' . $name . ']';
         }
         return $name;
@@ -255,19 +267,27 @@ class FieldsModel extends JModelList
     {
         $query = $this->getListQuery();
         if ($id > 0) {
-            $id = $this->_db->escape($id);
-            $query->where("`id`={$id}");
+            $id = $this->_db->quote($id);
+            $query->where("`id` = {$id}");
         } else {
-            $query->order('`id` ASC');
+            $query->order("`id` ASC");
         }
+        // load item
         $data = $this->_db->setQuery($query, 0, 1)->loadAssoc();
-        $query = $this->_db->getQuery(true)->select('`id`,`value`,`default`')->from($this->table_fieldvalues)->where('field_id=' . $this->_db->quote($id))->order('`id` ASC, `default` DESC');
-        $data['fieldValues'] = $this->_db->setQuery($query)->loadAssocList('id');
-        foreach ($data['fieldValues'] as &$fieldValue) {
-            $query = $this->_db->getQuery(true)->select('city_id')->from($this->table_valuecities)->where('fieldvalue_id=' . $this->_db->quote($fieldValue['id']));
-            $fieldValue['cities'] = $this->_db->setQuery($query)->loadColumn();
+        // load values
+        $query = $this->_db->getQuery(true)->select("`id`,`value`,`default`")->from($this->table_fieldvalues)
+            ->where("`field_id` = {$id}")->order("`default` DESC");
+        $data['fieldValues'] = $this->_db->setQuery($query)->loadAssocList();
+        foreach ($data['fieldValues'] as $k => $fieldValue) {
+            $fid = $this->_db->quote($fieldValue['id']);
+            $query = "SELECT `city`.`id`, `city`.`name` FROM `{$this->table_valuecities}` `t` "
+                . "INNER JOIN `#__mycityselector_city` `city` ON `t`.`city_id` = `city`.`id` WHERE `t`.`fieldvalue_id` = {$fid}";
+            $cities = $this->_db->setQuery($query)->loadAssocList();
+            if (empty($cities)) {
+                $cities = [];
+            }
+            $data['fieldValues'][$k]['cities'] = $cities;
         }
-
         return $data;
     }
 
@@ -292,58 +312,34 @@ class FieldsModel extends JModelList
     {
         // get all keys with "Prefix[value]"
         $prefix = $this->fieldPrefix;
-        $id = 0;
         if (!empty($data[$prefix])) {
-            $pairFieldValue = $fields = $values = $fieldValues = [];
-            foreach ($data[$prefix] as $param => $value) {
-                if ($param == 'id') {
-                    $id = intval($value);
-                    continue;
-                } elseif (stristr($param, 'value')) {
-                    $fieldValueId = explode('_', $param)[1];
-                    if (stristr($param, 'default')) {
-                        $fieldValues[$fieldValueId] = ['id' => $fieldValueId, 'value' => $value, 'default' => '1'];
-                    } else {
-                        $fieldValues[$fieldValueId] = ['id' => $fieldValueId, 'value' => $value, 'default' => '0'];
-                        if (isset($data[$prefix]['cities_' . $fieldValueId])) {
-                            $valueCities[$fieldValueId] = $data[$prefix]['cities_' . $fieldValueId];
-                            //unset($data[$prefix]['cities_' . $fieldValueId]);
-                        }
-                    }
-                    continue;
-                } elseif (stristr($param, 'cities')) {
-                    continue;
-                }
-                $pairFieldValue[] = $this->_db->quoteName($param) . '=' . $this->_db->quote($value);
-                $fields[] = $this->_db->quoteName($param);
-                $values[] = $this->_db->quote($value);
+            $data = $data[$prefix];
+            $id = intval($data['id']);
+            if (empty($data['name'])) {
+                $this->lastError = 'Название не может быть пустым'; // todo JText::_('COM_MYCITYSELECTOR_HELLO_SAVE_ERROR')
+                return $id;
             }
+            $name = $this->_db->quote($data['name']);
+            $published = intval($data['published']);
             // check item
-            $isExists = $id > 0 ? $this->_db->setQuery("SELECT `id` FROM `{$this->table}` WHERE `id`={$id}")->execute() : false;
+            $isExists = ($id > 0) ? $this->_db->setQuery("SELECT `id` FROM `{$this->table}` WHERE `id`={$id}")->execute() : false;
             if ($isExists === false || $isExists->num_rows == 0) {
                 // create
-                //$maxOrder = $this->_db->setQuery("SELECT max(`ordering`) FROM `{$this->table}`")->loadRow();
-                //$fields[] = 'ordering';
-                //$values[] = empty($maxOrder[0]) ? 1 : $maxOrder[0] + 1;
-                $query = $this->_db->getQuery(true)->insert($this->table)->columns($fields)->values(implode(',', $values));
-                $result = $this->_db->setQuery($query)->execute();
+                $result = $this->_db
+                    ->setQuery("INSERT INTO `{$this->table}` (`name`, `published`) VALUES ({$name}, {$published})")
+                    ->execute();
                 if ($result) {
                     $id = $this->_db->insertid();
-                    foreach ($fieldValues as $fieldValue) {
-                        $fieldValue['field_id'] = $id;
-                        $this->saveFieldValueAndCities($fieldValue, $valueCities[$fieldValue['id']]);
-                    }
+                    $this->saveFieldValues($id, $data);
                     return $id;
                 }
             } else {
                 // update
-                foreach ($fieldValues as $fieldValue) {
-                    $fieldValue['field_id'] = $id;
-                    $this->saveFieldValueAndCities($fieldValue, $valueCities[$fieldValue['id']]);
-                }
-                $query = $this->_db->getQuery(true)->update($this->table)->set($pairFieldValue)->where(['id = ' . $id]);
-                $result = $this->_db->setQuery($query)->execute();
+                $result = $this->_db
+                    ->setQuery("UPDATE `{$this->table}` SET `name` = {$name}, `published` = {$published} WHERE `id` = {$id}")
+                    ->execute();
                 if ($result) {
+                    $this->saveFieldValues($id, $data);
                     return $id;
                 }
             }
@@ -351,54 +347,54 @@ class FieldsModel extends JModelList
         return 0;
     }
 
-    /**
-     * Сохраняет значение одного поля, создает если не существовало.
-     * @param $data array
-     * @param $cities array
-     */
-    private function saveFieldValueAndCities($data, $cities = [])
-    {
-        $pairFieldValue = [];
-
-        $isExists = $this->_db->setQuery("SELECT `id` FROM `{$this->table_fieldvalues}` WHERE `id`={$data['id']}")->execute();
-        if ($isExists === false || $isExists->num_rows == 0) {
-            //create
-            unset($data['id']);
-            foreach ($data as $key => $value) {
-                $pairFieldValue[] = $this->_db->quoteName($key) . '=' . $this->_db->quote($value);
-            }
-            $query = $this->_db->getQuery(true)->insert($this->table_fieldvalues)->set($pairFieldValue);
-            $this->_db->setQuery($query)->execute();
-            $this->saveValueCities($this->_db->insertid(), $cities);
-        } else {
-            //update
-            foreach ($data as $key => $value) {
-                $pairFieldValue[] = $this->_db->quoteName($key) . '=' . $this->_db->quote($value);
-            }
-            $query = $this->_db->getQuery(true)->update($this->table_fieldvalues)->set($pairFieldValue)->where(['id = ' . $data['id']]);
-            $this->_db->setQuery($query)->execute();
-            $this->saveValueCities($data['id'], $cities, true);
-        }
-    }
-
 
     /**
-     * @param $id
-     * @param array $cities
-     * @param bool $update
-     * @return mixed|void
+     * Сохраняет контент
+     * @param int $fieldId
+     * @param array $data
      */
-    private function saveValueCities($id, $cities = [], $update = false)
+    private function saveFieldValues($fieldId, $data)
     {
-        if ($update) {
-            $this->_db->setQuery($this->_db->getQuery(true)->delete($this->table_valuecities)->where('fieldvalue_id = ' . $this->_db->quote($id)))->execute();
+        foreach ($data['value'] as $key => $value) {
+            $cities = isset($data['cities'][$key]) ? $data['cities'][$key] : [];
+            if (substr($key, 0, 1) == '_') {
+                // create
+                if (empty($value) && empty($cities)) continue;
+                $default = (substr($key, -3, 3) == 'DEF') ? '1' : '0';
+                // - value
+                $value = $this->_db->quote($value);
+                $result = $this->_db
+                    ->setQuery("INSERT INTO `{$this->table_fieldvalues}` (`field_id`,`value`,`default`) "
+                        . "VALUES ({$fieldId}, {$value}, {$default})")->execute();
+                // - cities
+                if ($result) {
+                    $id = $this->_db->insertid();
+                    if (!empty($cities)) {
+                        foreach ($cities as $cityId) {
+                            $cityId = $this->_db->quote($cityId);
+                            $this->_db->setQuery("INSERT INTO `{$this->table_valuecities}` (`fieldvalue_id`,`city_id`) "
+                                . "VALUES ({$id}, {$cityId})")->execute();
+                        }
+                    }
+                }
+            } else {
+                // update
+                $id = $this->_db->quote($key);
+                // - value
+                $value = $this->_db->quote($value);
+                $this->_db->setQuery("UPDATE `{$this->table_fieldvalues}` SET `value` = {$value} WHERE `id` = {$id}")
+                    ->execute();
+                // - cities
+                $this->_db->setQuery("DELETE FROM `{$this->table_valuecities}` WHERE `fieldvalue_id` = {$id}")->execute(); // remove all links
+                if (!empty($cities)) {
+                    foreach ($cities as $cityId) {
+                        $cityId = $this->_db->quote($cityId);
+                        $this->_db->setQuery("INSERT INTO `{$this->table_valuecities}` (`fieldvalue_id`,`city_id`) "
+                            . "VALUES ({$id}, {$cityId})")->execute();
+                    }
+                }
+            }
         }
-        if (sizeof($cities) == 0) return;
-        foreach ($cities as $city_id) {
-            $values[] = $this->_db->quote($id) . ',' . $this->_db->quote($city_id);
-        }
-        $query = $this->_db->getQuery(true)->insert($this->table_valuecities)->columns(['fieldvalue_id', 'city_id'])->values($values);
-        return $this->_db->setQuery($query)->execute();
     }
 
 

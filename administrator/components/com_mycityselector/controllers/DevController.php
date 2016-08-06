@@ -23,8 +23,8 @@ class DevController extends JxController {
     public function assets()
     {
         return [
-            ['css', 'url' => 'components/com_mycityselector/admin-style.css'],
-            ['js', 'url' => 'components/com_mycityselector/admin-scripts.js', 'defer' => true],
+            ['css', 'url' => 'components/com_mycityselector/assets/admin-style.css'],
+            ['js', 'url' => 'components/com_mycityselector/assets/admin-scripts.js', 'defer' => true],
         ];
     }
 
@@ -38,6 +38,7 @@ class DevController extends JxController {
             'default' => JText::_('COM_MYCITYSELECTOR_COUNTRIES'), //'country'
             'province' => JText::_('COM_MYCITYSELECTOR_PROVINCES'),
             'city' => JText::_('COM_MYCITYSELECTOR_CITIES'),
+            'fields' => JText::_('COM_MYCITYSELECTOR_FIELDS')
         ];
         if (JFactory::getConfig()->get('debug') == 1) {
             $sidebar['dev'] = 'DEV TOOLS';

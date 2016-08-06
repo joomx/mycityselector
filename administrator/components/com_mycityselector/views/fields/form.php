@@ -11,43 +11,27 @@
  * @var $data array
  * @var $model CountryModel
  */
-
 defined('_JEXEC') or die(header('HTTP/1.0 403 Forbidden') . 'Restricted access');
+
 jimport('joomla.form.field');
-JHtml::_('formbehavior.chosen', 'select');
-$form = JForm::getInstance('main', dirname(__FILE__) . '/form.xml');
-
 use adamasantares\jxforms\JxField;
-$mt = str_replace([' ','.'],'',microtime());
 
-?>
-<div class="field-value">
-    <?php
-    // TODO я не уверен, но может попробовать это?
-    //$editor =& JEditor::getInstance();
-    //$params = array( 'smilies'=> '0' ,
-    //    'style'  => '1' ,
-    //    'layer'  => '0' ,
-    //    'table'  => '0' ,
-    //    'clear_entities'=>'0'
-    //);
-    //echo $editor->display( 'desc', '', '400', '400', '20', '20', false, $params );
+$key = '_' . (microtime(true) * 10000);
 
-    $form->setFieldAttribute('cities', 'name', 'cities_'.$mt, 'Field');
-    $field = $form->getField('cities_'.$mt, 'Field');
-    ?>
-    <div class="cities">
-        <?= $field->input; ?>
-        <div class="control-buttons">
-            <button class="delete-field-value" id="<?= $mt ?>" onclick="return false"><?= JText::_('COM_MYCITYSELECTOR_DELETE_VALUE') ?></button>
-        </div>
+?><div class="field-value row-fluid new-value">
+    <div class="span3">
+        <label>
+            <index type="hidden" name="<?= $model->getFieldName('id') . "[{$key}]" ?>" value="<?= $data['id'] ?>"/>
+            <?= JText::_('COM_MYCITYSELECTOR_CITIES_TITLE') ?>
+        </label>
+        <select name="<?= $model->getFieldName('cities', 1) . "[{$key}][]" ?>" class="select2 fields-value" multiple="multiple">
+            <!-- ajax -->
+        </select>
     </div>
-    <?php
-    $form->setFieldAttribute('value', 'name', 'value_'.$mt, 'Field');
-    $field = $form->getField('value_'.$mt, 'Field');
-    ?>
-    <div class="value">
-    <?= $field->input ?>
+    <div class="span9">
+        <?= JxField::editor($model->getFieldName('value', 1) . "[{$key}]", '', $data['value'], [
+            'width' => '99%', 'height' => '150px'
+        ]) ?>
     </div>
-</div>
+</div><?php
 

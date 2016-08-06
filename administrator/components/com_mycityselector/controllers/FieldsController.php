@@ -23,8 +23,10 @@ class FieldsController extends JxController
     public function assets()
     {
         return [
-            ['css', 'url' => 'components/com_mycityselector/admin-style.css'],
-            ['js', 'url' => 'components/com_mycityselector/admin-scripts.js', 'defer' => true],
+            ['css', 'url' => 'components/com_mycityselector/assets/admin-style.css'],
+            ['css', 'url' => 'components/com_mycityselector/assets/select2.min.css'],
+            ['js', 'url' => 'components/com_mycityselector/assets/select2.min.js', 'defer' => true],
+            ['js', 'url' => 'components/com_mycityselector/assets/admin-scripts.js', 'defer' => true],
         ];
     }
 
@@ -107,6 +109,14 @@ class FieldsController extends JxController
         $model = $this->getModel('fields');
         /* @var $model fieldsModel */
         $data = $model->getDefaultRecordValues();
+        $data['fieldValues'] = [
+            [
+                'id' => 0,
+                'value' => '',
+                'default' => 1,
+                'cities' => []
+            ]
+        ];
         JToolBarHelper::title(JText::_('COM_MYCITYSELECTOR_NAME') . ' - ' . JText::_('COM_MYCITYSELECTOR_ITEM_ADDING'), 'big-ico');
         JToolBarHelper::apply('save');
         JToolBarHelper::save('saveandclose');
@@ -120,9 +130,27 @@ class FieldsController extends JxController
 
 
     /**
+     * Render form for additional cities
+     */
+    public function actionGetForm()
+    {
+        $model = $this->getModel('fields');
+        $this->render('form', [
+            'model' => $model,
+            'data' => [
+                'id' => 0,
+                'value' => '',
+                'default' => 0,
+                'cities' => ''
+            ],
+        ]);
+        $doc = JFactory::getDocument();
+        echo '<script>' . $doc->_script['text/javascript'] . '</script>';
+    }
+
+
+    /**
      * Edit form for item
-     * @param   boolean $cache If true, the view output will be cached
-     * @param   array $urlParams An array of safe url parameters and their variable types, for valid values see {@link JFilterInput::clean()}.
      */
     public function actionUpdate()
     {
@@ -186,9 +214,16 @@ class FieldsController extends JxController
         $url = '';
         $model = $this->getModel('fields');
         $id = $model->saveItem($_POST);
-        if (!$id) {
+        if (!empty($model->getLastError())) {
             // error
-            $this->setMessage(JText::_('COM_MYCITYSELECTOR_HELLO_SAVE_ERROR'), 'error');
+            $this->setMessage($model->getLastError(), 'error');
+            // TODO need to keep data and return its to form anyway for "create" action
+            if ($id > 0) {
+                $url .= '&task=update&id=' . $id;
+            } else {
+                $url .= '&task=add';
+            }
+            $this->redirect('index.php?option=' . $this->_component . '&controller=' . $this->_id . $url);
         } else {
             switch ($redirectTo) {
                 case 'add':
@@ -201,7 +236,7 @@ class FieldsController extends JxController
                     $url .= '&page=' . $page;
             }
         }
-        $this->setMessage(JText::_('COM_MYCITYSELECTOR_FORM_SAVED'), 'message');
+        $this->setMessage(JText::_('COM_MYCITYSELECTOR_FORM_SAVED'), 'message'); // TODO change message!
         $this->redirect('index.php?option=' . $this->_component . '&controller=' . $this->_id . $url);
     }
 
@@ -268,11 +303,33 @@ class FieldsController extends JxController
     }
 
 
-    public function actionGetForm() {
-        $this->render('form');
+    /**
+     *
+     */
+    public function actionAutocomplete()
+    {
+        $result = [];
+        $model = $this->getModel('city');
+        $cities = $model->searchItemsByName(@$_GET['q']);
+        if (!empty($cities)) {
+            foreach ($cities as $city) {
+                $result[] = [
+                    'id' => $city['id'],
+                    'name' => $city['name'],
+                    'province_name' => $city['province_name'],
+                    'country_name' => $city['country_name'],
+                ];
+            }
+        }
+        exit(json_encode(['results' => $result]));
     }
 
-    public function actionDeleteFieldValue() {
+
+    /**
+     * @throws Exception
+     */
+    public function actionDeleteFieldValue()
+    {
         $model = $this->getModel('fields');
         $id = JFactory::getApplication()->input->get('id');
         $model->deleteFieldValue($id);

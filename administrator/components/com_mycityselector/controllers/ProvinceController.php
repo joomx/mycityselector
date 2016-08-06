@@ -38,6 +38,7 @@ class ProvinceController extends JxController {
             'default' => JText::_('COM_MYCITYSELECTOR_COUNTRIES'), //'country'
             'province' => JText::_('COM_MYCITYSELECTOR_PROVINCES'),
             'city' => JText::_('COM_MYCITYSELECTOR_CITIES'),
+            'fields' => JText::_('COM_MYCITYSELECTOR_FIELDS')
         ];
         if (JFactory::getConfig()->get('debug') == 1) {
             $sidebar['dev'] = 'DEV TOOLS';

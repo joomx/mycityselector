@@ -1,11 +1,4 @@
 
-CREATE TABLE IF NOT EXISTS `#__mycityselector_settings` (
-  `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  `name` varchar(30) NOT NULL,
-  `value` text NOT NULL,
-  `is_json` tinyint(1) NOT NULL DEFAULT 0
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='my city selector settings' AUTO_INCREMENT=1;
-
 CREATE TABLE IF NOT EXISTS `#__mycityselector_country` (
   `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `name` varchar(30) NOT NULL,
@@ -13,28 +6,6 @@ CREATE TABLE IF NOT EXISTS `#__mycityselector_country` (
   `status` TINYINT(1) NOT NULL DEFAULT '1',
   `ordering` int(11) NULL
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
-
-CREATE TABLE `#__mycityselector_fields` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) DEFAULT NULL,
-  `published` tinyint(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
-
-CREATE TABLE `#__mycityselector_field_values` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `field_id` int(11) NOT NULL,
-  `value` text,
-  `default` tinyint(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
-
-CREATE TABLE `#__mycityselector_value_cities` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `fieldvalue_id` int(11) NOT NULL,
-  `city_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 INSERT INTO `#__mycityselector_country` (`id`, `name`, `subdomain`, `status`, `ordering`) VALUES
   (1, 'Россия', 'russia', 1, 1),
@@ -376,3 +347,26 @@ INSERT INTO `#__mycityselector_city` VALUES
 (187,2,91,'Молодечно','molodechno',1,187),
 (188,2,92,'Могилёв','mogilev',1,188),
 (189,2,92,'Бобруйск','bobrujsk',1,189);
+
+
+CREATE TABLE `#__mycityselector_field` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) DEFAULT NULL,
+  `published` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+
+CREATE TABLE `#__mycityselector_field_value` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `field_id` int(11) NOT NULL,
+  `value` text,
+  `default` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+
+CREATE TABLE `#__mycityselector_value_city` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `fieldvalue_id` int(11) NOT NULL,
+  `city_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;

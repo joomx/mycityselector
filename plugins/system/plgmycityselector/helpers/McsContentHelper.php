@@ -17,7 +17,6 @@ class McsContentHelper {
         // ищем теги вида [city Name, Name, Name]
         if (preg_match_all('/\[city\s+([^\]]+)\](.+)\[\/city\s*\]/isU', $body, $res)) {
             // в цикле перебираем найденные куски
-            $isCityFound = false; // флаг: был ли найден
             foreach ($res[1] as $i => $city) { // цикл по названиям городов из результата regexp
                 // $res[0][$i] - весь найденный блок
                 // $res[1][$i] - название города
@@ -28,7 +27,7 @@ class McsContentHelper {
                 $content = $res[2][$i];
                 $content = preg_replace('/<\/p>\s*<p>/smU', '<br/>', $content);
                 // проверяем какие теги внутри контента, если есть блочные элементы, то оборачиваем в DIV, иначе в SPAN
-                $tag = self::isHasBlockTag($content) ? 'div' : 'span';
+                $wrap = self::isHasBlockTag($content) ? 'div' : 'span';
                 // один из плагинов, работающий выше по порядку, почему-то конвертирует русские буквы в html последовательности (вот гад)
                 // пришлось сделать проверку названия города
                 if (strpos($city, '&#x') !== false) {
@@ -38,51 +37,32 @@ class McsContentHelper {
                 $cities = explode(',', $city);
                 // проверяем первый символ первого города, если он равен "!", значит это условие исключения
                 if (mb_substr(trim($cities[0]), 0, 1, 'UTF-8') == '!') {
-                    // условие исключения
                     $cities[0] = str_replace('!', '', $cities[0]); // удаляем "!"
-                    // еще нужно понять, чем является список: города, регионы, страны
-                    $type = McsData::getTypeByName($cities[0]);
-                    if ($type == 'city') {
-                        $newCities = McsData::getCities();
-                        foreach ($cities as $cityName) {
-                            if (isset($newCities[$cityName])) {
-                                unset($newCities[$cityName]); // исключаем города, которые перечислены в теге
-                            }
-                        }
-
-
-                    } else if ($type == 'province') {
-
-
-
-                    } else if ($type == 'country') {
-
-
-
-                    }
-                    // теперь нужно составить новый список городов, за исключением тех, которые перечислены в теге
-                    $cities = array_keys($newCities); // получаем список нужных городов
-                    unset($newCities);
+                    $ignore = true;
+                } else {
+                    $ignore = false;
                 }
-
-                // заменяем найденные теги на контент соответствующего города
-                $html = 'TODO';
-                $body = str_replace($res[0][$i], $html, $body);
-
+                $tags[] = ['type' => 'local', 'items' => $cities, 'ignore' => $ignore,
+                    'content' => $content, 'wrap' => $wrap];
             }
-
         }
-
-        // todo
-        // ищем теги вида [msc-ID title] где title не важен для кода, только для пользователя для наглядности
+        // ищем теги вида [mcs-ID title] где title не важен для кода, только для пользователя для наглядности
         // не забыть проверять is_published!
-        if (preg_match_all('/\[city\s+([^\]]+)\](.+)\[\/city\s*\]/usU', $body, $res)) {
+        if (preg_match_all('/\[mcs\-(\d+)\s+[^\]]+\]/is', $body, $res)) {
             foreach ($res[1] as $i => $city) { // цикл по названиям городов из результата regexp
+                // $res[0][$i] - весь найденный блок
+                // $res[1][$i] - ID контента
 
 
 
+
+                $tags[] = ['type' => 'db', 'items' => $cities, 'ignore' => $ignore,
+                    'content' => $content, 'wrap' => $wrap];
             }
         }
+
+        //var_dump($tags); exit;
+
         return $tags;
     }
 
