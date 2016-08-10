@@ -514,9 +514,9 @@ function updateManifest($file, $data = [], $destinationFile = '')
                     $element = $element[0];
                 }
                 if (is_string($val)) {
-                    $element->{0} = $val;
+                    $element[0] = $val;
                 } elseif (is_array($val)) {
-                    $element->{0} = '';
+                    $element[0] = '';
                     if (isset($val['tag'])) {
                         $attr = isset($val['attr']) ? $val['attr'] : [];
                         addXmlChild($element, $val['tag'], $val['value'], $attr);
