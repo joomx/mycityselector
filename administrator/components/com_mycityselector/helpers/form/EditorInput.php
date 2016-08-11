@@ -18,9 +18,6 @@ class EditorInput extends \JFormFieldEditor {
      */
     private $_config = [];
 
-    private $_mceParams = [];
-
-
     /**
      * Creates text field object
      * @param string $name
