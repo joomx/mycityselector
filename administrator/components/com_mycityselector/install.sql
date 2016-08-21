@@ -361,6 +361,7 @@ CREATE TABLE `#__mycityselector_field_value` (
   `field_id` int(11) NOT NULL,
   `value` text,
   `default` tinyint(1) NOT NULL DEFAULT '0',
+  `is_ignore` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 

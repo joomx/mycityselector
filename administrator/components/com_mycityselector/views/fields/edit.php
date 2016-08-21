@@ -81,6 +81,10 @@ $this->addJsDeclaration('
                                     <option selected value="<?= $city['id'] ?>"><?= $city['name'] ?></option>
                                 <?php } ?>
                             </select>
+                            <label class="mcs-checkbox city-ignore-checkbox">
+                                <input type="checkbox" name="<?= $model->getFieldName('is_ignore', 1) . "[{$key}]" ?>"
+                                       value="1" <?= $fieldValue['is_ignore'] ? 'checked' : '' ?> /> все кроме выбранных
+                            </label>
                         </div>
                         <div class="span9">
                             <?= JxField::editor($model->getFieldName('value', 1) . "[{$key}]",

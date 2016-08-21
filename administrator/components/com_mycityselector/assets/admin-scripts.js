@@ -9,6 +9,12 @@ jQuery(function($) {
     // for fields page
     if ($(".fields-page").length > 0) {
 
+        $(".city-ignore-checkbox input").on("change", function() {
+            if ($(this).is(':checked')) {
+                $(".city-ignore-checkbox input").not(this).prop("checked", false);
+            }
+        });
+
         function initSelect2(parent)
         {
             parent = parent || $(document);
@@ -67,6 +73,11 @@ jQuery(function($) {
                 var $form = $(data);
                 $form.insertBefore("#addform");
                 initSelect2($form);
+                $form.find(".city-ignore-checkbox input").on("change", function() {
+                    if ($(this).is(':checked')) {
+                        $(".city-ignore-checkbox input").not(this).prop("checked", false);
+                    }
+                });
                 $('.delete-field-value', $form).on("click", deleteContentFieldHandler);
             })
         });

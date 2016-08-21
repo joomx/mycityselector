@@ -27,6 +27,9 @@ $key = '_' . (microtime(true) * 10000);
         <select name="<?= $model->getFieldName('cities', 1) . "[{$key}][]" ?>" class="select2 fields-value" multiple="multiple">
             <!-- ajax -->
         </select>
+        <label class="mcs-checkbox city-ignore-checkbox">
+            <input type="checkbox" name="<?= $model->getFieldName('is_ignore', 1) . "[{$key}]" ?>" value="1" /> все кроме выбранных
+        </label>
     </div>
     <div class="span9">
         <?= JxField::editor($model->getFieldName('value', 1) . "[{$key}]", '', $data['value'], [

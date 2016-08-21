@@ -275,7 +275,7 @@ class FieldsModel extends JModelList
         // load item
         $data = $this->_db->setQuery($query, 0, 1)->loadAssoc();
         // load values
-        $query = $this->_db->getQuery(true)->select("`id`,`value`,`default`")->from($this->table_fieldvalues)
+        $query = $this->_db->getQuery(true)->select("`id`,`value`,`default`,`is_ignore`")->from($this->table_fieldvalues)
             ->where("`field_id` = {$id}")->order("`default` DESC");
         $data['fieldValues'] = $this->_db->setQuery($query)->loadAssocList();
         foreach ($data['fieldValues'] as $k => $fieldValue) {
@@ -357,15 +357,17 @@ class FieldsModel extends JModelList
     {
         foreach ($data['value'] as $key => $value) {
             $cities = isset($data['cities'][$key]) ? $data['cities'][$key] : [];
+            $isIgnore = isset($data['is_ignore'][$key]) ? $data['is_ignore'][$key] : 0;
             if (substr($key, 0, 1) == '_') {
                 // create
                 if (empty($value) && empty($cities)) continue;
                 $default = (substr($key, -3, 3) == 'DEF') ? '1' : '0';
                 // - value
                 $value = $this->_db->quote($value);
+                $isIgnore = $this->_db->quote($isIgnore);
                 $result = $this->_db
-                    ->setQuery("INSERT INTO `{$this->table_fieldvalues}` (`field_id`,`value`,`default`) "
-                        . "VALUES ({$fieldId}, {$value}, {$default})")->execute();
+                    ->setQuery("INSERT INTO `{$this->table_fieldvalues}` (`field_id`,`value`,`default`,`is_ignore`) "
+                        . "VALUES ({$fieldId}, {$value}, {$default}, {$isIgnore})")->execute();
                 // - cities
                 if ($result) {
                     $id = $this->_db->insertid();
@@ -382,8 +384,9 @@ class FieldsModel extends JModelList
                 $id = $this->_db->quote($key);
                 // - value
                 $value = $this->_db->quote($value);
-                $this->_db->setQuery("UPDATE `{$this->table_fieldvalues}` SET `value` = {$value} WHERE `id` = {$id}")
-                    ->execute();
+                $isIgnore = $this->_db->quote($isIgnore);
+                $this->_db->setQuery("UPDATE `{$this->table_fieldvalues}` SET `value` = {$value}, "
+                    . "`is_ignore` = {$isIgnore} WHERE `id` = {$id}")->execute();
                 // - cities
                 $this->_db->setQuery("DELETE FROM `{$this->table_valuecities}` WHERE `fieldvalue_id` = {$id}")->execute(); // remove all links
                 if (!empty($cities)) {

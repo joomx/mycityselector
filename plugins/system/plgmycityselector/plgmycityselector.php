@@ -45,43 +45,37 @@ class plgSystemPlgMycityselector extends JPlugin
      */
     public function onAfterRender()
     {
-        $currentCityName = McsData::get('cityName');
-        $currentCityCode = McsData::get('city');
         $isAdmin = (JFactory::getApplication()->getName() == 'administrator');
         if (!$this->editMode && !$isAdmin) { // не делаем замену блоков в админке и в режиме редактирования статьи
             $body = $this->getPageBody();
             $tags = McsContentHelper::parseCitiesTags($body);
-
-// еще нужно понять, чем является список: города, регионы, страны
-            //$type = McsData::getTypeByName($cities[0]);
-            //if ($type == 'city') {
-
-
-
-            //} else if ($type == 'province') {
-
-
-
-            //} else if ($type == 'country') {
-
-
-
-            //}
-
-            // todo обрабатываем найденные теги $tags
-            // 1. Смотрим, есть ли среди тегов отрицание [city !город]
-            // 1.1 Если есть, заменяем города из тега на другие из базы.
-            // 2. определяем, есть ли среди тегов текущий город
-            // 3.1 Если есть, то заменяем найденные теги на текст, а остальные удаляем из текста
-            // 3.2 Если нет, то удаляем из текста все теги, кроме "[city *]", если он есть
-
-
-
-            // заменяем найденные теги на контент соответствующего города
-            //$html = 'TODO';
-            //$body = str_replace($res[0][$i], $html, $body);
-
-
+            // анализируем
+            foreach ($tags as $data) {
+                if ($data['type'] == 'db') {
+                    McsContentHelper::processingDbData($body, $data);
+                }
+            }
+            $isMatchCity = false; // is there match of any tag with currant city?
+            $forAnyCity = [];
+            foreach ($tags as $data) {
+                if ($data['type'] == 'local') {
+                    if ($data['cities'][0] != '*') { // любой город
+                        // тут все как было, проверяем город и подставляем текст если нужно
+                        if (McsContentHelper::processingLocalData($body, $data)) {
+                            $isMatchCity = true;
+                        }
+                    } else {
+                        $forAnyCity = $data;
+                    }
+                }
+            }
+            if (!empty($forAnyCity)) {
+                if (!$isMatchCity) {
+                    $body = McsContentHelper::insertContentData($body, $forAnyCity);
+                } else {
+                    $body = str_replace($forAnyCity['position'], '', $body);
+                }
+            }
             $this->setPageBody($body);
         } else if ($isAdmin && @$_GET['option'] == 'com_installer' && @$_GET['view'] == 'manage') {
             // just for hide package elements from "Extensions/Manage" list.

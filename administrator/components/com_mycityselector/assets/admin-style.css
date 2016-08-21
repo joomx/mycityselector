@@ -16,6 +16,13 @@
     color: red;
 }
 
+.mcs-checkbox {
+    margin: 3px 1px;
+}
+.mcs-checkbox input {
+    margin: 0 !important;
+}
+
 .debug-mode {
 
 }

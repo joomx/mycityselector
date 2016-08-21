@@ -141,6 +141,7 @@ class FieldsController extends JxController
                 'id' => 0,
                 'value' => '',
                 'default' => 0,
+                'is_ignore' => 0,
                 'cities' => ''
             ],
         ]);
