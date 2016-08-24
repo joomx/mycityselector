@@ -55,15 +55,6 @@
             <option value="1">JYES</option>
             <option value="0">JNO</option>
         </field>
-        <field
-                name="cities_list_type"
-                type="radio"
-                label="COM_MYCITYSELECTOR_CITIES_LIST_TYPE"
-                default="1" >
-            <option value="0">COM_MYCITYSELECTOR_CITIES_LIST_TYPE_0</option>
-            <option value="1">COM_MYCITYSELECTOR_CITIES_LIST_TYPE_1</option>
-            <option value="2">COM_MYCITYSELECTOR_CITIES_LIST_TYPE_2</option>
-        </field>
     </fieldset>
 
     <fieldset name="permissions" label="JCONFIG_PERMISSIONS_LABEL" description="JCONFIG_PERMISSIONS_DESC">
