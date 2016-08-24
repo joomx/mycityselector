@@ -93,9 +93,9 @@ $regions = ['Республика Адыгея
 Минская область
 Могилёвская область',
 
-'Вінницька область
-Волинська область
-Дніпропетровська область
+'Винницкая область
+Волынская область
+Днепропетровская область
 Донецька область
 Житомирська область
 Закарпатська область
@@ -124,7 +124,7 @@ $regions = ['Республика Адыгея
 
 
 
-$db->setQuery("TRUNCATE #__mycityselector_region"); // remove regions
+$db->setQuery("TRUNCATE #__mycityselector_province"); // remove regions
 $db->execute();
 $i = 1;
 $j = 1;
@@ -134,7 +134,7 @@ foreach ($regions as $regionsCountry) {
     foreach ($regionsCountry as $region) {
         out("  {$region}\n", 'light_blue');
         $name = $db->escape($region);
-        $db->setQuery("INSERT INTO #__mycityselector_region (`country_id`, `name`, `subdomain`,`ordering`) VALUES ({$i}, '{$name}', '',{$j})");
+        $db->setQuery("INSERT INTO #__mycityselector_province (`country_id`, `name`, `subdomain`,`ordering`) VALUES ({$i}, '{$name}', '',{$j})");
         $db->execute();
         $j++;
     }

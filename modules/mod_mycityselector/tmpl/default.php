@@ -50,6 +50,12 @@ $this->addScript('https://api-maps.yandex.ru/2.1/?lang=ru_RU');
     style="display:none;">
     <a class="close" href="javascript:void(0)" title=""></a>
     <div class="title"><?= $this->get('dialog_title') ?></div>
+    <?php
+    if ($cities_list_type == 2) {
+        $countries = $citiesList['list'];
+        include($layoutCountry);
+    }
+    ?>
     <div class="quick-search">
         <input type="text" placeholder="<?= JText::_('COM_MYCITYSELECTOR_SEARCH_HINT')?>">
     </div>
@@ -73,8 +79,6 @@ $this->addScript('https://api-maps.yandex.ru/2.1/?lang=ru_RU');
                 }
                 break;
             case 2: // страны регионы и города
-                $countries = $citiesList['list'];
-                include($layoutCountry);
                 foreach ($citiesList['list'] as $country => $countryData) {
                     $provinces = $countryData['list'];
                     include($layoutProvince);

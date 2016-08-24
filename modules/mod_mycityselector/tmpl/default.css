@@ -69,8 +69,7 @@
     height: auto;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
-    background-color: #fff;
-    background-color: rgba(255, 255, 255, 0.92);
+    background-color: #e8e8e8;
     box-shadow: 0px 0px 10px #c7c7c7;
     -moz-box-shadow: 0px 0px 10px #c7c7c7;
     -webkit-box-shadow: 0px 0px 10px #c7c7c7;
@@ -78,7 +77,6 @@
 
 .mcs-dialog a {
     color: #6b6b6b;
-    text-decoration: none;
 }
 
 .mcs-dialog.has-groups, .mcs-dialog.has-groups-countries {
@@ -100,62 +98,69 @@
 }
 
 .mcs-dialog .title {
-    font-size: 14px;
-    padding: 8px 18px;
+    font-size: 24px;
+    padding: 20px;
     margin: 0;
-    border-bottom: 1px solid #bababa;
+    color: #000000;
 }
 
-.mcs-dialog .provinces, .mcs-dialog .countries {
-    width: 200px;
-    float: left;
+.mcs-dialog .provinces {
+    width: 320px;
+    /* float: left; */
     margin: 0;
-    padding: 10px 0 10px 20px;
+    padding: 0;
     overflow-y: scroll;
     height: 300px;
+    display: inline-block;
 }
 
-.mcs-dialog .country, .mcs-dialog .province, .mcs-dialog .city {
-    margin: 0 0 6px 0;
-    padding: 0;
+.mcs-dialog .province, .mcs-dialog .city {
+    margin: 0 10px 6px 12px;
     font-size: 14px;
+    border-radius: 12px;
+    padding: 10px;
 }
 
 .mcs-dialog .country a.active, .mcs-dialog .province a.active, .mcs-dialog .city a.active {
-    color: #000;
+    color: #3e454b;
     border-bottom: none;
 }
 
-.mcs-dialog  .inner a {
-    border-bottom: 1px dashed #6b6b6b;
+.mcs-dialog a {
+    border-bottom: 1px dashed #2196f3;
+    font-size: 14pt;
+    color: #2196f3;
+}
+
+.mcs-dialog a:hover {
+    color: #fe5722;
+    border-bottom-color: #fe5722;
+    text-decoration: none;
 }
 
 .mcs-dialog .cities {
-/*    min-height: 140px;*/
-    padding: 10px 0 10px 16px;
+    /*    min-height: 140px;*/
+    /* padding: 10px 0 10px 16px; */
 }
 
 .mcs-dialog.has-groups .cities, .mcs-dialog.has-groups-countries .cities {
     /*border-left: 1px solid #bababa;*/
-  /*  width: 340px !important;*/
+    /*  width: 340px !important;*/
     display: inline-block;
-    padding: 10px 0 10px 10px;
+    /* padding: 10px 0 10px 10px; */
+    vertical-align: top;
 }
 
 .mcs-dialog .cities.hidden, .mcs-dialog .countries.hidden, .mcs-dialog .provinces.hidden, .mcs-dialog .city.hidden {
     display: none;
 }
 
-.mcs-dialog .city{
-    float: left;
-/*    width: 160px;*/
+.mcs-dialog .city {
+    /* float: left; */
+    /*    width: 160px;*/
     display: inline-block;
-    margin: 0 10px 6px 0;
-}
-
-.mcs-dialog .link {
-    border-bottom: 1px dashed #6b6b6b;
-    font-size: 14px;
+    margin: 20px 20px 0 0;
+    padding: 0;
 }
 
 .mcs-dialog .link.active {
@@ -163,14 +168,67 @@
     border-bottom: none;
 }
 
-.mcs-dialog .link:hover, .mcs-dialog .link:active, .mcs-dialog .link:focus {
-    color: #000;
-    background: none;
-}
-
 .mcs-clear {
     clear: both;
 }
+
 .mcs-dialog .quick-search {
-    padding: 3px;
+    padding: 15px 0 15px 19px;
+    background: #ffffff;
+}
+
+.mcs-dialog .countries .country {
+    display: inline-block;
+    font-size: 15pt;
+    padding: 10px;
+}
+
+.mcs-dialog .countries .country.active {
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    background-color: #ffffff;
+
+}
+
+.mcs-dialog .countries {
+    padding-left: 20px;
+}
+
+.mcs-dialog .quick-search input {
+    margin: 0;
+    padding: 8px;
+    font-size: 18pt;
+    border-color: #aaaaaa;
+    width: 95%;
+    border-radius: 10px;
+    color: #666a7c;
+}
+
+.mcs-dialog {font-family: 'Open Sans', sans-serif;}
+
+.mcs-dialog .inner {
+    background-color: #ffffff;
+}
+
+.mcs-dialog .mcs-region-title, .mcs-dialog .mcs-city-title {
+    color: #333333;
+    font-size: 16pt;
+    margin: 0 0 20px 22px;
+}
+
+.mcs-dialog .province.active {
+    background-color: #eeeeee;
+}
+
+
+.mcs-dialog .cities .mcs-city-title {
+    margin: 0;
+}
+
+.mcs-dialog .cities {
+    margin: 0 0 20px 22px;
+}
+
+.mcs-dialog .city a:hover {
+    border-bottom-style: solid;
 }

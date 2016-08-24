@@ -24,11 +24,11 @@ function slugTranslit($str)
 }
 
 
-$db->setQuery("SELECT * from `#__mycityselector_region`");
+$db->setQuery("SELECT * from `#__mycityselector_province`");
 $result = $db->loadAssocList();
 foreach ($result as $region) {
     $region['subdomain'] = slugTranslit(trim($region['name']));
-    $db->setQuery("UPDATE `#__mycityselector_region` SET `subdomain` = '{$region['subdomain']}' WHERE `id` = {$region['id']}");
+    $db->setQuery("UPDATE `#__mycityselector_province` SET `subdomain` = '{$region['subdomain']}' WHERE `id` = {$region['id']}");
     $db->execute();
     out("   '{$region['name']}' => '{$region['subdomain']}'\n", 'light_blue');
 }
