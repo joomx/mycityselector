@@ -65,7 +65,13 @@ $this->addScript('https://api-maps.yandex.ru/2.1/?lang=ru_RU');
             case 0: //только города
                 $cities = $citiesList['list'];
                 $province = '';
-                include($layoutCity);
+                ?>
+                <div class="cities-wrapper full-width">
+                    <?php
+                    include($layoutCity);
+                    ?>
+                </div>
+                <?php
                 break;
             case 1: //регионы и города
                 // если города раздлены по группам, выводим их в отдельный блок
@@ -73,10 +79,17 @@ $this->addScript('https://api-maps.yandex.ru/2.1/?lang=ru_RU');
                 $provinces = $citiesList['list'];
                 include($layoutProvince);
                 // города
-                foreach ($citiesList['list'] as $province => $provinceData) {
-                    $cities = $provinceData['list'];
-                    include($layoutCity);
-                }
+                ?>
+                <div class="cities-wrapper">
+                    <div class="mcs-city-title"><?= JText::_('COM_MYCITYSELECTOR_CITY'); ?></div>
+                    <?php
+                    foreach ($citiesList['list'] as $province => $provinceData) {
+                        $cities = $provinceData['list'];
+                        include($layoutCity);
+                    }
+                    ?>
+                </div>
+                <?php
                 break;
             case 2: // страны регионы и города
                 foreach ($citiesList['list'] as $country => $countryData) {
