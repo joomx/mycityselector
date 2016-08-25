@@ -1,11 +1,11 @@
 /**
- * Стили MyCitySelector
+ * ÃÂ¡Ã‘â€šÃÂ¸ÃÂ»ÃÂ¸ MyCitySelector
  *
- * Чтобы создать свои стили или шаблон, не нужно менять текущий файл.
- * Более корректным будет переопределить текущий шаблон, скопировав данные файлы
- * в директорию "/templates/шаблон_сайта/html/mod_mycityselector".
- * (В Joomla 3.x это делается из менеджера шаблонов)
- * После создания копии шаблона, его необходимо выбрать в настройках модуля.
+ * ÃÂ§Ã‘â€šÃÂ¾ÃÂ±Ã‘â€¹ Ã‘ÂÃÂ¾ÃÂ·ÃÂ´ÃÂ°Ã‘â€šÃ‘Å’ Ã‘ÂÃÂ²ÃÂ¾ÃÂ¸ Ã‘ÂÃ‘â€šÃÂ¸ÃÂ»ÃÂ¸ ÃÂ¸ÃÂ»ÃÂ¸ Ã‘Ë†ÃÂ°ÃÂ±ÃÂ»ÃÂ¾ÃÂ½, ÃÂ½ÃÂµ ÃÂ½Ã‘Æ’ÃÂ¶ÃÂ½ÃÂ¾ ÃÂ¼ÃÂµÃÂ½Ã‘ÂÃ‘â€šÃ‘Å’ Ã‘â€šÃÂµÃÂºÃ‘Æ’Ã‘â€°ÃÂ¸ÃÂ¹ Ã‘â€žÃÂ°ÃÂ¹ÃÂ».
+ * Ãâ€˜ÃÂ¾ÃÂ»ÃÂµÃÂµ ÃÂºÃÂ¾Ã‘â‚¬Ã‘â‚¬ÃÂµÃÂºÃ‘â€šÃÂ½Ã‘â€¹ÃÂ¼ ÃÂ±Ã‘Æ’ÃÂ´ÃÂµÃ‘â€š ÃÂ¿ÃÂµÃ‘â‚¬ÃÂµÃÂ¾ÃÂ¿Ã‘â‚¬ÃÂµÃÂ´ÃÂµÃÂ»ÃÂ¸Ã‘â€šÃ‘Å’ Ã‘â€šÃÂµÃÂºÃ‘Æ’Ã‘â€°ÃÂ¸ÃÂ¹ Ã‘Ë†ÃÂ°ÃÂ±ÃÂ»ÃÂ¾ÃÂ½, Ã‘ÂÃÂºÃÂ¾ÃÂ¿ÃÂ¸Ã‘â‚¬ÃÂ¾ÃÂ²ÃÂ°ÃÂ² ÃÂ´ÃÂ°ÃÂ½ÃÂ½Ã‘â€¹ÃÂµ Ã‘â€žÃÂ°ÃÂ¹ÃÂ»Ã‘â€¹
+ * ÃÂ² ÃÂ´ÃÂ¸Ã‘â‚¬ÃÂµÃÂºÃ‘â€šÃÂ¾Ã‘â‚¬ÃÂ¸Ã‘Å½ "/templates/Ã‘Ë†ÃÂ°ÃÂ±ÃÂ»ÃÂ¾ÃÂ½_Ã‘ÂÃÂ°ÃÂ¹Ã‘â€šÃÂ°/html/mod_mycityselector".
+ * (Ãâ€™ Joomla 3.x Ã‘ÂÃ‘â€šÃÂ¾ ÃÂ´ÃÂµÃÂ»ÃÂ°ÃÂµÃ‘â€šÃ‘ÂÃ‘Â ÃÂ¸ÃÂ· ÃÂ¼ÃÂµÃÂ½ÃÂµÃÂ´ÃÂ¶ÃÂµÃ‘â‚¬ÃÂ° Ã‘Ë†ÃÂ°ÃÂ±ÃÂ»ÃÂ¾ÃÂ½ÃÂ¾ÃÂ²)
+ * ÃÅ¸ÃÂ¾Ã‘ÂÃÂ»ÃÂµ Ã‘ÂÃÂ¾ÃÂ·ÃÂ´ÃÂ°ÃÂ½ÃÂ¸Ã‘Â ÃÂºÃÂ¾ÃÂ¿ÃÂ¸ÃÂ¸ Ã‘Ë†ÃÂ°ÃÂ±ÃÂ»ÃÂ¾ÃÂ½ÃÂ°, ÃÂµÃÂ³ÃÂ¾ ÃÂ½ÃÂµÃÂ¾ÃÂ±Ã‘â€¦ÃÂ¾ÃÂ´ÃÂ¸ÃÂ¼ÃÂ¾ ÃÂ²Ã‘â€¹ÃÂ±Ã‘â‚¬ÃÂ°Ã‘â€šÃ‘Å’ ÃÂ² ÃÂ½ÃÂ°Ã‘ÂÃ‘â€šÃ‘â‚¬ÃÂ¾ÃÂ¹ÃÂºÃÂ°Ã‘â€¦ ÃÂ¼ÃÂ¾ÃÂ´Ã‘Æ’ÃÂ»Ã‘Â.
  */
 
 .mcs-module {
@@ -86,15 +86,20 @@
 .mcs-dialog .close {
     position: absolute;
     top: 8px;
-    right: 8px;
-    width: 20px;
-    height: 20px;
-    background: url(close.svg) left top no-repeat;
+    right: 19px;
+    background: url(close.svg) 76px 6px no-repeat;
     opacity: 0.5;
+    border: none;
+    font-size: 12pt;
+    color: #fbfbfb;
+    background-color: #8d8f93;
+    padding: 5px 29px 7px 8px;
+    border-radius: 13px;
 }
 
 .mcs-dialog .close:hover {
     opacity: 1;
+    color: #fbfbfb;
 }
 
 .mcs-dialog .title {
@@ -105,8 +110,7 @@
 }
 
 .mcs-dialog .provinces {
-    width: 320px;
-    /* float: left; */
+    width: 30%;
     margin: 0;
     padding: 0;
     overflow-y: scroll;
@@ -124,6 +128,7 @@
 .mcs-dialog .country a.active, .mcs-dialog .province a.active, .mcs-dialog .city a.active {
     color: #3e454b;
     border-bottom: none;
+    text-decoration: none;
 }
 
 .mcs-dialog a {
@@ -138,16 +143,9 @@
     text-decoration: none;
 }
 
-.mcs-dialog .cities {
-    /*    min-height: 140px;*/
-    /* padding: 10px 0 10px 16px; */
-}
-
-.mcs-dialog.has-groups .cities, .mcs-dialog.has-groups-countries .cities {
-    /*border-left: 1px solid #bababa;*/
-    /*  width: 340px !important;*/
+.mcs-dialog .cities-wrapper {
+    width: 60%;
     display: inline-block;
-    /* padding: 10px 0 10px 10px; */
     vertical-align: top;
 }
 
@@ -156,10 +154,8 @@
 }
 
 .mcs-dialog .city {
-    /* float: left; */
-    /*    width: 160px;*/
     display: inline-block;
-    margin: 20px 20px 0 0;
+    margin: 10px 20px 0 0;
     padding: 0;
 }
 
@@ -204,7 +200,9 @@
     color: #666a7c;
 }
 
-.mcs-dialog {font-family: 'Open Sans', sans-serif;}
+.mcs-dialog {
+    font-family: 'Open Sans', sans-serif;
+}
 
 .mcs-dialog .inner {
     background-color: #ffffff;
@@ -220,15 +218,22 @@
     background-color: #eeeeee;
 }
 
-
 .mcs-dialog .cities .mcs-city-title {
     margin: 0;
 }
 
 .mcs-dialog .cities {
     margin: 0 0 20px 22px;
+    display: inline-block;
 }
 
-.mcs-dialog .city a:hover {
-    border-bottom-style: solid;
+.mcs-dialog .provinces::-webkit-scrollbar {
+    background-color: #eeeeee;
+    width: 10px;
+    border-radius: 5px;
+}
+
+.mcs-dialog .provinces::-webkit-scrollbar-thumb {
+    background-color: #8f8e94;
+    border-radius: 5px;
 }

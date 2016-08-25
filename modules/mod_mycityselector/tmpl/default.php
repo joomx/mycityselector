@@ -48,7 +48,7 @@ $this->addScript('https://api-maps.yandex.ru/2.1/?lang=ru_RU');
     class="mcs-dialog <?= $cities_list_type == 1 ? 'has-groups' : '' ?>
 <?= $cities_list_type == 2 ? 'has-groups-countries' : '' ?>"
     style="display:none;">
-    <a class="close" href="javascript:void(0)" title=""></a>
+    <a class="close" href="javascript:void(0)" title=""><?= JText::_('COM_MYCITYSELECTOR_CLOSE') ?></a>
     <div class="title"><?= $this->get('dialog_title') ?></div>
     <?php
     if ($cities_list_type == 2) {
@@ -57,7 +57,7 @@ $this->addScript('https://api-maps.yandex.ru/2.1/?lang=ru_RU');
     }
     ?>
     <div class="quick-search">
-        <input type="text" placeholder="<?= JText::_('COM_MYCITYSELECTOR_SEARCH_HINT')?>">
+        <input type="text" placeholder="<?= JText::_('COM_MYCITYSELECTOR_SEARCH_HINT') ?>">
     </div>
     <div class="inner">
         <?php
@@ -84,12 +84,19 @@ $this->addScript('https://api-maps.yandex.ru/2.1/?lang=ru_RU');
                     include($layoutProvince);
 
                 }
-                foreach ($citiesList['list'] as $country => $countryData) {
-                    foreach ($countryData['list'] as $province => $provinceData) {
-                        $cities = $provinceData['list'];
-                        include($layoutCity);
+                ?>
+                <div class="cities-wrapper">
+                    <div class="mcs-city-title"><?= JText::_('COM_MYCITYSELECTOR_CITY'); ?></div>
+                    <?php
+                    foreach ($citiesList['list'] as $country => $countryData) {
+                        foreach ($countryData['list'] as $province => $provinceData) {
+                            $cities = $provinceData['list'];
+                            include($layoutCity);
+                        }
                     }
-                }
+                    ?>
+                </div>
+                <?php
                 break;
         }
         ?>

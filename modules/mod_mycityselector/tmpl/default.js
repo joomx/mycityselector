@@ -214,7 +214,9 @@
     function selectGroup() {
         $(".cities", $dialog).addClass('hidden'); // => прячем все города
         $(".province a", $dialog).removeClass('active'); // => сбрасываем активную группу
+        $(".province", $dialog).removeClass('active');
         $(this).addClass('active'); // => выделяем группу
+        $(this).parent().addClass('active'); // => выделяем группу
         var group = $(this).attr('data-group'); // => читаем идентификатор выбранной группы
         $(".cities.group-" + group, $dialog).removeClass('hidden'); // => отображаем блок городов
         return false;
@@ -226,7 +228,9 @@
     function selectCountry() {
         $(".provinces", $dialog).addClass('hidden'); // Прячем все регионы
         $(".country a", $dialog).removeClass('active'); // => сбрасываем активную группу
+        $(".country", $dialog).removeClass('active');
         $(this).addClass('active'); // => выделяем группу
+        $(this).parent().addClass('active');
         var group = $(this).attr('data-group'); // => читаем идентификатор выбранной группы
         $(".provinces-" + group, $dialog).removeClass('hidden');
         return false;

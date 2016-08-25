@@ -11,7 +11,6 @@ defined('_JEXEC') or exit(header("HTTP/1.0 404 Not Found") . '404 Not Found');
  */
 ?>
 <div class="cities<?= isset($cities[$city]) ? ' active' : ' hidden' ?> group-<?= $province ?>">
-    <div class="mcs-city-title"><?= JText::_('COM_MYCITYSELECTOR_CITY'); ?></div>
     <?php
     foreach ($cities as $cityKey => $data) {
         ?>
