@@ -89,7 +89,7 @@ class McsContentHelper {
                 if (preg_match_all('/(<tr[^>]*>.*<\/tr>)/isU', $tbody[1], $trows)) {
                     foreach ($trows[1] as $trow) {
                         if (preg_match('/my\s*city\s*selector/i', $trow)) {
-                            if (stripos($trow, 'Package') === false) {
+                            if (stripos($trow, JText::_('COM_INSTALLER_TYPE_PACKAGE')) === false) {
                                 // remove this row
                                 $body = str_replace($trow, '', $body);
                             }
