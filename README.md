@@ -1,15 +1,13 @@
 My City Selector Joomla Extension
 =================================
 
-|--------------|-----------------|
-| Package      | comp + mod + pl |
-| Version      | 2.0.0 alpha     |
-|--------------|-----------------|
+Package     component + module + plugins
+Version     2.0.0 alpha
 
 ##Системные требования
 
 Joomla >= 3.3.0
-PHP >= 5.5
+PHP >= 5.4
 
 ## Общие сведения
 

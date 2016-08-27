@@ -14,23 +14,20 @@
  */
 defined('_JEXEC') or exit(header("HTTP/1.0 404 Not Found") . '404 Not Found');
 
-
-// загружаем jquery
 $this->addJQuery();
-// подлючаем файлы стилей и скриптов ($myUrl - это URL до директории, в которой находится текущий шаблон)
 $this->addScript($layoutUrl . 'default.js');
 $this->addStyle($layoutUrl . 'default.css');
 
-// подключаем YandexGeoLocation
+// YandexGeoLocation
 $this->addScript('https://api-maps.yandex.ru/2.1/?lang=ru_RU');
 
-// Drop-down меню
+// Drop-down menu
 ?>
 <div class="mcs-module<?= $this->get('moduleclass_sfx') ?>">
     <?= $this->get('text_before') ?>
     <a class="city" href="javascript:void(0)" title="Выбрать другой город"><?= $cityCode ?></a>
     <?= $this->get('text_after') ?>
-    <div class="question" style="display:none;">Ваш город <span id="yaCity"></span>? &nbsp;&nbsp;&nbsp;&nbsp;<a
+    <div class="question" style="display:none;"><?= JText::printf('COM_MYCITYSELECTOR_IS_THIS_YOUR_CITY', '<span id="yaCity"></span>') ?>&nbsp;&nbsp;&nbsp;<a
             href="javascript:void(0)" class="close">x</a>
         <div>
             <button id="mcs-button-yes"><?= JText::_('JYES') ?></button>
