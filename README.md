@@ -13,7 +13,7 @@ PHP >= 5.4
 
 My City Selector - это расширение для CMS Joomla, позволяющее отображать разную информацию для разных городов.
 
-<img src="https://raw.githubusercontent.com/adamasantares/mycityselector/develop/doc_images/image-1.jpg" alt="" width="100%" />
+<img src="https://raw.githubusercontent.com/art-programming-team/mycityselector/develop/doc_images/image-1.jpg" alt="" width="100%" />
 
 В данной версии основной упор сделан на использование поддоменов для разных городов, так как это самый
 лучший способ разделять контент для разных городов с точки зрения поисковиков. Ниже будет описано пару примеров,
