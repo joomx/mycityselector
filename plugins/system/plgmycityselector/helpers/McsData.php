@@ -230,7 +230,8 @@ class McsData
             $where = '1 = 1';
         }
         $query = $db->getQuery(true)->select('*')->from('#__mycityselector_city')->where($where);
-        $rows = $db->setQuery($query)->loadAssocList();
+        $db->setQuery($query);
+        $rows = $db->loadAssocList();
         if (!empty($column)) {
             $rows = array_column($rows, $column);
         }
@@ -249,7 +250,8 @@ class McsData
             $db = JFactory::getDbo();
             $code = $db->quote($code);
             $query = $db->getQuery(true)->select('*')->from('#__mycityselector_city')->where("`subdomain` LIKE {$code}");
-            $city = $db->setQuery($query)->loadAssocList();
+            $db->setQuery($query);
+            $city = $db->loadAssocList();
             if (!empty($city)) {
                 $city = $city[0];
             }
@@ -270,15 +272,18 @@ class McsData
             $db = JFactory::getDbo();
             $name = $db->quote('%' . $name . '%');
             $query = $db->getQuery(true)->select('id')->from('#__mycityselector_city')->where("`name` LIKE {$name}");
-            if (!empty($db->setQuery($query)->loadAssocList())) {
+            $db->setQuery($query);
+            if (!empty($db->loadAssocList())) {
                 $type = 'city';
             } else {
                 $query = $db->getQuery(true)->select('id')->from('#__mycityselector_province')->where("`name` LIKE {$name}");
-                if (!empty($db->setQuery($query)->loadAssocList())) {
+                $db->setQuery($query);
+                if (!empty($db->loadAssocList())) {
                     $type = 'province';
                 } else {
                     $query = $db->getQuery(true)->select('id')->from('#__mycityselector_country')->where("`name` LIKE {$name}");
-                    if (!empty($db->setQuery($query)->loadAssocList())) {
+                    $db->setQuery($query);
+                    if (!empty($db->loadAssocList())) {
                         $type = 'country';
                     }
                 }
@@ -308,7 +313,8 @@ class McsData
             . "INNER JOIN `#__mycityselector_field_value` `fv` ON `fv`.`field_id` = `fld`.`id` "
             . "INNER JOIN `#__mycityselector_value_city` `vc` ON `vc`.`fieldvalue_id` = `fv`.`id` "
             . "WHERE `fld`.`id` = {$id} AND `vc`.`city_id` = {$cityId} AND `fv`.`is_ignore` = 0";
-        $result = $db->setQuery($query)->loadAssocList();
+        $db->setQuery($query);
+        $result = $db->loadAssocList();
         if (!empty($result[0]['value'])) {
             return empty(trim(strip_tags($result[0]['value']))) ? '' : $result[0]['value'];
         } else {
@@ -323,7 +329,8 @@ class McsData
                     INNER JOIN `#__mycityselector_value_city` `vc2` ON `vc2`.`fieldvalue_id` = `fv2`.`id`
                     WHERE `fld2`.`id` = {$id} AND `fv2`.`is_ignore` = 1
                 )";
-            $result = $db->setQuery($query)->loadAssocList();
+            $db->setQuery($query);
+            $result = $db->loadAssocList();
             if (!empty($result[0]['value'])) {
                 return empty(trim(strip_tags($result[0]['value']))) ? '' : $result[0]['value'];
             }
@@ -331,7 +338,8 @@ class McsData
             $query = "SELECT `fv`.`value` FROM `#__mycityselector_field` `fld` "
                 . "INNER JOIN `#__mycityselector_field_value` `fv` ON `fv`.`field_id` = `fld`.`id` "
                 . "WHERE `fv`.`field_id` = {$id} AND `fv`.`default` = 1";
-            $result = $db->setQuery($query)->loadAssocList();
+            $db->setQuery($query);
+            $result = $db->loadAssocList();
             if (!empty($result[0]['value'])) {
                 return empty(trim(strip_tags($result[0]['value']))) ? '' : $result[0]['value'];
             }
