@@ -8,7 +8,7 @@ My City Selector Joomla Extension
 
 ## Информация
 
-10.09.2016 Закончена вторая версия расширения, но пока в beta версии. Еще проводится тестирование и пишется документация. Можно скачивать [отсюда](https://github.com/art-programming-team/mycityselector/blob/develop/jexter/extensions/mcs/pkg_mycityselector.zip?raw=true) и оставлять отзывы по поводу возникающих проблем.
+10.09.2016 Закончена вторая версия расширения, но пока только в Beta. Проводится тестирование и пишется документация. Можно скачивать [отсюда](https://github.com/art-programming-team/mycityselector/blob/develop/jexter/extensions/mcs/pkg_mycityselector.zip?raw=true) и оставлять отзывы по поводу возникающих проблем.
 
 18.06.2016 Объявлено о прекращении поддержки Joomla 2.5, поэтому в ближайшее время данное расширение будет обновляться только с учетом подержки joomla 3x.
 
