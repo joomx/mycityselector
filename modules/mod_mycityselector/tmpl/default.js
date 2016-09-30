@@ -83,7 +83,7 @@
         if (w.mcs_yandexgeo && w.mcs_yandexgeo === true) {
             // пробуем получить доступ к geolocation
             console.log("MCS: try to use geolocation.");
-            if (navigator.geolocation) {
+            if (navigator.geolocation && window.location.protocol == "https:") {
                 navigator.geolocation.getCurrentPosition(
                     function(position){ // success
                         console.log("MCS: latitude " + position.coords.latitude + ", longitude " + position.coords.longitude);
@@ -122,7 +122,7 @@
                     }
                 );
             } else {
-                console.log("MCS: Geolocation is not supported by this browser.");
+                console.log("MCS: Geolocation isn't supported or disabled.");
             }
         }
     }
