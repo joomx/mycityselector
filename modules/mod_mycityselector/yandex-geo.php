@@ -3,10 +3,6 @@
  * Делает запрос на сервис геолокации Яндекс и возвращает название города
  */
 
-if (!isset($_REQUEST['key']) || $_REQUEST['key'] != 'sv84ts934pesgs037cw0bynh23z0-203c0-039c9ru') {
-    exit(header("HTTP/1.0 404 Not Found") . '404 Not Found (pk empty)');
-}
-
 if (!isset($_REQUEST['lon']) || !isset($_REQUEST['lat'])) {
     exit(json_encode(['error' => 1]));
 }

@@ -158,9 +158,9 @@ function updateManifest($file, $data = [], $destFile=''){
                 }
                 // записываем в элемент новое значение или добавляем новые элементы
                 if (is_string($val)) {
-                    $element->{0} = $val; // присваиваем новое значение
+                    $element[0] = $val; // присваиваем новое значение
                 } elseif (is_array($val)) {
-                    $element->{0} = ''; // очищаем элемент
+                    $element[0] = ''; // очищаем элемент
                     if (isset($val['tag'])) {
                         // один элемент
                         addXmlChild($element, $val['tag'], $val['value'], @$val['attr']);
