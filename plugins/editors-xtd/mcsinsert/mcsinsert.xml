@@ -2,7 +2,7 @@
 <extension version="3.1" type="plugin" group="editors-xtd" method="upgrade">
 	<name>plg_editors-xtd_mcsinsert</name>
 	<author>Konstantin Kutsevalov &amp; Vladislav Smolenskiy</author>
-	<creationDate>Sep 2016</creationDate>
+	<creationDate>Oct 2016</creationDate>
 	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
 	<authorEmail>konstantin@kutsevalov.name</authorEmail>
 	<authorUrl>www.kutsevalov.name</authorUrl>
