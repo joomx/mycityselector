@@ -116,6 +116,9 @@ MSC в админке. Основной недостаток этих тегов
 
 <img src="https://raw.githubusercontent.com/art-programming-team/mycityselector/develop/doc_images/image-7.jpg" alt="" />
 
+TODO: исправить подписи в меню и заголовке (вместо Данные - Тексты и Текст)
+
+
 .......в процессе написания
 
 ## Кастомизация
