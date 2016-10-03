@@ -13,7 +13,7 @@ PHP >= 5.4
 
 My City Selector (MCS) - это расширение для CMS Joomla, позволяющее отображать разную информацию для разных городов.
 
-<img src="https://raw.githubusercontent.com/art-programming-team/mycityselector/develop/doc_images/image-1.jpg" alt="" width="100%" />
+<img src="https://raw.githubusercontent.com/art-programming-team/mycityselector/develop/doc_images/image-1.jpg" alt="" />
 
 
 В новой 2й версии основной упор сделан на использование поддоменов для разных городов, так как это самый
@@ -38,7 +38,7 @@ My City Selector (MCS) - это расширение для CMS Joomla, позв
  - Включить модуль "My City Selector MOD" и настроить его.
  - Прописать в настройках компонента "MyCitySelector" базовый домен вашего сайта.
  
-<img src="https://raw.githubusercontent.com/art-programming-team/mycityselector/develop/doc_images/config.jpg" alt="" width="100%" />
+<img src="https://raw.githubusercontent.com/art-programming-team/mycityselector/develop/doc_images/config.jpg" alt="" />
 
 После чего, при определенном уровне удачи :) все должно заработать.
 
@@ -58,7 +58,7 @@ kiev.krakozyabra.org<br>
 Управление текстами происходит через компонент MyCitySelector в админке, там же и управление
 списком городов и настройки компонента.
 
-<img src="https://raw.githubusercontent.com/art-programming-team/mycityselector/develop/doc_images/image-2.jpg" alt="" width="100%" />
+<img src="https://raw.githubusercontent.com/art-programming-team/mycityselector/develop/doc_images/image-2.jpg" alt="" />
 
 Часть настроек находится в модуле, который отвечает за отображаемое окно выбора города на сайте.
 
@@ -88,20 +88,20 @@ MSC в админке. Основной недостаток этих тегов
 и у каждого свои условия по городам. Кроме того, вам не нужно вводить их вручную.
 В редакторе Вы можете найти кнопку для вставки маркера в текущую позицию курсора.
 
-<img src="https://raw.githubusercontent.com/art-programming-team/mycityselector/develop/doc_images/image-3.jpg" alt="" width="100%" />
+<img src="https://raw.githubusercontent.com/art-programming-team/mycityselector/develop/doc_images/image-3.jpg" alt="" />
 
 Просто выбираете нужный контент из списка и вставляете маркер в текст. Все просто.
 
 Рассмотрим как проиходит управление содержимым этих маркеров. Перейдите в админ-панель
 и раскройте пункт меню "Компоненты".
 
-<img src="https://raw.githubusercontent.com/art-programming-team/mycityselector/develop/doc_images/image-4.jpg" alt="" width="100%" />
+<img src="https://raw.githubusercontent.com/art-programming-team/mycityselector/develop/doc_images/image-4.jpg" alt="" />
 
 Компонент позволяет управлять списком стран/регионов/городов и текстами для них (а так же некоторыми базовыми настройками).
 Список локаций достаточно примитивен и разобраться с ним не составит труда. Например так выглядит
 список стран.
 
-<img src="https://raw.githubusercontent.com/art-programming-team/mycityselector/develop/doc_images/image-5.jpg" alt="" width="100%" />
+<img src="https://raw.githubusercontent.com/art-programming-team/mycityselector/develop/doc_images/image-5.jpg" alt="" />
 
 При клике по ссылке "регионы" вы сможете открыть список регионов, относящихся к данной стране.
 
@@ -112,15 +112,14 @@ MSC в админке. Основной недостаток этих тегов
 
 Перейдем к управлению текстами. Что тут у нас...?
 
-<img src="https://raw.githubusercontent.com/art-programming-team/mycityselector/develop/doc_images/image-6.jpg" alt="" width="100%" />
+<img src="https://raw.githubusercontent.com/art-programming-team/mycityselector/develop/doc_images/image-6.jpg" alt="" />
 
 эммм...ну тут собственно пусто. Самое время что-нибудь создать. Предположим (совершенно точно), нам нужно для разных
 городов отображать разные адреса и контакты.
-
 Создадим новый текст и обзавем его "Контакты".
 
 
-
+.......в процессе написания
 
 ## Кастомизация
 
