@@ -250,7 +250,7 @@ class JexterBuilder {
         out("  - checking backend component ... ", 'yellow');
         if (is_dir($pathAdmin) && is_file($scriptAdmin)) {
             out("ok\n", "green");
-            out("  - create frontend source copy ... ", 'yellow');
+            out("  - create backend source copy ... ", 'yellow');
             if (!copyDir($pathAdmin, $copyAdminPath)) {
                 out("fail\n", 'red');
                 return null;
