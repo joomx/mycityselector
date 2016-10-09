@@ -1,24 +1,19 @@
 /**
- * Стили MyCitySelector
- *
- * Чтобы создать свои стили или шаблон, не нужно менять текущий файл.
- * Более корректным будет переопределить текущий шаблон, скопировав данные файлы
- * в директорию "/templates/шаблон_сайта/html/mod_mycityselector".
- * (В Joomla 3.x это делается из менеджера шаблонов)
- * После создания копии шаблона, её необходимо выбрать в настройках модуля.
- */
-
+* MCS default template
+*/
 .mcs-module {
-	position: relative;
-	width: 200px;
-	text-align: left;
+    position: relative;
+    width: 200px;
+    text-align: left;
 }
+
 .mcs-module .city {
     color: #046;
     font-size: 14px;
     text-decoration: none;
     border-bottom: 1px dashed #046;
 }
+
 .mcs-module .question {
     position: absolute;
     top: 20px;
@@ -33,6 +28,7 @@
     -webkit-border-radius: 3px;
     -khtml-border-radius: 3px;
 }
+
 .mcs-module .question .close {
     position: relative;
     top: -5px;
@@ -56,96 +52,187 @@
 }
 
 .mcs-dialog {
-	position: fixed;
-	z-index: 9000;
-	top: 20%;
-	left: 50%;
-	width: 360px;
-	margin-left: -200px;
-	height: auto;
+    box-sizing: border-box;
+    position: fixed;
+    z-index: 9000;
+    top: 20%;
+    left: 30%;
+    width: 360px;
+    margin-left: -200px;
+    height: auto;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
-	background-color: #fff;
-	background-color: rgba(255, 255, 255, 0.92);
-	box-shadow: 0px 0px 10px #c7c7c7;
-	-moz-box-shadow: 0px 0px 10px #c7c7c7;
-	-webkit-box-shadow: 0px 0px 10px #c7c7c7;
+    background-color: #e8e8e8;
+    box-shadow: 0px 0px 10px #c7c7c7;
+    -moz-box-shadow: 0px 0px 10px #c7c7c7;
+    -webkit-box-shadow: 0px 0px 10px #c7c7c7;
 }
+
 .mcs-dialog a {
     color: #6b6b6b;
-    text-decoration: none;
 }
-.mcs-dialog.has-groups {
-    width: 500px;
+
+.mcs-dialog {
+    width: 70%;
 }
+
 .mcs-dialog .close {
-	position: absolute;
-	top: 8px;
-	right: 8px;
-	width: 20px;
-	height: 20px;
-	background: url(close.svg) left top no-repeat;
+    position: absolute;
+    top: 8px;
+    right: 19px;
+    background: #8d8f93 url(close.png) right 8px center no-repeat;
     opacity: 0.5;
+    border: none;
+    font-size: 12pt;
+    color: #fbfbfb;
+    padding: 5px 29px 7px 8px;
+    border-radius: 13px;
 }
+
 .mcs-dialog .close:hover {
     opacity: 1;
+    color: #fbfbfb;
 }
+
 .mcs-dialog .title {
-    font-size: 14px;
-    padding: 8px 18px;
+    font-size: 24px;
+    padding: 20px;
     margin: 0;
-    border-bottom: 1px solid #bababa;
+    color: #000000;
 }
-.mcs-dialog .groups {
-    width: 118px;
-    float: left;
+
+.mcs-dialog .provinces {
+    width: 30%;
     margin: 0;
-    padding: 10px 0 10px 20px;
+    padding: 0;
+    overflow-y: scroll;
+    height: 300px;
+    display: inline-block;
 }
-.mcs-dialog .group {
-	margin: 0 0 6px 0;
-	padding: 0;
+
+.mcs-dialog .province, .mcs-dialog .city {
+    margin: 0 10px 6px 12px;
     font-size: 14px;
+    border-radius: 12px;
+    padding: 10px;
 }
-.mcs-dialog .group a.active {
-    color: #000;
-	border-bottom: none;
+
+.mcs-dialog .country a.active, .mcs-dialog .province a.active, .mcs-dialog .city a.active {
+    color: #3e454b;
+    border-bottom: none;
+    text-decoration: none;
 }
-.mcs-dialog .group a {
-	border-bottom: 1px dashed #6b6b6b;
+
+.mcs-dialog a {
+    border-bottom: 1px dashed #2196f3;
+    font-size: 14pt;
+    color: #2196f3;
 }
-.mcs-dialog .cities {
-    min-height: 140px;
-    padding: 10px 0 10px 16px;
+
+.mcs-dialog a:hover {
+    color: #fe5722;
+    border-bottom-color: #fe5722;
+    text-decoration: none;
 }
-.mcs-dialog.has-groups .cities {
-    border-left: 1px solid #bababa;
-    width: 340px !important;
-    margin-left: 150px;
-    padding: 10px 0 10px 10px;
+
+.mcs-dialog .cities-wrapper {
+    width: 69%;
+    display: inline-block;
+    vertical-align: top;
+    overflow-y: scroll;
+    height: 300px;
 }
-.mcs-dialog .cities.hidden {
-	display: none;
+
+.mcs-dialog .cities.hidden, .mcs-dialog .countries.hidden, .mcs-dialog .provinces.hidden, .mcs-dialog .city.hidden {
+    display: none;
 }
+
 .mcs-dialog .city {
-    float: left;
-	width: 160px;
-	display: inline-block;
-	margin: 0 10px 6px 0;
+    display: inline-block;
+    margin: 10px 20px 0 0;
+    padding: 0;
+    width: 150px;
 }
-.mcs-dialog .link {
-	border-bottom: 1px dashed #6b6b6b;
-	font-size: 14px;
-}
+
 .mcs-dialog .link.active {
     color: #000;
-	border-bottom: none;
-}
-.mcs-dialog  .link:hover, .mcs-dialog  .link:active, .mcs-dialog  .link:focus {
-	color: #000;
-	background: none;
+    border-bottom: none;
 }
 
 .mcs-clear {
     clear: both;
+}
+
+.mcs-dialog .quick-search {
+    padding: 15px 0 15px 19px;
+    background: #ffffff;
+}
+
+.mcs-dialog .countries .country {
+    display: inline-block;
+    font-size: 15pt;
+    padding: 10px;
+}
+
+.mcs-dialog .countries .country.active {
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    background-color: #ffffff;
+
+}
+
+.mcs-dialog .countries {
+    padding-left: 20px;
+}
+
+.mcs-dialog .quick-search input {
+    margin: 0;
+    padding: 8px;
+    font-size: 18pt;
+    border-color: #aaaaaa;
+    width: 95%;
+    border-radius: 10px;
+    color: #666a7c;
+}
+
+.mcs-dialog {
+    font-family: 'Open Sans', sans-serif;
+}
+
+.mcs-dialog .inner {
+    background-color: #ffffff;
+}
+
+.mcs-dialog .mcs-region-title, .mcs-dialog .mcs-city-title {
+    color: #333333;
+    font-size: 16pt;
+    margin: 0 0 20px 22px;
+}
+
+.mcs-dialog .province.active {
+    background-color: #eeeeee;
+}
+
+.mcs-dialog .cities .mcs-city-title {
+    margin: 0;
+}
+
+.mcs-dialog .cities {
+    margin: 0 0 20px 22px;
+    display: inline-block;
+}
+
+.mcs-dialog .provinces::-webkit-scrollbar, .mcs-dialog .cities-wrapper::-webkit-scrollbar {
+    background-color: #eeeeee;
+    width: 10px;
+    border-radius: 5px;
+}
+
+.mcs-dialog .provinces::-webkit-scrollbar-thumb, .mcs-dialog .cities-wrapper::-webkit-scrollbar-thumb {
+    background-color: #8f8e94;
+    border-radius: 5px;
+}
+
+.mcs-dialog .cities-wrapper.full-width {
+    width: 99%;
 }

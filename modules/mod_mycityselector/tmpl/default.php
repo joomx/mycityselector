@@ -1,87 +1,114 @@
 <?php
 /**
  * Default Template
- * Шаблон модуля mcs
  *
- * В данном шаблоне существует объект $this, который указывает
- * на экземпляр класса 'mcsModule' из файла 'modules/mod_mcs/mod_mcs.php'.
- * Поэтому здесь можно использовать вызов любых его методов, кроме '__construct()'.
+ * @var $this MyCitySelectorModule
+ * @var $layoutUrl string
+ * @var $citiesList array[string]
+ * @var $cities_list_type int
+ * @var $city string
+ * @var $cityCode string
+ * @var $layoutCity string
+ * @var $layoutProvince string
+ * @var $layoutCountry string
  */
 defined('_JEXEC') or exit(header("HTTP/1.0 404 Not Found") . '404 Not Found');
 
-
-// загружаем jquery
 $this->addJQuery();
+$this->addScript($layoutUrl . 'default.js');
+$this->addStyle($layoutUrl . 'default.css');
 
-// подлючаем файлы стилей и скриптов ($myUrl - это URL до директории, в которой находится текущий шаблон)
-$this->addScript($myUrl . 'default.js');
-$this->addStyle($myUrl . 'default.css');
+// YandexGeoLocation
+$this->addScript('https://api-maps.yandex.ru/2.1/?lang=ru_RU');
 
+// Drop-down menu
+?>
+<div class="mcs-module<?= $this->get('moduleclass_sfx') ?>">
+    <?= $this->get('text_before') ?>
+    <a class="city" href="javascript:void(0)" title="Выбрать другой город"><?= $cityCode ?></a>
+    <?= $this->get('text_after') ?>
+    <div class="question" style="display:none;"><?= JText::printf('COM_MYCITYSELECTOR_IS_THIS_YOUR_CITY', '<span id="yaCity"></span>') ?>&nbsp;&nbsp;&nbsp;<a
+            href="javascript:void(0)" class="close">x</a>
+        <div>
+            <button id="mcs-button-yes"><?= JText::_('JYES') ?></button>
+            <button id="mcs-button-no"><?= JText::_('JNO') ?></button>
+        </div>
+    </div>
 
-// Drop-down меню
-?><div class="mcs-module<?= $this->get('moduleclass_sfx') ?>">
-	<?= $this->get('text_before') ?>
-	<a class="city" href="javascript:void(0)" title="Выбрать другой город"><?= $currentCity ?></a>
-	<?= $this->get('text_after') ?>
-	<div class="question" style="display:none;">Не ваш город?&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" class="close">x</a></div>
 </div><?php
 
 
 // Диалог выбора города.
 // При создании своей html разметки необходимо сохранить имена классов основных элементов (.mcs-dialog, .close и т.д.).
-?><div class="mcs-dialog<?= $hasGroups ? ' has-groups' : '' ?>" style="display:none;">
-	<a class="close" href="javascript:void(0)" title=""></a>
-	<div class="title"><?= $this->get('dialog_title') ?></div>
-	<div class="inner"><?php
-        // Для справки:
-        // $citiesList - это массив вида: [
-        //   '__all__' => [   # все города одним списком
-        //      'Москва' => ['subdomain' => 'moscow', 'path' => ''],
-        //      'Санкт-Петербург' => ['subdomain' => 'spb', 'path' => ''],
-        //      'Черемушки' => ['subdomain' => '', 'path' => '/other/cities']
-        //   ],
-        //   'Московская область' => [   # если были заданны группы городов, то для каждой группы также свой список
-        //      'Москва' => ['subdomain' => 'moscow', 'path' => ''],
-        //   ],
-        //   ...
-        // ]
-
-
-        // если города раздлены по группам, выводим их в отдельный блок
-        if ($hasGroups) {
-            ?><div class="groups"><?php
-                foreach ($citiesList as $group => $cities) {
-                    if ($group == '__all__') continue;
-                    ?>
-                    <div class="group group-<?= $this->translit($group) ?>">
-                        <a class="<?= isset($cities[$currentCity]) ? ' active' : '' ?>"
-                           href="#" data-group="<?= $this->translit($group) ?>"><?= $group ?></a>
-                    </div>
+?>
+<div
+    class="mcs-dialog <?= $cities_list_type == 1 ? 'has-groups' : '' ?>
+<?= $cities_list_type == 2 ? 'has-groups-countries' : '' ?>"
+    style="display:none;">
+    <a class="close" href="javascript:void(0)" title=""><?= JText::_('COM_MYCITYSELECTOR_CLOSE') ?></a>
+    <div class="title"><?= $this->get('dialog_title') ?></div>
+    <?php
+    if ($cities_list_type == 2) {
+        $countries = $citiesList['list'];
+        include($layoutCountry);
+    }
+    ?>
+    <div class="quick-search">
+        <input type="text" placeholder="<?= JText::_('COM_MYCITYSELECTOR_SEARCH_HINT') ?>">
+    </div>
+    <div class="inner">
+        <?php
+        switch ($cities_list_type) {
+            case 0: //только города
+                $cities = $citiesList['list'];
+                $province = '';
+                ?>
+                <div class="cities-wrapper full-width">
                     <?php
-                }
-            ?></div><?php
-        }
-
-        // города
-        foreach ($citiesList as $group => $cities) {
-            if ($hasGroups && $group == '__all__') { continue; } // если есть группы, то пропускаем полный список
-            ?>
-            <div class="cities<?= isset($cities[$currentCity]) ? ' active' : ' hidden' ?>
-                group-<?= $this->translit($group) ?>"><?php
-                foreach ($cities as $city => $data) {
+                    include($layoutCity);
                     ?>
-                    <div class="city">
-                        <a class="link<?= ($currentCity==$city) ? ' active' : '' ?>"
-                            id="city-<?= $this->translit($city) ?>" data-city="<?= $city ?>"
-                            href="<?= $data['url'] ?>" title=""><?= $city ?></a>
-                    </div>
+                </div>
+                <?php
+                break;
+            case 1: //регионы и города
+                // если города раздлены по группам, выводим их в отдельный блок
+                $country = '';
+                $provinces = $citiesList['list'];
+                include($layoutProvince);
+                // города
+                ?>
+                <div class="cities-wrapper">
+                    <div class="mcs-city-title"><?= JText::_('COM_MYCITYSELECTOR_CITY'); ?></div>
                     <?php
+                    foreach ($citiesList['list'] as $province => $provinceData) {
+                        $cities = $provinceData['list'];
+                        include($layoutCity);
+                    }
+                    ?>
+                </div>
+                <?php
+                break;
+            case 2: // страны регионы и города
+                foreach ($citiesList['list'] as $country => $countryData) {
+                    $provinces = $countryData['list'];
+                    include($layoutProvince);
+
                 }
                 ?>
-                <div class="mcs-clear"></div>
-            </div>
-            <?php
+                <div class="cities-wrapper">
+                    <div class="mcs-city-title"><?= JText::_('COM_MYCITYSELECTOR_CITY'); ?></div>
+                    <?php
+                    foreach ($citiesList['list'] as $country => $countryData) {
+                        foreach ($countryData['list'] as $province => $provinceData) {
+                            $cities = $provinceData['list'];
+                            include($layoutCity);
+                        }
+                    }
+                    ?>
+                </div>
+                <?php
+                break;
         }
-
-	?></div>
+        ?>
+    </div>
 </div>

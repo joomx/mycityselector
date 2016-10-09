@@ -1,0 +1,41 @@
+#!/usr/bin/env php
+<?php
+/*
+ * JEXTER
+ * Joomla extensions creator
+ * @author Konstantin Kutsevalov (AdamasAntares) <mail@art-prog.ru>
+ * @version 1.0.0 alpha
+ * @license GPL v3 (license.txt)
+ *
+ * Use: ./jexter/build
+ * Use: ./jexter/build  my_project
+ *
+ * the first argument is name of project config (base dir is Jexter directory)
+ * the second argument is suffix for directory of source copy (that will be created before package building)
+ *
+ * @var $argv array
+ */
+
+ namespace adamasantares\jexter;
+
+require 'lib/helper.php';
+require 'lib/JexterBuilder.php';
+
+// check extensions
+if (!extension_loaded('zip')) {
+    out("The Zip php extension not installed!\n", 'red');
+    exit;
+} elseif (!function_exists('simplexml_load_file')) {
+    out("The SimpleXml php extension not installed!\n", 'red');
+    exit;
+}
+
+// parsing console arguments
+$args = prepareArguments($argv, [
+    '1' => ['name' => 'config', 'default' => 'project'],
+    'myDir' => ['name' => 'myDir', 'default' => __DIR__],
+]);
+
+JexterBuilder::run($args);
+
+out("Finish\n", 'cyan');

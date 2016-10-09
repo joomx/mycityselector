@@ -1,0 +1,108 @@
+#!/usr/bin/env php
+<?php
+/**
+ * @package		Joomla.Cli
+ *
+ * @author Rene Kreijveld <email@renekreijveld.nl>
+ * @see https://gist.github.com/renekreijveld/8823105
+ * @copyright	Copyright (C) 2005 - 2013 Open Source Matters, Inc. All rights reserved.
+ * @license		GNU General Public License version 2 or later; see LICENSE.txt
+ *
+ * Joomla 3.2 example CLI script
+ * 05-feb-2014
+ *
+ * @modification Kutsevalov Konstantin <konstantin@kutsevalov.name>
+ * @description This script is the enter point for Joomla CLI for running your own script without additional Joomla code
+ *      Just create a simple script and run "./jexter/jrun myscript". Into a script you can use any Joomla's Objects.
+ *
+ * @example
+ * ```
+ * <?php
+ * // @var $db JDatabaseDriverMysqli
+ *
+ * out("Read users\n", "blue");
+ * out("Enter count:", "gray");
+ * $input = $this->in();
+ * out("You entered: " . $input . "\n");
+ *
+ *
+ * ```
+ */
+
+const _JEXEC = 1;
+error_reporting(E_ALL | E_NOTICE);
+ini_set('display_errors', 1);
+
+require_once dirname(__FILE__) . '/lib/helper.php';
+$cfg = adamasantares\jexter\loadMyConfig();
+$siteRoot = adamasantares\jexter\normalizePath(str_replace('@builder', dirname(__FILE__), $cfg['siteRoot']));
+
+if (file_exists($siteRoot . '/defines.php')) {
+    require_once $siteRoot . '/defines.php';
+}
+if (!defined('_JDEFINES')) {
+    define('JPATH_BASE', $siteRoot);
+    require_once JPATH_BASE . '/includes/defines.php';
+}
+require_once JPATH_BASE . '/includes/framework.php';
+require_once JPATH_LIBRARIES . '/import.legacy.php';
+require_once JPATH_LIBRARIES . '/cms.php';
+
+
+/**
+ * Colored output
+ * @param String $string
+ * @param String $color 'black', 'dark_gray', 'blue', 'light_blue', 'green', 'light_green',
+ *      'cyan', 'light_cyan', 'red', 'light_red', 'purple', 'light_purple', 'brown', 'yellow', 'light_gray', 'white'
+ * @param String $background 'black', 'red', 'green', 'yellow', 'blue', 'magenta', 'cyan', 'light_gray'
+ */
+function out($string, $color = '', $bgColor = '') {
+    adamasantares\jexter\out($string, $color, $bgColor);
+}
+
+
+/**
+ * @package  Joomla.CLI
+ * @since    3.0
+ */
+class CliApp extends JApplicationCli
+{
+
+    private $script = 'demo';
+
+    /**
+     * Defines the script name from cli arguments
+     * @param $argv
+     */
+    public function defineScript($argv) {
+        if (isset($argv[1]) && !empty($argv[1])) {
+            $script = str_replace('.php', '', $argv[1]);
+
+            if (is_file(dirname(__FILE__) . '/cli_scripts/' . $script . '.php')) {
+                $this->script = dirname(__FILE__) . '/cli_scripts/' . $script . '.php';
+            } else {
+                out("script {$script} not found. Execute 'demo' script...\n", 'purple');
+                $this->script = dirname(__FILE__) . '/cli_scripts/' . $this->script . '.php';
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * Entry point for CLI script
+     * @return  void
+     * @since   3.0
+     */
+    public function doExecute()
+    {
+        $db = JFactory::getDBO();
+        out("<= Start =>\n", 'green');
+        // include user's script
+        include $this->script;
+        out("<= Finish =>\n", 'green');
+    }
+}
+
+// Instantiate the application object, passing the class name to JCli::getInstance
+// and use chaining to execute the application.
+JApplicationCli::getInstance('CliApp')->defineScript($argv)->execute();

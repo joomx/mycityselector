@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="library" version="3.x" method="upgrade">
+    <name>{newlibrary}</name>
+    <libraryname>{newlibrary_classname}</libraryname>
+    <author>{author}</author>
+    <creationDate>{date}</creationDate>
+    <copyright>{copy}</copyright>
+    <license>GNU LESSER GENERAL PUBLIC LICENSE Version 3</license>
+    <authorUrl>{author_url}</authorUrl>
+    <version>1.0.0</version>
+    <description>_NEWLIBRARY__DESCRIPTION</description>
+    <files>
+		<filename>{newlibrary_classname}.php</filename>
+        <folder>widgets</folder>
+        <folder>helpers</folder>
+        <folder>classes</folder>
+    </files>
+</extension>

@@ -1,0 +1,16 @@
+/**
+ * {jex_name}
+ * @author {jex_author}
+ * @version 1.0.0
+ */
+
+._JEX_CLASSNAME_-error {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: red;
+    border: 1px solid red;
+    border-radius: 10px;
+}
+
+/* todo put your styles here */
+
