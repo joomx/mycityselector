@@ -28,6 +28,8 @@ My City Selector (MCS) - это расширение для CMS Joomla, позв
 
 Скачиваете отсюда: https://github.com/art-programming-team/mycityselector/releases
 
+(Предыдущая версия 1.8 доступна здесь https://github.com/art-programming-team/mycityselector/tree/v1.8.x/builder/package)
+
 Расширение включает в себя два плагина, компонент и модуль. Все они ставяться одним пакетом,
 поэтому загруженный архив распаковывать не нужно. Устанавливайте как есть.
 
