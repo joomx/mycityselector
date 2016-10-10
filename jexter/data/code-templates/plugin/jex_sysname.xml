@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="3.x" type="plugin" group="{jex_group}" method="update">
+	<name>T_JEX_NAME</name>
+	<creationDate>{jex_date}</creationDate>
+	<author>{jex_author}</author>
+	<license>GNU/GPL v3</license>
+	<authorEmail>{jex_autor_email}</authorEmail>
+	<authorUrl>{jex_autor_url}</authorUrl>
+    <copyright>All rights reserved</copyright>
+	<version>1.0.0</version>
+	<description>T_JEX_DESCRIPTION</description>
+
+    <scriptfile>installer.php</scriptfile>
+	<files>
+        <filename plugin="{jex_sysname}">{jex_sysname}.php</filename>
+        <filename>installer.php</filename>
+        <filename>helper.php</filename>
+        <folder>language</folder>
+        <filename>{jex_sysname}.xml</filename>
+    </files>
+
+    <languages>
+        <language tag="en-GB">language/en-GB/en-GB.plg_{jex_group}_{jex_sysname}.sys.ini</language>
+        <language tag="ru-RU">language/ru-RU/ru-RU.plg_{jex_group}_{jex_sysname}.sys.ini</language>
+    </languages>
+
+	<!--updateservers>
+		<server type="extension" priority="1" name="{jex_name} Update Site">{update_url}</server>
+	</updateservers-->
+
+</extension>

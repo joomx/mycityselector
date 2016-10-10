@@ -1,0 +1,48 @@
+{
+    "name": "MyCitySelector",
+    "id": "pkg_mycityselector",
+    "version": "2.0.0",
+    "type": "package",
+    "manifest": "@builder/config/pkg_mycityselector.xml",
+    "updateServers": [
+        {"type": "extension", "name": "MCS Update Server", "url": "http://..."}
+    ],
+    "packageFiles": [
+        "@builder/../administrator/components/com_mycityselector/installer.php",
+        "@builder/../components/com_mycityselector/license.txt"
+    ],
+    "packageItems": [
+        {
+            "name": "MyCitySelector",
+            "id": "mcsinsert",
+            "type": "plugin/editors-xtd",
+            "version": "2.0.0",
+            "excludes": []
+        },
+        {
+            "name": "MyCitySelector",
+            "id": "plgmycityselector",
+            "type": "plugin/system",
+            "version": "2.0.0",
+            "excludes": []
+        },
+        {
+            "name": "MyCitySelector",
+            "id": "mod_mycityselector",
+            "type": "module/site",
+            "version": "2.0.0",
+            "excludes": [
+                "jquery.tablednd.js",
+                "orange.rar"
+            ]
+        },
+        {
+            "name": "MyCitySelector",
+            "id": "com_mycityselector",
+            "script": "mycityselector.php",
+            "type": "component",
+            "version": "2.0.0",
+            "excludes": []
+        }
+    ]
+}

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module" version="3.x" method="upgrade" client="site">
+	<name>_NEWMOD_</name>
+	<creationDate>{date}</creationDate>
+	<author>{author}</author>
+	<authorEmail>{author_email}</authorEmail>
+	<authorUrl>{author_url}</authorUrl>
+	<copyright>All rights reserved</copyright>
+	<license>GNU/GPL v3</license>
+	<version>1.0.0</version>
+	<description>_NEWMOD__DESCRIPTION</description>
+	<scriptfile>installer.php</scriptfile>
+	<files>
+        <filename module="mod_newmod">mod_newmod.php</filename>
+        <filename>mod_newmod.xml</filename>
+        <folder>tmpl</folder>
+    </files>
+	<config>
+		<fields name="params">
+
+			<fieldset name="basic">
+
+                <!-- your options -->
+
+			</fieldset>
+
+            <fieldset name="advanced">
+                <field name="moduleclass_sfx" type="text" label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL" description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC"/>
+                <field name="cache" type="list" default="0" label="COM_MODULES_FIELD_CACHING_LABEL" description="COM_MODULES_FIELD_CACHING_DESC">
+                    <option value="1">JGLOBAL_USE_GLOBAL</option>
+                    <option value="0">COM_MODULES_FIELD_VALUE_NOCACHING</option>
+                </field>
+                <field name="cache_time" type="text" default="900" label="COM_MODULES_FIELD_CACHE_TIME_LABEL" description="COM_MODULES_FIELD_CACHE_TIME_DESC"/>
+            </fieldset>
+
+		</fields>
+	</config>
+</extension>

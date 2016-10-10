@@ -1,0 +1,67 @@
+/**
+ * MyCitySelector
+ * @author Konstantin Kutsevalov
+ * @version 2.0.0
+ */
+
+.Mycityselector-error {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: red;
+    border: 1px solid red;
+    border-radius: 10px;
+}
+
+.color-red {
+    color: red;
+}
+
+.mcs-checkbox {
+    margin: 3px 1px;
+}
+.mcs-checkbox input {
+    margin: 0 !important;
+}
+
+.debug-mode {
+
+}
+.debug-mode .isis-demo {
+    display: inline-block;
+    font-size: 12px;
+    padding: 4px;
+    margin: 6px 4px;
+    border: 1px solid gray;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+.debug-mode .isis-demo .icon {
+    font-size: 18px;
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    margin-right: .25em;
+    line-height: 18px;
+}
+.debug-mode .icon-color {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+}
+.field-values button {
+    width: 100%;
+    height: 40px;
+}
+.field-values select {
+    width: 100%;
+}
+.field-values .field-value {
+    box-sizing: border-box;
+    padding: 4px;
+    border: 1px solid  #f0f0f0;
+}
+.field-values .control-buttons {
+    margin-top: 10px;
+}
+

@@ -1,0 +1,55 @@
+#!/usr/bin/env php
+<?php
+/*
+ * JEXTER
+ * Joomla console package builder
+ * @author Konstantin Kutsevalov (AdamasAntares) <mail@art-prog.ru>
+ * @version 1.0.0 alpha
+ * @license GPL v3 (license.txt)
+ *
+ * Use:
+ *   "$ ./jexter/create comp" - create component
+ *   "$ ./jexter/create plg" - create plugin
+ *   "$ ./jexter/create mod" - create module
+ *   "$ ./jexter/create lib" - create library
+ * also you can pass the name of new component as second argument
+ *   "$ ./jexter/create comp poherator" - create component with name "comp_poherator"   ;)
+ *
+ * @var $argv array
+ */
+
+ namespace adamasantares\jexter;
+
+require 'lib/helper.php';
+require 'lib/JexterCreator.php';
+require 'lib/JexterBuilder.php';
+
+// check extensions
+if (!extension_loaded('zip')) {
+    out("The Zip php extension not installed!\n", 'red');
+    exit;
+} elseif (!function_exists('simplexml_load_file')) {
+    out("The SimpleXml php extension not installed!\n", 'red');
+    exit;
+}
+
+// parsing console arguments
+$args = prepareArguments($argv, [
+    '1' => ['name' => 'type', 'default' => 'mod'],
+    'myDir' => ['name' => 'myDir', 'default' => __DIR__],
+]);
+
+// correcting type name
+$convertType = ['plg' => 'plugin', 'com' => 'component', 'comp' => 'component', 'mod' => 'module', 'lib' => 'library'];
+if (isset($convertType[$args['type']])) {
+    $args['type'] = $convertType[$args['type']];
+}
+
+out("Creating a {$args['type']} (for break use Ctrl+C)\n", 'green');
+
+// requesting additional parameters
+$scenario = require 'lib/scenario.php';
+$params = readCliParameters($args, $scenario);
+
+JexterCreator::run($params);
+

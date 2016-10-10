@@ -1,58 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- https://docs.joomla.org/Manifest_files -->
-<extension type="module" version="2.5.0" method="upgrade" client="site">
+<extension type="module" version="3.2" method="upgrade" client="site">
 	<name>My City Selector MOD</name>
-	<creationDate>Sep 2015</creationDate>
-	<author>Konstantin Kutsevalov</author>
+	<creationDate>Oct 2016</creationDate>
+	<author>Konstantin Kutsevalov &amp; Vladislav Smolenskiy</author>
 	<authorEmail>konstantin@kutsevalov.name</authorEmail>
 	<authorUrl>http://www.kutsevalov.name/2013/08/12/modul-vibora-goroda-dlya-joomla/</authorUrl>
 	<copyright>All rights reserved</copyright>
 	<license>GNU/GPL</license>
-	<version>1.2.84</version>
+	<version>2.0.0</version>
 	<description><![CDATA[
 	<h3 class="description-module-header">My City Selector</h3>
 	<div class="description-module" style="text-align:left;">
 		Данный модуль является частью расширения "MyCitySelector".
-		<br/>
-		О настройках модуля можно прочитать <a href="http://www.kutsevalov.name/2013/08/13/modul-vibora-goroda-dlya-joomla/" title="перейти" target="_blank">здесь</a>.
 	</div>
 	]]></description>
-	<scriptfile>installer.php</scriptfile>
-	<files><filename>MCSTranslit.php</filename><filename>ext-params.css</filename><filename>ext-params.js.php</filename><filename>ext_mod_mini.png</filename><filename>jquery.tablednd.min.js</filename><filename module="mod_mycityselector">mod_mycityselector.php</filename><filename>mod_mycityselector.xml</filename><filename>orange.rar</filename><folder>tmpl</folder><filename>yandex-geo.php</filename></files>
+
+    <files><filename>ext_mod_mini.png</filename><folder>language</folder><filename module="mod_mycityselector">mod_mycityselector.php</filename><filename>mod_mycityselector.xml</filename><folder>tmpl</folder></files>
+
+    <languages>
+        <language tag="en-GB">language/en-GB/en-GB.mod_mycityselector.sys.ini</language>
+        <language tag="en-GB">language/en-GB/en-GB.mod_mycityselector.ini</language>
+        <language tag="ru-RU">language/ru-RU/ru-RU.mod_mycityselector.sys.ini</language>
+        <language tag="ru-RU">language/ru-RU/ru-RU.mod_mycityselector.ini</language>
+    </languages>
+
 	<config>
 		<fields name="params">
-
 			<fieldset name="basic">
-                <field name="plugin_check" type="text" default="Внимание!" label="Проверьте корректность установки плагина 'System - My City Selector'." description=""/>
-                <field name="main_domain" type="text" default="" label="Основной домен" description="Например, если это домен третьего уровня site.com.ru"/>
-                <field name="let_select" type="radio" default="2" label="Выбор города при входе" description="При входе на сайт, пользователю во всплывающем окне будет предложено выбрать свой город (если он не делал этого ранее)">
-                    <option value="1">Да</option>
-                    <option value="2">Нет</option>
+				<field name="dialog_title" type="text" default="Пожалуйста, выберите ваш город" label="MOD_MYCITYSELECTOR_TEXT_DIALOG_TITLE" description=""/>
+                <field name="cities_list_type" type="list" default="0" label="MOD_MYCITYSELECTOR_TEXT_LIST_TYPE" description="">
+                    <option value="0">MOD_MYCITYSELECTOR_TEXT_LIST_FLAT</option>
+                    <option value="1">MOD_MYCITYSELECTOR_TEXT_LIST_PROVINCES</option>
+                    <option value="2">MOD_MYCITYSELECTOR_TEXT_LIST_COUNTRIES</option>
                 </field>
-                <field name="baseip" type="radio" default="none" label="Геолокация" description="Укажите какой способ использовать для определения города">
-                    <option value="none">Не использовать</option>
-                    <option value="sypex">SypexGeo</option>
-                    <option value="sypex_yandexgeo">SypexGeo + Yandex Geo</option>
-                    <option value="yandexgeo">Yandex Geo</option>
-                </field>
-				<field name="cities_list" type="textarea" default="Москва&#13;&#10;Санкт-Петербург" label="Список городов" description=""/>
-				<field name="default_city" type="text" default="Москва" label="Город по умолчанию" description="Город, который будет выбран по умолчанию при входе на сайт"/>
-				<field name="dialog_title" type="text" default="Пожалуйста, выберите ваш город" label="Заголовок окна" description="Заголовок окна выбора города"/>
 			</fieldset>
-
             <fieldset name="advanced">
-                <field name="layout" type="modulelayout" label="Шаблон модуля" description="Шаблон который будет использован модулем"/>
-                <field name="js_callback" type="textarea" default="/* здесь можно прописать произвольный javascript, он будет срабатывать при переключении города, если при этом не происходит редирект на поддомен или страницу */" label="JS Callback" description="Javascript callback на событие переключения города (когда нет редиректа)" rows="8" cols="50"/>
+                <field name="layout" type="modulelayout" template="default" label="MOD_MYCITYSELECTOR_TEMPLATE" description="Шаблон который будет использован модулем"/>
                 <field name="moduleclass_sfx" type="text" label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL" description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC"/>
-                <field name="text_before" type="textarea" default="" label="Текст перед модулем" description="" rows="5" cols="50"/>
-                <field name="text_after" type="textarea" default="" label="Текст после модуля" description="" rows="5" cols="50"/>
+                <field name="text_before" type="textarea" label="MOD_MYCITYSELECTOR_TEXT_BEFORE" description="MOD_MYCITYSELECTOR_TEXT_BEFORE" rows="5" cols="50"/>
+                <field name="text_after" type="textarea" label="MOD_MYCITYSELECTOR_TEXT_AFTER" description="MOD_MYCITYSELECTOR_TEXT_AFTER" rows="5" cols="50"/>
                 <field name="cache" type="list" default="0" label="COM_MODULES_FIELD_CACHING_LABEL" description="COM_MODULES_FIELD_CACHING_DESC">
                     <option value="1">JGLOBAL_USE_GLOBAL</option>
                     <option value="0">COM_MODULES_FIELD_VALUE_NOCACHING</option>
                 </field>
                 <field name="cache_time" type="text" default="900" label="COM_MODULES_FIELD_CACHE_TIME_LABEL" description="COM_MODULES_FIELD_CACHE_TIME_DESC"/>
             </fieldset>
-
 		</fields>
 	</config>
 </extension>

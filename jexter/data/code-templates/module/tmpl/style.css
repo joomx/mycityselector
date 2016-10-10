@@ -1,0 +1,12 @@
+/**
+ * @author {author}
+ * @varsion 1.0.0
+ */
+
+._NEWMOD_ {
+    color: blue;
+    font-size: 24px;
+    padding: 6px 8px;
+    border: 1px solid blue;
+    border-radius: 6px;
+}
