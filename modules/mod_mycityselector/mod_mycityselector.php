@@ -62,7 +62,7 @@ class MyCitySelectorModule
                 ->setQuery("SELECT COUNT(*) AS `cnt` FROM `#__extensions` WHERE `element`='plgmycityselector'")
                 ->loadResult();
             if ($find) {
-                $err = 'Плагин MyCitySelector не активен!';
+                $err = 'Плагин MyCitySelector не активен!'; // todo i18n
             } else {
                 $err = 'Плагин MyCitySelector не установлен!';
             }
@@ -81,7 +81,7 @@ class MyCitySelectorModule
             'cookieDomain' => $this->get('cookieDomain'),
             'city' => $this->get('city'),
             'cityCode' => $this->get('cityName'),
-            'layoutUrl' => JURI::base() . str_replace(JPATH_BASE . '/', '', dirname($this->layout)) . '/',
+            'layoutUrl' => JUri::base() . str_replace(JPATH_BASE . '/', '', dirname($this->layout)) . '/',
             'citiesList' => $citiesList,
             'cities_list_type' => $this->get('cities_list_type', '1'),
             'returnUrl' => JUri::getInstance()->toString(),
