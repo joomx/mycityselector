@@ -70,11 +70,12 @@ class Pkg_mycityselectorInstallerScript {
      */
     function postflight($route, JAdapterInstance $adapter)
     {
+        $version = $adapter->getManifest()->version->__toString();
         $green = 'style="color: #3c763d;"';
         $red = 'style="color: #ff2b2b;"';
         $icon = 'style="color: #e68300"';
         // TODO i18n
-        echo '<h3>My City Selector</h3>';
+        echo '<h3>My City Selector ' . $version . '</h3>';
         if ($route == 'install' || $route == 'update') {
             $success = true;
             $github = 'https://github.com/art-programming-team/mycityselector/issues';
