@@ -12,12 +12,17 @@
 
     <install>
         <sql>
-            <file driver="mysql" charset="utf8">install.sql</file>
+            <file driver="mysql" charset="utf8">sql/install.sql</file>
         </sql>
     </install>
+    <update>
+        <schemas>
+            <schemapath type="mysql">sql/updates</schemapath>
+        </schemas>
+    </update>
     <uninstall>
         <sql>
-            <file driver="mysql" charset="utf8">uninstall.sql</file>
+            <file driver="mysql" charset="utf8">sql/uninstall.sql</file>
         </sql>
     </uninstall>
 
@@ -38,7 +43,7 @@
             <menu link="option=com_config&amp;view=component&amp;component=com_mycityselector" img="class:module">COM_MYCITYSELECTOR_OPTIONS</menu>
         </submenu>
 
-        <files folder="admin"><folder>assets</folder><filename>com_mycityselector.xml</filename><filename>config.xml</filename><folder>controllers</folder><folder>helpers</folder><folder>images</folder><filename>index.html</filename><filename>install.sql</filename><filename>installer.php</filename><folder>language</folder><filename>license.txt</filename><folder>models</folder><filename>mycityselector.php</filename><filename>uninstall.sql</filename><folder>views</folder></files>
+        <files folder="admin"><folder>assets</folder><filename>com_mycityselector.xml</filename><filename>config.xml</filename><folder>controllers</folder><folder>helpers</folder><folder>images</folder><filename>index.html</filename><filename>installer.php</filename><folder>language</folder><filename>license.txt</filename><folder>models</folder><filename>mycityselector.php</filename><folder>sql</folder><folder>views</folder></files>
 
         <languages folder="admin">
             <language tag="en-GB">language/en-GB/en-GB.com_mycityselector.sys.ini</language>

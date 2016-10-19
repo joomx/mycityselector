@@ -349,14 +349,14 @@ INSERT INTO `#__mycityselector_city` VALUES
 (189,2,92,'Бобруйск','bobrujsk',1,189);
 
 
-CREATE TABLE `#__mycityselector_field` (
+CREATE TABLE IF NOT EXISTS `#__mycityselector_field` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) DEFAULT NULL,
   `published` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
-CREATE TABLE `#__mycityselector_field_value` (
+CREATE TABLE IF NOT EXISTS `#__mycityselector_field_value` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `field_id` int(11) NOT NULL,
   `value` text,
@@ -365,7 +365,7 @@ CREATE TABLE `#__mycityselector_field_value` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
-CREATE TABLE `#__mycityselector_value_city` (
+CREATE TABLE IF NOT EXISTS `#__mycityselector_value_city` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `fieldvalue_id` int(11) NOT NULL,
   `city_id` int(11) NOT NULL,

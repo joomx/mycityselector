@@ -5,8 +5,8 @@
  */
 defined('_JEXEC') or exit(header("HTTP/1.0 404 Not Found") . '404 Not Found');
 
-// @devnote Этот инсталлер используется не из компонента, а из установочного файла пакета.
-class pkg_mycityselectorInstallerScript {
+// @devnote Этот инсталлер используется не из компонента, а из установочного файла пакета, поэтому и префикс "pkg_"
+class Pkg_mycityselectorInstallerScript {
 
 
     /**
@@ -70,41 +70,69 @@ class pkg_mycityselectorInstallerScript {
      */
     function postflight($route, JAdapterInstance $adapter)
     {
-        // Set the big value for plugin ordering and activate it
-        // general plugin
-        $qu = "UPDATE `#__extensions` SET `ordering`=9990, `enabled`=1 WHERE `element`='plgmycityselector' AND `type`='plugin'";
-        JFactory::getDBO()->setQuery($qu)->execute();
-        // editor button plugin
-        $qu = "UPDATE `#__extensions` SET `ordering`=9991, `enabled`=1 WHERE `element`='mcsinsert' AND `type`='plugin'";
-        JFactory::getDBO()->setQuery($qu)->execute();
+        $green = 'style="color: #3c763d;"';
+        $red = 'style="color: #ff2b2b;"';
+        $icon = 'style="color: #e68300"';
+        // TODO i18n
+        echo '<h3>My City Selector</h3>';
+        if ($route == 'install' || $route == 'update') {
+            $success = true;
+            $github = 'https://github.com/art-programming-team/mycityselector/issues';
+            // Set the big value for plugin ordering and activate it
+            // general plugin
+            $qu = "UPDATE `#__extensions` SET `ordering`=9990, `enabled`=1 WHERE `element`='plgmycityselector' AND `type`='plugin'";
+            JFactory::getDBO()->setQuery($qu)->execute();
+            // editor button plugin
+            $qu = "UPDATE `#__extensions` SET `ordering`=9991, `enabled`=1 WHERE `element`='mcsinsert' AND `type`='plugin'";
+            JFactory::getDBO()->setQuery($qu)->execute();
 
+            // здесь мы проверяем факт установки всех элементов пакеты
+            echo '<strong>Компонент</strong>';
+            $result = $green . '><span class="icon icon-checkmark-2"></span>';
+            if (!is_file(JPATH_BASE.'/components/com_mycityselector/mycityselector.php') || !is_file(JPATH_BASE.'/../components/com_mycityselector/mycityselector.php')) {
+                $result = $red . '><span class="icon icon-not-ok"></span>';
+                $success = false;
+            }
+            echo '<p><span class="icon icon-cube" ' . $icon . '></span> com_mycityselector: <em ' . $result . '</em></p>';
+            echo '<strong>Таблицы</strong>';
+            $tables = JFactory::getDBO()->setQuery("SHOW TABLES;")->loadColumn();
+            $myTables = ['mycityselector_country', 'mycityselector_province', 'mycityselector_city', 'mycityselector_field',
+                'mycityselector_field_value', 'mycityselector_value_city'];
+            $prefix = JFactory::getConfig()->get('dbprefix');
+            foreach ($myTables as $table) {
+                $result = $green . '><span class="icon icon-checkmark-2"></span>';
+                if (!in_array($prefix.$table, $tables)) {
+                    $success = false;
+                    $result = $red . '><span class="icon icon-not-ok"></span>';
+                }
+                echo '<p><span class="icon icon-database" ' . $icon . '></span> ' . $prefix.$table . ': <em ' . $result . '</em></p>';
+            }
+            echo '<strong>Плагины</strong>';
+            $result = $green . '><span class="icon icon-checkmark-2"></span>';
+            if (!is_file(JPATH_BASE.'/../plugins/system/plgmycityselector/plgmycityselector.php')) {
+                $result = $red . '><span class="icon icon-not-ok"></span>';
+            }
+            echo '<p><span class="icon icon-puzzle" ' . $icon . '></span> plgmycityselector: <em ' . $result . '</em></p>';
+            $result = $green . '><span class="icon icon-checkmark-2"></span>';
+            if (!is_file(JPATH_BASE.'/../plugins/editors-xtd/mcsinsert/mcsinsert.php')) {
+                $result = $red . '><span class="icon icon-not-ok"></span>';
+            }
+            echo '<p><span class="icon icon-puzzle" ' . $icon . '></span> mcsinsert: <em ' . $result . '</em></p>';
+            echo '<strong>Модуль</strong>';
+            $result = $green . '><span class="icon icon-checkmark-2"></span>';
+            if (!is_file(JPATH_BASE.'/../modules/mod_mycityselector/mod_mycityselector.php')) {
+                $result = $red . '><span class="icon icon-not-ok"></span>';
+            }
+            echo '<p><span class="icon icon-grid-view-2" ' . $icon . '></span> mod_mycityselector: <em ' . $result . '</em></p>';
 
-        // здесь мы проверяем факт установки всех элементов пакеты
-        // компонент, модуль, плагин
-
-        ?>
-        <h3>My City Selector</h3>
-        <p>Установка вроде как завершена.</p>
-        <?php
-
-        // TODO настройки будут в отдельной таблице
-        // присваиваем параметру "базовый домен" значение по умолчанию
-//        $host = $_SERVER['SERVER_NAME'];
-//        $db = JFactory::getDbo();
-//        $db->setQuery("SELECT `params` FROM `#__modules` WHERE `module`='mod_mycityselector'")->execute();
-//        $rows = $db->loadAssocList();
-//        if (count($rows) > 0) {
-//            $row = $rows[0];
-//            $params = new JRegistry();
-//            $params->loadString($row['params']);
-//            if (method_exists($params, 'setValue')) {
-//                $params->setValue('main_domain', $host);
-//            } else {
-//                $params->set('main_domain', $host);
-//            }
-//            $params = $db->quote($params->toString());
-//            $db->setQuery("UPDATE `#__modules` SET `params`={$params} WHERE `module`='mod_mycityselector'")->execute();
-//        }
+            if ($success) {
+                echo '<p ' . $green . '>Установка успешно завершена.</p>';
+            } else {
+                echo '<p>В процессе установки возникли <em ' . $red . '>ошибки</em> :(<br>'
+                    . ' Придётся <a href="' . $github . '" target="_blank" style="text-decoration:underline">жаловаться</a> разработчикам...</p>';
+            }
+        }
+        echo '<div style="height:10px"></div>';
         return true;
     }
 
