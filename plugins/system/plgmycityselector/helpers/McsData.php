@@ -183,6 +183,9 @@ class McsData
                 }
             }
         } else {
+
+//            var_dump($_COOKIE); exit;
+
             if (!empty($_COOKIE['MCS_CITY_CODE'])) { // new cookie key
                 $city = self::findCity($_COOKIE['MCS_CITY_CODE']);
                 if ($city) {
@@ -207,7 +210,7 @@ class McsData
         }
 
         // set cookies
-        setcookie('MCS_CITY_CODE', self::$city, time() + 3600 * 24 * 30, '/', self::$cookieDomain);
+        setcookie('MCS_CITY_CODE', self::$city, time() + 3600 * 24 * 30, '/', self::$cookieDomain, false, false);
     }
 
 

@@ -110,7 +110,8 @@ class MyCitySelectorModule
             . 'window.mcs_base_domain="' . McsData::get('basedomain') . '";'
             . 'window.mcs_cookie_domain="' . McsData::get('cookieDomain') . '";'
             . 'window.mcs_http="' . McsData::get('http') . '";'
-            . "window.mcs_yandexgeo={$yandex};";
+            . "window.mcs_yandexgeo={$yandex};"
+            . "window.mcs_debug_mode=" . McsData::get('debug_mode') . ";";
         JFactory::getDocument()->addScriptDeclaration($script);
     }
 

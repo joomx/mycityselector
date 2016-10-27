@@ -17,8 +17,8 @@ defined('_JEXEC') or exit(header("HTTP/1.0 404 Not Found") . '404 Not Found');
     <?php
     foreach ($provinces as $provinceKey => $data) {
         ?>
-        <div class="province <?= isset($data['list'][$this->variables['city']]) ? ' active' : '' ?>">
-            <a class="<?= isset($data['list'][$this->variables['city']]) ? ' active' : '' ?>"
+        <div class="province <?= isset($data['list'][$city]) ? ' active' : '' ?>">
+            <a class="<?= isset($data['list'][$city]) ? ' active' : '' ?>"
                href="#" data-group="<?= $provinceKey ?>"><?= $data['name'] ?></a>
         </div>
         <?php
