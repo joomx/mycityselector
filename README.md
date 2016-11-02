@@ -97,7 +97,7 @@ MSC в админке. Основной недостаток этих тегов
 
 Перейдем к рассмотрению компонента "MyCitySelector". Откройте подпункт "Страны".
 
-<img src="https://raw.githubusercontent.com/art-programming-team/mycityselector/develop/doc_images/image-5.jpg" alt="" />
+<img src="https://raw.githubusercontent.com/art-programming-team/mycityselector/develop/doc_images/image-5.png" alt="" />
 
 При клике по ссылке "регионы" вы сможете открыть список регионов, относящихся к данной стране. Аналогично и в списке
 регионов, так есть ссылка "города". Делая элементы списков неактывными, вы запрещаете их отображение в окне выбора города.
