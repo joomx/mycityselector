@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="component" version="3.2" method="upgrade">
     <name>Mycityselector</name>
-    <creationDate>Oct 2016</creationDate>
+    <creationDate>Nov 2016</creationDate>
     <author>Konstantin Kutsevalov &amp; Vladislav Smolenskiy</author>
     <authorEmail>konstantin@kutsevalov.name</authorEmail>
     <authorUrl>http://kutsevalov.name</authorUrl>
     <copyright>All rights reserved</copyright>
     <license>GNU/GPL v3</license>
-    <version>2.0.1</version>
+    <version>2.0.2</version>
     <description>COM_MYCITYSELECTOR_DESCRIPTION</description>
 
     <install>
