@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: vlad
- * Date: 22.06.16
- * Time: 15:25
- */
+
 function yaGeoCode($city)
 {
     $userAgent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] :

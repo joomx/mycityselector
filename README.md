@@ -61,7 +61,7 @@ kiev.krakozyabra.org<br>
 Управление текстами происходит через компонент MyCitySelector в админке, там же и управление
 списком городов и настройки компонента.
 
-<img src="https://raw.githubusercontent.com/art-programming-team/mycityselector/develop/doc_images/image-3.jpg" alt="" />
+<img src="https://raw.githubusercontent.com/art-programming-team/mycityselector/develop/doc_images/image-2.png" alt="" />
 
 Часть настроек находится в модуле, который отвечает за отображаемое окно выбора города на сайте.
 
@@ -118,8 +118,6 @@ MSC в админке. Основной недостаток этих тегов
 текст (адрес).
 
 <img src="https://raw.githubusercontent.com/art-programming-team/mycityselector/develop/doc_images/image-7.jpg" alt="" />
-
-<span style="display:none">TODO: исправить подписи в меню и заголовке (вместо Данные - Тексты и Текст)</span>
 
 
 
