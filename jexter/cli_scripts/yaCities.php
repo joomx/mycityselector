@@ -45,7 +45,7 @@ function yaGeoCode($city)
 
 
 $db = JFactory::getDbo();
-$query = $db->getQuery(true)->select('a.name, b.name')->from('#__mycityselector_city a')->leftJoin('#__mycityselector_region b on a.province_id=b.id');
+$query = $db->getQuery(true)->select('a.name, b.name')->from('#__mycityselector_city a')->leftJoin('#__mycityselector_province b on a.province_id=b.id');
 $cities = $db->setQuery($query)->loadRowList();
 foreach ($cities as $city) {
     $yaCity = yaGeoCode($city[1] . ', ' . $city[0]);
