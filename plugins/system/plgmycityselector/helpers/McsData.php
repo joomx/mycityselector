@@ -274,17 +274,20 @@ class McsData
         if (!empty($name)) {
             $db = JFactory::getDbo();
             $name = $db->quote('%' . $name . '%');
-            $query = $db->getQuery(true)->select('id')->from('#__mycityselector_city')->where("`name` LIKE {$name}");
+            $query = $db->getQuery(true);
+            $query->select('id')->from('#__mycityselector_city')->where("`name` LIKE {$name}");
             $db->setQuery($query);
             if (!empty($db->loadAssocList())) {
                 $type = 'city';
             } else {
-                $query = $db->getQuery(true)->select('id')->from('#__mycityselector_province')->where("`name` LIKE {$name}");
+                $query = $db->getQuery(true);
+                $query->select('id')->from('#__mycityselector_province')->where("`name` LIKE {$name}");
                 $db->setQuery($query);
                 if (!empty($db->loadAssocList())) {
                     $type = 'province';
                 } else {
-                    $query = $db->getQuery(true)->select('id')->from('#__mycityselector_country')->where("`name` LIKE {$name}");
+                    $query = $db->getQuery(true);
+                    $query->select('id')->from('#__mycityselector_country')->where("`name` LIKE {$name}");
                     $db->setQuery($query);
                     if (!empty($db->loadAssocList())) {
                         $type = 'country';
