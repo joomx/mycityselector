@@ -232,7 +232,8 @@ class McsData
         if (empty($where)) {
             $where = '1 = 1';
         }
-        $query = $db->getQuery(true)->select('*')->from('#__mycityselector_city')->where($where);
+        $query = $db->getQuery(true);
+        $query->select('*')->from('#__mycityselector_city')->where($where);
         $db->setQuery($query);
         $rows = $db->loadAssocList();
         if (!empty($column)) {
@@ -252,7 +253,8 @@ class McsData
         if (!empty($code)) {
             $db = JFactory::getDbo();
             $code = $db->quote($code);
-            $query = $db->getQuery(true)->select('*')->from('#__mycityselector_city')->where("`subdomain` LIKE {$code}");
+            $query = $db->getQuery(true);
+            $query->select('*')->from('#__mycityselector_city')->where("`subdomain` LIKE {$code}");
             $db->setQuery($query);
             $city = $db->loadAssocList();
             if (!empty($city)) {
