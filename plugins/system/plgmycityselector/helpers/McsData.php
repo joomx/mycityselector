@@ -232,7 +232,8 @@ class McsData
         if (empty($where)) {
             $where = '1 = 1';
         }
-        $query = $db->getQuery(true)->select('*')->from('#__mycityselector_city')->where($where);
+        $query = $db->getQuery(true);
+        $query->select('*')->from('#__mycityselector_city')->where($where);
         $db->setQuery($query);
         $rows = $db->loadAssocList();
         if (!empty($column)) {
@@ -252,7 +253,8 @@ class McsData
         if (!empty($code)) {
             $db = JFactory::getDbo();
             $code = $db->quote($code);
-            $query = $db->getQuery(true)->select('*')->from('#__mycityselector_city')->where("`subdomain` LIKE {$code}");
+            $query = $db->getQuery(true);
+            $query->select('*')->from('#__mycityselector_city')->where("`subdomain` LIKE {$code}");
             $db->setQuery($query);
             $city = $db->loadAssocList();
             if (!empty($city)) {
@@ -274,17 +276,20 @@ class McsData
         if (!empty($name)) {
             $db = JFactory::getDbo();
             $name = $db->quote('%' . $name . '%');
-            $query = $db->getQuery(true)->select('id')->from('#__mycityselector_city')->where("`name` LIKE {$name}");
+            $query = $db->getQuery(true);
+            $query->select('id')->from('#__mycityselector_city')->where("`name` LIKE {$name}");
             $db->setQuery($query);
             if (!empty($db->loadAssocList())) {
                 $type = 'city';
             } else {
-                $query = $db->getQuery(true)->select('id')->from('#__mycityselector_province')->where("`name` LIKE {$name}");
+                $query = $db->getQuery(true);
+                $query->select('id')->from('#__mycityselector_province')->where("`name` LIKE {$name}");
                 $db->setQuery($query);
                 if (!empty($db->loadAssocList())) {
                     $type = 'province';
                 } else {
-                    $query = $db->getQuery(true)->select('id')->from('#__mycityselector_country')->where("`name` LIKE {$name}");
+                    $query = $db->getQuery(true);
+                    $query->select('id')->from('#__mycityselector_country')->where("`name` LIKE {$name}");
                     $db->setQuery($query);
                     if (!empty($db->loadAssocList())) {
                         $type = 'country';
