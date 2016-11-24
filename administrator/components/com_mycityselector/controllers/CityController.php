@@ -15,7 +15,8 @@ require_once 'DefaultController.php';
 use adamasantares\jxmvc\JxController;
 use adamasantares\jxmvc\JxView;
 
-class CityController extends JxController {
+class CityController extends JxController
+{
 
 
     /**
@@ -59,12 +60,13 @@ class CityController extends JxController {
         JToolBarHelper::unpublishList();
         JToolBarHelper::custom('drop', 'delete', 'delete', JText::_('COM_MYCITYSELECTOR_ITEM_DELETE'));
         $provinceId = intval($this->input->getCmd('province_id'));
-        $model = $this->getModel('city', ['province_id' => $provinceId]); /* @var $model CityModel */	// (./models/[$modelName].php)
+        $model = $this->getModel('city', ['province_id' => $provinceId]);
+        /* @var $model CityModel */    // (./models/[$modelName].php)
         // sorting
         $this->setStateFromRequest('order_by', $model->filter_fields);
         $listOrder = $this->getState('order_by', 'name');
         $this->setStateFromRequest('order_direction', ['asc', 'desc']);
-        $listDirection  = $this->getState('order_direction', 'asc');
+        $listDirection = $this->getState('order_direction', 'asc');
         $model->setOrder($listOrder, $listDirection);
         // country & province names
         $province = $this->getModel('province')->getItem($provinceId);
@@ -86,7 +88,7 @@ class CityController extends JxController {
             'countryName' => $countryName,
             'provinceName' => $provinceName,
         ]);
-	}
+    }
 
 
     /**
@@ -100,8 +102,11 @@ class CityController extends JxController {
         JToolBarHelper::save2new('saveandnew');
         JToolBarHelper::cancel('default');
 
-        $model = $this->getModel('city'); /* @var $model CityModel */
+        $model = $this->getModel('city');
+        /* @var $model CityModel */
         $data = [];
+        $data['countries'] = $model->getCountries();
+        $data['provinces'] = $model->getProvinces();
         foreach ($model->getFields() as $name => $coloumn) {
             $data[$name] = '';
             if (!empty($coloumn['default'])) {
@@ -116,7 +121,7 @@ class CityController extends JxController {
             'model' => $model,
             'data' => $data
         ]);
-	}
+    }
 
 
     /**
@@ -124,12 +129,15 @@ class CityController extends JxController {
      */
     public function actionUpdate()
     {
-		$model = $this->getModel('city'); /* @var $model CityModel */
+        $model = $this->getModel('city');
+        /* @var $model CityModel */
         $id = intval($this->input->getCmd('id'));
         if (!empty($_POST['cid'])) {
             $id = intval($_POST['cid'][0]);
         }
         $data = $model->getItem($id);
+        $data['countries'] = $model->getCountries();
+        $data['provinces'] = $model->getProvinces();
         JToolBarHelper::title(JText::_('COM_MYCITYSELECTOR_NAME') . ' - ' . JText::_('COM_MYCITYSELECTOR_ITEM_EDITING') . ': ' . $data['name'], 'big-ico');
         if (!empty($data)) {
             JToolBarHelper::apply('save');
@@ -145,7 +153,7 @@ class CityController extends JxController {
             //$view->setLayout('not_found');
             $this->render('not_found', []);
         }
-	}
+    }
 
 
     /**
@@ -182,7 +190,8 @@ class CityController extends JxController {
     {
         $page = 0; // TODO store current page in session
         $url = '';
-        $model = $this->getModel('city'); /* @var $model CityModel */
+        $model = $this->getModel('city');
+        /* @var $model CityModel */
         $id = $model->saveItem($_POST);
         if (!$id) {
             // error
@@ -210,12 +219,13 @@ class CityController extends JxController {
     public function actionDrop()
     {
         $page = $this->input->getCmd('page', 0);
-		$model	= $this->getModel('city'); /* @var $model CityModel */
+        $model = $this->getModel('city');
+        /* @var $model CityModel */
         if (!empty($_POST['cid'])) {
             $model->dropItems($_POST['cid']);
         }
-        $this->redirect('index.php?option=' . $this->_component . '&controller='.$this->_id.'&page=' . $page);
-	}
+        $this->redirect('index.php?option=' . $this->_component . '&controller=' . $this->_id . '&page=' . $page);
+    }
 
 
     /**
@@ -224,12 +234,13 @@ class CityController extends JxController {
     public function actionPublish()
     {
         $page = $this->input->getCmd('page', 0);
-		$model	= $this->getModel('city'); /* @var $model CityModel */
+        $model = $this->getModel('city');
+        /* @var $model CityModel */
         if (!empty($_POST['cid'])) {
             $model->publishItems($_POST['cid'], 1);
         }
-        $this->redirect('index.php?option=' . $this->_component . '&controller='.$this->_id.'&page=' . $page);
-	}
+        $this->redirect('index.php?option=' . $this->_component . '&controller=' . $this->_id . '&page=' . $page);
+    }
 
 
     /**
@@ -238,12 +249,13 @@ class CityController extends JxController {
     public function actionUnPublish()
     {
         $page = $this->input->getCmd('page', 0);
-		$model	= $this->getModel('city'); /* @var $model CityModel */
+        $model = $this->getModel('city');
+        /* @var $model CityModel */
         if (!empty($_POST['cid'])) {
             $model->publishItems($_POST['cid'], 0);
         }
-        $this->redirect('index.php?option=' . $this->_component . '&controller='.$this->_id.'&page=' . $page);
-	}
+        $this->redirect('index.php?option=' . $this->_component . '&controller=' . $this->_id . '&page=' . $page);
+    }
 
 
     /**
@@ -257,7 +269,7 @@ class CityController extends JxController {
             /* @var $model CityModel */
             $model = $this->getModel('city');
             $listOrder = $this->getState('order_by', 'name');
-            $listDirection  = $this->getState('order_direction', 'asc');
+            $listDirection = $this->getState('order_direction', 'asc');
             $model->setOrder($listOrder, $listDirection);
             $model->saveOrdering($order);
         }

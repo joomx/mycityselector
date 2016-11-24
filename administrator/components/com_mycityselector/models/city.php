@@ -416,4 +416,19 @@ class CityModel extends JModelList
         }
     }
 
+    public function getCountries()
+    {
+        $query = $this->_db->getQuery(true);
+        $query->select('id,name')->from('#__mycityselector_country')->where('status=1')->order('ordering');
+        $this->_db->setQuery($query);
+        return $this->_db->loadAssocList('id', 'name');
+    }
+
+    public function getProvinces()
+    {
+        $query = $this->_db->getQuery(true);
+        $query->select('id,name')->from('#__mycityselector_province')->where('status=1')->order('ordering');
+        $this->_db->setQuery($query);
+        return $this->_db->loadAssocList('id', 'name');
+    }
 }

@@ -9,6 +9,8 @@
 
 defined('_JEXEC') or die(header('HTTP/1.0 403 Forbidden') . 'Restricted access');
 
+JHtml::_('formbehavior.chosen', 'select');
+
 use adamasantares\jxforms\JxField;
 
 ?>
@@ -44,9 +46,29 @@ use adamasantares\jxforms\JxField;
             'inline' => true
         ]) ?>
 
-        <input type="hidden" name="<?= $model->getFieldName('country_id') ?>" value="<?= $data['country_id'] ?>" />
-        <input type="hidden" name="<?= $model->getFieldName('province_id') ?>" value="<?= $data['province_id'] ?>" />
-        <input type="hidden" name="<?= $model->getFieldName('id') ?>" value="<?= $data['id'] ?>" />
+
+        <div class="form-inline form-inline-header">
+            <div class="control-label">
+                <label><?= JText::_('COM_MYCITYSELECTOR_COUNTRY') ?></label>
+            </div>
+            <div class="controls">
+                <?=
+                JHtml::_('select.genericlist', $data['countries'], $model->getFieldName('country_id'), null, 'value', 'text', $data['country_id']);
+                ?>
+            </div>
+        </div>
+
+        <div class="form-inline form-inline-header">
+            <div class="control-label">
+                <label><?= JText::_('COM_MYCITYSELECTOR_PROVINCE') ?></label>
+            </div>
+            <div class="controls">
+                <?=
+                JHtml::_('select.genericlist', $data['provinces'], $model->getFieldName('province_id'), null, 'value', 'text', $data['province_id']);
+                ?>
+            </div>
+        </div>
+        <input type="hidden" name="<?= $model->getFieldName('id') ?>" value="<?= $data['id'] ?>"/>
 
         <?= $this->formControllerName() ?>
         <?= $this->formOption() ?>
