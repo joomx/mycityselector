@@ -90,6 +90,7 @@ class ProvinceController extends JxController {
     {
         $model = $this->getModel('province'); /* @var $model ProvinceModel */
         $data = $model->getDefaultRecordValues();
+        $data['countries'] = $model->getCountries();
         JToolBarHelper::title(JText::_('COM_MYCITYSELECTOR_NAME') . ' - ' . JText::_('COM_MYCITYSELECTOR_ITEM_ADDING'), 'big-ico');
         JToolBarHelper::apply('save');
         JToolBarHelper::save('saveandclose');
@@ -115,6 +116,7 @@ class ProvinceController extends JxController {
             $id = intval($_POST['cid'][0]);
         }
         $data = $model->getItem($id);
+        $data['countries'] = $model->getCountries();
         JToolBarHelper::title(JText::_('COM_MYCITYSELECTOR_NAME') . ' - ' . JText::_('COM_MYCITYSELECTOR_ITEM_EDITING') . ': ' . $data['name'], 'big-ico');
         if (!empty($data)) {
             JToolBarHelper::apply('save');
