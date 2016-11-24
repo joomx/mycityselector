@@ -11,7 +11,8 @@ defined('_JEXEC') or die(header('HTTP/1.0 403 Forbidden') . 'Restricted access')
 jimport('joomla.application.component.modellist');
 
 
-class CityModel extends JModelList {
+class CityModel extends JModelList
+{
 
     /**
      * Table name
@@ -76,7 +77,7 @@ class CityModel extends JModelList {
         if (!empty($config['province_id'])) {
             $this->provinceId = intval($config['province_id']);
         }
-		parent::__construct($config);
+        parent::__construct($config);
         $fields = $this->_db->getTableColumns($this->table, false);
         foreach ($fields as $field => $details) {
             $type = explode('(', $details->Type);
@@ -91,8 +92,8 @@ class CityModel extends JModelList {
                 'comment' => $details->Comment
             ];
         }
-		$this->input = JFactory::getApplication()->input;
-	}
+        $this->input = JFactory::getApplication()->input;
+    }
 
     /**
      * Properties getter
@@ -153,7 +154,7 @@ class CityModel extends JModelList {
      * @param bool $nc no check field?
      * @return string
      */
-    public function getFieldName($name, $nc=false)
+    public function getFieldName($name, $nc = false)
     {
         if (isset($this->fields[$name]) || $nc) {
             return $this->fieldPrefix . '[' . $name . ']';
@@ -198,8 +199,8 @@ class CityModel extends JModelList {
         } else {
             $provinceId = intval($provinceId);
         }
-		$page = intval($this->input->getCmd('page', '0'));
-		$start = intval($this->pageLimit * $page);
+        $page = intval($this->input->getCmd('page', '0'));
+        $start = intval($this->pageLimit * $page);
         $query = $this->getListQuery();
         if ($provinceId != 0) {
             $query->where("province_id={$provinceId}");
@@ -209,7 +210,7 @@ class CityModel extends JModelList {
             return $this->_db->setQuery($query, $start, $this->pageLimit)->loadAssocList();
         }
         return $this->_db->setQuery($query)->loadAssocList();
-	}
+    }
 
 
     /**
@@ -228,7 +229,7 @@ class CityModel extends JModelList {
             . "LEFT JOIN `#__mycityselector_country` `cnt` ON `cnt`.`id` = `city`.`country_id` "
             . "WHERE `city`.`name` LIKE {$term} AND `city`.`status` = 1";
         return $this->_db->setQuery($query)->loadAssocList();
-	}
+    }
 
 
     /**
@@ -241,8 +242,8 @@ class CityModel extends JModelList {
         $id = $this->_db->escape($id);
         $query = $this->getListQuery();
         $query->where("`id`={$id}");
-		return $this->_db->setQuery($query)->loadAssoc();
-	}
+        return $this->_db->setQuery($query)->loadAssoc();
+    }
 
 
     /**
@@ -275,16 +276,16 @@ class CityModel extends JModelList {
                 }
                 $pairFieldValue[] = $this->_db->quoteName($param) . '=' . $this->_db->quote($value);
                 $fields[] = $this->_db->quoteName($param);
-                $values[] = $this->_db->quoteName($value);
+                $values[] = $this->_db->quote($value);
             }
             // check item
             $isExists = $this->_db->setQuery("SELECT count(`id`) FROM `{$this->table}` WHERE `id`={$id}")->execute();
-            if ($isExists->num_rows == 0) {
+            if ($isExists->num_rows == 0 || $id == 0) {
                 // create
                 $maxOrder = $this->_db->setQuery("SELECT max(`ordering`) FROM `{$this->table}`")->loadRow();
                 $fields[] = 'ordering';
                 $values[] = empty($maxOrder[0]) ? 1 : $maxOrder[0] + 1;
-                $query = $this->_db->getQuery(true)->insert($this->table)->columns($fields)->values($values);
+                $query = $this->_db->getQuery(true)->insert($this->table)->columns($fields)->values(implode(',', $values));
                 $result = $this->_db->setQuery($query)->execute();
                 if ($result) {
                     return $this->_db->insertid();
@@ -365,7 +366,7 @@ class CityModel extends JModelList {
         }
         $html = '';
         $page = intval($this->input->getCmd('page', 0));
-        $this->_db->setQuery("SELECT COUNT(*) AS `val` FROM `{$this->table}`".($provinceId == 0 ? '' : " WHERE `province_id` = {$provinceId}"));
+        $this->_db->setQuery("SELECT COUNT(*) AS `val` FROM `{$this->table}`" . ($provinceId == 0 ? '' : " WHERE `province_id` = {$provinceId}"));
         $count = $this->_db->loadResult();
         if ($count > 0) {
             $url = $_SERVER['REQUEST_URI'];
@@ -378,7 +379,7 @@ class CityModel extends JModelList {
             if ($count % $this->pageLimit > 0) {
                 $pages++;
             }
-            for ($i=0; $i<$pages; $i++) {
+            for ($i = 0; $i < $pages; $i++) {
                 if ($page == $i) {
                     $html .= '<b><a href="' . $url . 'page=' . $i . '">' . ($i + 1) . '</a></b> &nbsp;';
                 } else {
@@ -414,5 +415,5 @@ class CityModel extends JModelList {
             $i++;
         }
     }
-	
+
 }
