@@ -62,9 +62,9 @@ class MyCitySelectorModule
                 ->setQuery("SELECT COUNT(*) AS `cnt` FROM `#__extensions` WHERE `element`='plgmycityselector'")
                 ->loadResult();
             if ($find) {
-                $err = 'Плагин MyCitySelector не активен!'; // todo i18n
+                $err = JText::_('MOD_MYCITYSELECTOR_PLUGIN_NOT_ACTIVE');
             } else {
-                $err = 'Плагин MyCitySelector не установлен!';
+                $err = JText::_('MOD_MYCITYSELECTOR_PLUGIN_NOT_INSTALLED');
             }
             $this->error = '<span style="color:red;">' . $err . '</span>';
             return;
@@ -78,6 +78,7 @@ class MyCitySelectorModule
             'comParams' => $this->get('compSettings'),
             'http' => $this->get('http'),
             'baseDomain' => $this->get('basedomain'),
+            'defaultCityCode' => $this->get('default_city'),
             'cookieDomain' => $this->get('cookieDomain'),
             'city' => $this->get('city'),
             'cityCode' => $this->get('cityName'),
@@ -221,7 +222,6 @@ class MyCitySelectorModule
     }
 
 }
-
 
 // Start module
 MyCitySelectorModule::run();

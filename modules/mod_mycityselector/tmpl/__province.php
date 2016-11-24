@@ -13,7 +13,7 @@ defined('_JEXEC') or exit(header("HTTP/1.0 404 Not Found") . '404 Not Found');
 
 <div
     class="provinces <?= $cities_list_type != 2 || isset($provinces[$province]) ? 'active' : 'hidden' ?> provinces-<?= $country ?>">
-    <div class="mcs-region-title"><?= JText::_('COM_MYCITYSELECTOR_PROVINCE') ?></div>
+    <div class="mcs-region-title"><?= JText::_('MOD_MYCITYSELECTOR_PROVINCE') ?></div>
     <?php
     foreach ($provinces as $provinceKey => $data) {
         ?>
