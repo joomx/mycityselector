@@ -27,7 +27,7 @@ $this->addScript('https://api-maps.yandex.ru/2.1/?lang=ru_RU');
     <?= $this->get('text_before') ?>
     <a class="city" href="javascript:void(0)" title="Выбрать другой город"><?= $cityCode ?></a>
     <?= $this->get('text_after') ?>
-    <div class="question" style="display:none;"><?= JText::printf('MOD_MYCITYSELECTOR_IS_THIS_YOUR_CITY', '<span id="yaCity"></span>') ?>&nbsp;&nbsp;&nbsp;<a
+    <div class="question" style="display:none;"><?php JText::printf('MOD_MYCITYSELECTOR_IS_THIS_YOUR_CITY', '<span id="yaCity"></span>') ?>&nbsp;&nbsp;&nbsp;<a
             href="javascript:void(0)" class="close">x</a>
         <div>
             <button id="mcs-button-yes"><?= JText::_('JYES') ?></button>

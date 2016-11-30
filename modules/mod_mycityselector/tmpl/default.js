@@ -10,10 +10,10 @@
 
     // for debug mode
     if (!w.console) w.console = {};
-    if (!w.console.log) w.console.log = function () {};
+    if (!w.console.log) w.console.log = function () {
+    };
     if (!w.console.error) w.console.error = w.console.log;
-    function vardump()
-    {
+    function vardump() {
         (w.mcs_debug_mode && w.mcs_debug_mode == 1) && w.console.log(arguments);
     }
 
@@ -33,15 +33,9 @@
         // инициализация
         $(function () {
             initialize();
-            ymaps.ready(yandex_geolocation);
-            // отображение окна или подсказки
-            /*            if (getCookie('MCS_NOASK') != 1) {
-             if (w.mcs_dialog == 1) {
-             openDialog();
-             } else if (w.mcs_dialog == 2) {
-             $(".question", $module).show(50);
-             }
-             }*/
+            if (w.mcs_yandexgeo == true) {
+                ymaps.ready(yandex_geolocation);
+            }
         });
     }, 50);
 
@@ -51,8 +45,7 @@
      * Переносим диалог из позиции установки модуля в корень документа и
      * привязываем события в кнопкам и ссылкам
      */
-    function initialize()
-    {
+    function initialize() {
         vardump("MCS begin initialize");
         // находим html-шаблон диалога и модуля
         $dialog = $('.mcs-dialog');
@@ -69,6 +62,7 @@
             // . клик по кнопке да на tooltip
             $("#mcs-button-yes", $module).on('click', function () {
                 autoSwitchToDetectedCity(yaCity)
+                $(".question", $module).hide(50);
             });
             // . клик по кнопке нет на tooltip
             $("#mcs-button-no", $module).on('click', openDialog);
@@ -93,8 +87,7 @@
     }
 
 
-    function yandex_geolocation()
-    {
+    function yandex_geolocation() {
         vardump("yandex_geolocation");
         if (location.protocol == 'https:') {
             if (ymaps.geolocation) {
@@ -128,8 +121,7 @@
     }
 
 
-    function openDialog()
-    {
+    function openDialog() {
         $(".question", $module).css('display', 'none');
         $overlay.css('display', 'block');
         $dialog.css('display', 'block');
@@ -152,8 +144,7 @@
     }
 
 
-    function closeDialog()
-    {
+    function closeDialog() {
         vardump("closeDialog");
         $overlay.css('display', 'none');
         $dialog.css('display', 'none');
@@ -161,8 +152,7 @@
     }
 
 
-    function closePopUp()
-    {
+    function closePopUp() {
         vardump("closePopUp");
         setCookie('MCS_NOASK', 1);
         $(".question", $module).hide(50);
@@ -175,11 +165,9 @@
      * если он есть в списке. При условии что не открыто окно выбора города и пользователь еще не успел сделать выбор.
      * @param {string} city Название города
      */
-    function autoSwitchToDetectedCity(city)
-    {
+    function autoSwitchToDetectedCity(city) {
         vardump("autoSwitchToDetectedCity", city);
-        //if ($dialog.css('display') == 'none' && w.mcs_yandexgeo === true) {
-        if ($dialog.css('display') == 'none') {
+        if ($dialog.css('display') == 'none' && w.mcs_yandexgeo === true) {
             // ищем город в списке
             $(".link", $dialog).each(function (index, link) {
                 if ($(link).data("city") == city) {
@@ -196,8 +184,7 @@
      * Запоминает выбранный город и запускает переключение контента
      * @returns {boolean}
      */
-    function selectCity()
-    {
+    function selectCity() {
         w.mcs_yandexgeo = false; // запрещаем геолокации автоматическое переключение города, так как пользователь уже сделал выбор
         var $link = $(this),
             cityCode = $link.data("code"),
@@ -219,8 +206,7 @@
     /**
      * Переключает группы городов
      */
-    function selectGroup()
-    {
+    function selectGroup() {
         $(".cities", $dialog).addClass('hidden'); // => прячем все города
         $(".province a", $dialog).removeClass('active'); // => сбрасываем активную группу
         $(".province", $dialog).removeClass('active');
@@ -236,8 +222,7 @@
     /**
      * Переключает страны
      */
-    function selectCountry()
-    {
+    function selectCountry() {
         $(".provinces", $dialog).addClass('hidden'); // Прячем все регионы
         $(".country a", $dialog).removeClass('active'); // => сбрасываем активную группу
         $(".country", $dialog).removeClass('active');
@@ -250,8 +235,7 @@
     }
 
 
-    function mcsQuickSearch()
-    {
+    function mcsQuickSearch() {
         var city, value = this.value.toLowerCase();
         vardump("mcsQuickSearch", value);
         if (value != '') {
@@ -281,8 +265,7 @@
      * @param {String} cookie name
      * @param {String} cookie value
      */
-    function setCookie(name, value)
-    {
+    function setCookie(name, value) {
         var exdate = new Date(), cookie,
             domain = (window.mcs_cookie_domain) ? window.mcs_cookie_domain : "";
         if (domain != "") {
@@ -300,8 +283,7 @@
     }
 
 
-    function getCookie(name)
-    {
+    function getCookie(name) {
         var matches = document.cookie.match(new RegExp(
             "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
         ));
@@ -309,8 +291,7 @@
     }
 
 
-    function deleteCookie(name)
-    {
+    function deleteCookie(name) {
         var domain = (window.mcs_cookie_domain) ? window.mcs_cookie_domain : "",
             cookie = name + "=;domain={domain};expires=Thu, 01 Jan 1970 00:00:01 GMT";
         vardump("deleteCookie", cookie.replace('{domain}', domain));
