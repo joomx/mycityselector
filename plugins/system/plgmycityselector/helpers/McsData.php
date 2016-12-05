@@ -306,19 +306,22 @@ class McsData
             $query = $db->getQuery(true);
             $query->select('id')->from('#__mycityselector_city')->where("`name` LIKE {$name}");
             $db->setQuery($query);
-            if (!empty($db->loadAssocList())) {
+            $res = $db->loadAssocList();
+            if (!empty($res)) {
                 $type = 'city';
             } else {
                 $query = $db->getQuery(true);
                 $query->select('id')->from('#__mycityselector_province')->where("`name` LIKE {$name}");
                 $db->setQuery($query);
-                if (!empty($db->loadAssocList())) {
+                $res = $db->loadAssocList();
+                if (!empty($res)) {
                     $type = 'province';
                 } else {
                     $query = $db->getQuery(true);
                     $query->select('id')->from('#__mycityselector_country')->where("`name` LIKE {$name}");
                     $db->setQuery($query);
-                    if (!empty($db->loadAssocList())) {
+                    $res = $db->loadAssocList();
+                    if (!empty($res)) {
                         $type = 'country';
                     }
                 }

@@ -215,9 +215,10 @@ class FieldsController extends JxController
         $url = '';
         $model = $this->getModel('fields');
         $id = $model->saveItem($_POST);
-        if (!empty($model->getLastError())) {
+        $error = $model->getLastError();
+        if (!empty($error)) {
             // error
-            $this->setMessage($model->getLastError(), 'error');
+            $this->setMessage($error, 'error');
             // TODO need to keep data and return its to form anyway for "create" action
             if ($id > 0) {
                 $url .= '&task=update&id=' . $id;

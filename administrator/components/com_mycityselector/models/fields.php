@@ -107,8 +107,8 @@ class FieldsModel extends JModelList
      */
     function __get($name)
     {
-        if (!empty($this->$name)) {
-            return $this->$name;
+        if (!empty($this->{$name})) {
+            return $this->{$name};
         }
         return null;
     }
