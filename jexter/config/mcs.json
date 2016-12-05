@@ -1,7 +1,7 @@
 {
     "name": "MyCitySelector",
     "id": "pkg_mycityselector",
-    "version": "2.0.22",
+    "version": "2.0.23",
     "type": "package",
     "manifest": "@builder/config/pkg_mycityselector.xml",
     "updateServers": [
@@ -16,21 +16,21 @@
             "name": "MyCitySelector",
             "id": "mcsinsert",
             "type": "plugin/editors-xtd",
-            "version": "2.0.22",
+            "version": "2.0.2",
             "excludes": []
         },
         {
             "name": "MyCitySelector",
             "id": "plgmycityselector",
             "type": "plugin/system",
-            "version": "2.0.22",
+            "version": "2.0.23",
             "excludes": []
         },
         {
             "name": "MyCitySelector",
             "id": "mod_mycityselector",
             "type": "module/site",
-            "version": "2.0.22",
+            "version": "2.0.23",
             "excludes": [
                 "jquery.tablednd.js",
                 "orange.rar"
@@ -41,7 +41,7 @@
             "id": "com_mycityselector",
             "script": "mycityselector.php",
             "type": "component",
-            "version": "2.0.22",
+            "version": "2.0.23",
             "excludes": []
         }
     ]

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="module" version="3.2" method="upgrade" client="site">
 	<name>My City Selector MOD</name>
-	<creationDate>Nov 2016</creationDate>
+	<creationDate>Dec 2016</creationDate>
 	<author>Konstantin Kutsevalov &amp; Vladislav Smolenskiy</author>
 	<authorEmail>konstantin@kutsevalov.name</authorEmail>
 	<authorUrl>http://www.kutsevalov.name/2013/08/12/modul-vibora-goroda-dlya-joomla/</authorUrl>
 	<copyright>All rights reserved</copyright>
 	<license>GNU/GPL</license>
-	<version>2.0.2</version>
+	<version>2.0.23</version>
 	<description><![CDATA[
 	<h3 class="description-module-header">My City Selector</h3>
 	<div class="description-module" style="text-align:left;">

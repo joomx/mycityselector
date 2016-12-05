@@ -8,6 +8,7 @@ defined('_JEXEC') or exit(header("HTTP/1.0 404 Not Found") . '404 Not Found');
 JLoader::import('joomla.plugin.plugin');
 JLoader::import('plugins.system.plgmycityselector.helpers.McsContentHelper', JPATH_ROOT);
 JLoader::import('plugins.system.plgmycityselector.helpers.McsData', JPATH_ROOT);
+JLoader::import('plugins.system.plgmycityselector.helpers.McsLog', JPATH_ROOT);
 
 class plgSystemPlgMycityselector extends JPlugin
 {
@@ -28,6 +29,7 @@ class plgSystemPlgMycityselector extends JPlugin
             unset($_COOKIE['MCS_CITY_CODE']);
         }
         // load data and settings
+        McsLog::add('Загрузка данных');
         McsData::load();
         // check for "backend mode" and "frontend edit mode"
         $this->editMode = ($jInput->get('view') == 'form' && $jInput->get('layout') == 'edit');
@@ -48,14 +50,17 @@ class plgSystemPlgMycityselector extends JPlugin
         $isAdmin = (JFactory::getApplication()->getName() == 'administrator');
         if (!$this->editMode && !$isAdmin) { // не делаем замену блоков в админке и в режиме редактирования статьи
             $body = $this->getPageBody();
+            McsLog::add('Парсинг тегов и меток');
             $tags = McsContentHelper::parseCitiesTags($body);
             // анализируем
+            McsLog::add('Анализ меток');
             foreach ($tags as $data) {
                 if ($data['type'] == 'db') {
                     McsContentHelper::processingDbData($body, $data);
                 }
             }
-            $isMatchCity = false; // is there match of any tag with currant city?
+            McsLog::add('Анализ тегов');
+            $isMatchCity = false; // маркер, указывает на наличие хоть одного совпадения по городу в цикле ниже
             $forAnyCity = [];
             foreach ($tags as $data) {
                 if ($data['type'] == 'local') {
@@ -65,7 +70,7 @@ class plgSystemPlgMycityselector extends JPlugin
                             $isMatchCity = true;
                         }
                     } else {
-                        $forAnyCity = $data;
+                        $forAnyCity = $data; // данные для любого города, тег [city *]
                     }
                 }
             }
@@ -76,10 +81,13 @@ class plgSystemPlgMycityselector extends JPlugin
                     $body = str_replace($forAnyCity['position'], '', $body);
                 }
             }
+            McsLog::add('Анализ закончен');
+            // добавим логи
+            $body = str_replace('</body>', McsLog::render() . "\n</body>", $body);
             $this->setPageBody($body);
         } else if ($isAdmin && @$_GET['option'] == 'com_installer' && @$_GET['view'] == 'manage') {
-            // just for hide package elements from "Extensions/Manage" list.
-            // Sometimes users uninstall not a package but one of extension of package.
+            // просто скрывает отдельные элементы пакета в "Extensions/Manage"
+            // поскольку иногда пользователи удаляют не сам пакет, а его части и потом возникают проблемы при новой установке
             $body = McsContentHelper::removePackageElements($this->getPageBody());
             $this->setPageBody($body);
         }

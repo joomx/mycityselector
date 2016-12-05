@@ -1,4 +1,6 @@
 <?php
+defined('_JEXEC') or exit(header("HTTP/1.0 404 Not Found") . '404 Not Found');
+
 
 /**
  * Class McsData
@@ -116,7 +118,7 @@ class McsData
         self::$modSettings = new JRegistry($module->params);
         self::$moduleId = $module->id;
         // cookie domain
-        if (self::$compSettings->get('subdomain_cities') == '1') {
+        if (self::$compSettings->get('subdomain_cities') == '1') { // города на поддоменах?
             self::$cookieDomain = '.' . self::$compSettings->get('basedomain');
         } else {
             self::$cookieDomain = self::$compSettings->get('basedomain');
@@ -135,81 +137,106 @@ class McsData
      */
     private static function detectCurrentCity()
     {
-        if (self::get('subdomain_cities') == '1') {
-            // check by current subdomain
-            if (!empty(self::$compSettings) && self::$compSettings->get('basedomain')) { // check base domain
+        if (self::get('subdomain_cities') == '1') { // города на поддоменах?
+            // проверяем базовый домен
+            if (!empty(self::$compSettings) && self::$compSettings->get('basedomain')) {
                 $baseDomain = self::$compSettings->get('basedomain');
+                McsLog::add('Базовый домен: ' . $baseDomain );
             } else {
-                // try to detect base domain name
+                // иначе, пытаемся определить базовый домен самостоятельно
+                McsLog::add('Базовый домен не определен', McsLog::WARN);
                 $baseDomain = $_SERVER['HTTP_HOST'];
                 $parts = explode('.', $baseDomain);
                 if (count($parts) > 2) {
                     if ($parts[0] == 'www') {
                         $baseDomain = str_replace('www.', '', $_SERVER['HTTP_HOST']);
                     } else {
-                        // probably, this is a subdomain, need to remove its and left only domain name
-                        unset($parts[0]);
+                        // возможно, это поддомен. попытаемся его найти в базе
+                        $city = self::findCity($parts[0]);
+                        if (!empty($city)) {
+                            unset($parts[0]); // да это поддомен, удаляем его и остается только имя домена
+                        }
                         $baseDomain = implode('.', $parts);
                     }
                 }
+                McsLog::add('Автоопределение: ' . $baseDomain, McsLog::WARN);
             }
+            McsLog::add('Определяем текущий город');
+            // проверяем текущий поддомен
             $subDomain = str_replace([$baseDomain, '.'], ['', ''], $_SERVER['HTTP_HOST']);
             if (!empty($subDomain) && $subDomain != 'www') {
-                self::$isBaseDomain = false;
+                McsLog::add('Ищем город по поддомену');
                 $city = self::findCity($subDomain);
-                if ($city) {
+                if (!empty($city)) {
+                    McsLog::add('Город найден: ' . $city['name']);
+                    self::$isBaseDomain = false;
                     self::$cityId = $city['id'];
                     self::$city = $subDomain;
                     self::$cityName = $city['name'];
-                } // else :pointDefault:
+                } else {
+                    McsLog::add('Город ' . $subDomain . ' не найден, отправляем на базовый домен', McsLog::WARN);
+                    $default = self::get('default_city');
+                    $city = self::findCity($default);
+                    if (!empty($city)) {
+                        self::$isBaseDomain = false;
+                        self::$cityId = $city['id'];
+                        self::$city = $subDomain;
+                        self::$cityName = $city['name'];
+                        self::$needRedirectTo = self::get('http') . self::get('basedomain') . '/';
+                    }
+                }
             } else {
-                // this is the BASE domain
-                // check current city by cookies but only if autoswitch is disabled.
-                if (self::get('autoswitch_city') == '1' && !empty($_COOKIE['MCS_CITY_CODE'])) { // new cookie key
+                // иначе - это базовый домен
+                // если включен авторедирект на выбранный ранее город, то
+                if (self::get('autoswitch_city') == '1' && !empty($_COOKIE['MCS_CITY_CODE'])) { // проверяем код города в кукисах
                     $city = self::findCity($_COOKIE['MCS_CITY_CODE']);
-                    if ($city) {
-                        // compare with default city
-                        if (!empty(self::$compSettings) && self::$compSettings->get('default_city')) {
-                            $default = self::$compSettings->get('default_city');
+                    if (!empty($city)) {
+                        // если город найден и он не является городом по умолчанию, то даем команду на редирект
+                        if (!empty(self::$compSettings) && self::get('default_city')) {
+                            $default = self::get('default_city');
                             if ($default != $_COOKIE['MCS_CITY_CODE']) {
-                                // need redirect to right subdomain
                                 self::$cityId = $city['id'];
                                 self::$city = $_COOKIE['MCS_CITY_CODE'];
                                 self::$cityName = $city['name'];
                                 self::$needRedirectTo = self::get('http') . self::$city . '.' . self::get('basedomain') . '/';
                             }
                         }
-                    } // else :pointDefault:
+                    } // иначе, см ниже :pointDefault:
                 }
             }
         } else {
-
-//            var_dump($_COOKIE); exit;
-
-            if (!empty($_COOKIE['MCS_CITY_CODE'])) { // new cookie key
+            McsLog::add('Определяем текущий город');
+            if (!empty($_COOKIE['MCS_CITY_CODE'])) {
+                McsLog::add('Ищем город по поддомену');
                 $city = self::findCity($_COOKIE['MCS_CITY_CODE']);
-                if ($city) {
+                if (!empty($city)) {
+                    McsLog::add('Город найден: ' . $city['name']);
                     self::$cityId = $city['id'];
                     self::$city = $_COOKIE['MCS_CITY_CODE'];
                     self::$cityName = $city['name'];
-                } // else :pointDefault:
+                } // иначе, см ниже :pointDefault:
             }
         }
 
         // :pointDefault:
-        // get default city of base domain (default_city from comp options)
+        // берем город по умолчанию (default_city из настроек компонента)
         if (empty(self::$city)) {
-            if (!empty(self::$compSettings) && self::$compSettings->get('default_city')) {
-                $city = self::findCity(self::$compSettings->get('default_city'));
-                if ($city) {
+            if (!empty(self::$compSettings) && self::get('default_city')) {
+                $city = self::findCity(self::get('default_city'));
+                if (!empty($city)) {
+                    McsLog::add('Город найден: ' . $city['name']);
                     self::$cityId = $city['id'];
                     self::$city = $city['subdomain'];
                     self::$cityName = $city['name'];
+                } else {
+                    // да что за нафиг?
+                    McsLog::add('Базовый город не определен!', McsLog::WARN);
+                    return;
                 }
             }
         }
 
-        // set cookies
+        // обновляем кукис
         setcookie('MCS_CITY_CODE', self::$city, time() + 3600 * 24 * 30, '/', self::$cookieDomain, false, false);
     }
 
