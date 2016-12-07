@@ -354,7 +354,8 @@ class McsData
         $db->setQuery($query);
         $result = $db->loadAssocList();
         if (!empty($result[0]['value'])) {
-            return empty(trim(strip_tags($result[0]['value']))) ? '' : $result[0]['value'];
+            $test = trim(strip_tags($result[0]['value']));
+            return empty($test) ? '' : $result[0]['value'];
         } else {
             // теперь смотрим, нет ли отрицаний
             $query = "SELECT `fv`.`value` FROM `#__mycityselector_field` `fld` "
@@ -370,7 +371,8 @@ class McsData
             $db->setQuery($query);
             $result = $db->loadAssocList();
             if (!empty($result[0]['value'])) {
-                return empty(trim(strip_tags($result[0]['value']))) ? '' : $result[0]['value'];
+                $test = trim(strip_tags($result[0]['value']));
+                return empty($test) ? '' : $result[0]['value'];
             }
             // иначе, ищем текст по умолчанию
             $query = "SELECT `fv`.`value` FROM `#__mycityselector_field` `fld` "
@@ -379,7 +381,8 @@ class McsData
             $db->setQuery($query);
             $result = $db->loadAssocList();
             if (!empty($result[0]['value'])) {
-                return empty(trim(strip_tags($result[0]['value']))) ? '' : $result[0]['value'];
+                $test = trim(strip_tags($result[0]['value']));
+                return empty($test) ? '' : $result[0]['value'];
             }
         }
         return false;
