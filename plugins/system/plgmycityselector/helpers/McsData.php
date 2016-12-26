@@ -114,9 +114,16 @@ class McsData
         // load component settings
         self::$compSettings = JComponentHelper::getParams('com_mycityselector');
         // load module settings (todo there is one problem with modulehelper, it always returns params only for first module, but user may has several modules)
-        $module = JModuleHelper::getModule('mod_mycityselector');
-        self::$modSettings = new JRegistry($module->params);
-        self::$moduleId = $module->id;
+
+        $query = JFactory::getDbo()->getQuery(true)->select('params')->from('#__extensions')->where("element = 'mod_mycityselector' limit 1;");
+        $result = JFactory::getDbo()->setQuery($query)->loadResult();
+        //$module = JModuleHelper::getModule('mod_mycityselector');
+        self::$modSettings = new JRegistry($result);
+
+        $query = JFactory::getDbo()->getQuery(true)->select('id')->from('#__modules')->where("module = 'mod_mycityselector' limit 1;");
+        $result = JFactory::getDbo()->setQuery($query)->loadResult();
+        self::$moduleId = $result;
+
         // cookie domain
         if (self::$compSettings->get('subdomain_cities') == '1') { // города на поддоменах?
             self::$cookieDomain = '.' . self::$compSettings->get('basedomain');
