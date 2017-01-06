@@ -137,6 +137,32 @@ MSC в админке. Основной недостаток этих тегов
 
 *Если вам кажется, что некоторые моменты можно бы было описать лучше или где-то закралась неточность, то можете написать мне об этом на почту или сделать pull request.*
 
+## Robots.txt
+
+Если используется вариант с поддоменами, возможно Вам будет полезно использовать скрипт robots.txt.php для подмены директивы Host в вашем robots.txt.
+Чтобы им воспользоваться, необходимо прописать правило редиректа для "/robots.txt" в настройках вашего сервера.
+
+Для Apache в файле ".htaccess" добавьте строку
+
+```
+RewriteEngine On # эту строку только если такой директивы в htaccess еще нет
+RewriteRule ^robots.txt$ /components/com_mycityselector/robots.txt.php
+```
+
+Для Nginx:
+
+```
+server {
+     
+     ... other instructions ..
+     
+     location /robots.txt {
+         rewrite "^.*+$" /components/com_mycityselector/robots.txt.php;
+     }
+}
+```
+
+
 
 ##Благодарности
 
