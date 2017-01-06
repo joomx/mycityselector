@@ -156,8 +156,7 @@ CREATE TABLE IF NOT EXISTS `#__mycityselector_city` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=190 DEFAULT CHARSET=utf8;
 
-
-INSERT INTO `#__mycityselector_city` VALUES
+INSERT INTO `#__mycityselector_city` (`id`, `country_id`, `province_id`, `name`, `subdomain`, `status`, `ordering`) VALUES
 (1,1,44,'Майкоп','majkop',1,1),
 (2,1,46,'Уфа','ufa',1,2),
 (3,1,46,'Стерлитамак','sterlitamak',1,3),
