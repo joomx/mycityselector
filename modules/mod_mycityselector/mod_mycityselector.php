@@ -2,7 +2,14 @@
 /**
  * Модуль MyCitySelector
  * Отвечает за вывод диалогового окна со списком городов и переключение между ними
+ *
+ * @var $module stdClass with options: id, title, module, position, content, showtitle, params, menuid, name, style
+ * @var $params Joomla\Registry\Registry (module's parameters)
+ * @var $app JApplicationSite
+ * @var $template string (site's template name)
+ * @var $path string (path of this file like __FILE__)
  */
+
 defined('_JEXEC') or exit(header("HTTP/1.0 404 Not Found") . '404 Not Found');
 
 
@@ -35,14 +42,20 @@ class MyCitySelectorModule
      */
     private $variables = [];
 
+    /**
+     * @var stdClass|null
+     */
+    private $module = null;
 
     /**
+     * @param stdClass $module
+     * @param Joomla\Registry\Registry $params
      * @return MyCitySelectorModule
      */
-    public static function run()
+    public static function run($module, $params)
     {
         if (self::$instance === null) {
-            self::$instance = new self();
+            self::$instance = new self($module, $params);
         }
         if (empty(self::$instance->error)) {
             self::$instance->render();
@@ -53,9 +66,10 @@ class MyCitySelectorModule
 
 
     /**
-     * init
+     * @param stdClass $module
+     * @param Joomla\Registry\Registry $params
      */
-    private function __construct()
+    private function __construct($module, $params)
     {
         if (!class_exists('McsData')) {
             $find = JFactory::getDbo()
@@ -72,9 +86,10 @@ class MyCitySelectorModule
 
         $citiesList = $this->loadCities();
         $this->layout = JModuleHelper::getLayoutPath('mod_mycityselector', McsData::get('layout', 'default'));
+        $this->module = $module;
         $this->variables = [
-            'modID' => $this->get('moduleId'),
-            'params' => $this->get('modSettings'),
+            'modID' => $module->id,
+            'params' => $params,
             'comParams' => $this->get('compSettings'),
             'http' => $this->get('http'),
             'baseDomain' => $this->get('basedomain'),
@@ -90,6 +105,8 @@ class MyCitySelectorModule
             'layoutProvince' => JModuleHelper::getLayoutPath('mod_mycityselector', '__province'),
             'layoutCity' => JModuleHelper::getLayoutPath('mod_mycityselector', '__city')
         ];
+        McsData::set('moduleId', $module->id);
+        McsData::set('modSettings', $params);
         if ($this->variables['cities_list_type'] > 1 ) { // Нужно узнать какой регион выбран, иначе в шаблоне придется перебирать весь массив
             $db = JFactory::getDbo();
             $query = $db->getQuery(true)->select('a.subdomain')->from('#__mycityselector_province a')
@@ -224,4 +241,4 @@ class MyCitySelectorModule
 }
 
 // Start module
-MyCitySelectorModule::run();
+MyCitySelectorModule::run($module, $params);

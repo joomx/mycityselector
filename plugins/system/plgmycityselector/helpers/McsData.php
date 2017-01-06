@@ -109,18 +109,22 @@ class McsData
     }
 
 
+    /**
+     * Loads all options of extension
+     */
     public static function load()
     {
         // load component settings
         self::$compSettings = JComponentHelper::getParams('com_mycityselector');
-        // load module settings (todo there is one problem with modulehelper, it always returns params only for first module, but user may has several modules)
-
-        $query = JFactory::getDbo()->getQuery(true)->select('params')->from('#__extensions')->where("element = 'mod_mycityselector' limit 1;");
-        $result = JFactory::getDbo()->setQuery($query)->loadResult();
-        //$module = JModuleHelper::getModule('mod_mycityselector');
-        self::$modSettings = new JRegistry($result);
-
-        $query = JFactory::getDbo()->getQuery(true)->select('id')->from('#__modules')->where("module = 'mod_mycityselector' limit 1;");
+        // load module settings
+        $query = JFactory::getDbo()->getQuery(true);
+        $query->select('params')->from('#__extensions')->where("element = 'mod_mycityselector' LIMIT 1");
+        $query = JFactory::getDbo()->setQuery($query);
+        $result = $query->loadResult();
+        self::$modSettings = new \JRegistry($result); // alias of Joomla\Registry\Registry in libraries/vendor/joomla/registry/src/Registry.php
+        // определяем ID модуля
+        $query = JFactory::getDbo()->getQuery(true);
+        $query->select('id')->from('#__modules')->where("module = 'mod_mycityselector' LIMIT 1");
         $result = JFactory::getDbo()->setQuery($query)->loadResult();
         self::$moduleId = $result;
 
