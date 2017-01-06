@@ -16,7 +16,7 @@
  * @var $argv array
  */
 
- namespace adamasantares\jexter;
+namespace adamasantares\jexter;
 
 require 'lib/helper.php';
 require 'lib/JexterBuilder.php';
@@ -33,6 +33,7 @@ if (!extension_loaded('zip')) {
 // parsing console arguments
 $args = prepareArguments($argv, [
     '1' => ['name' => 'config', 'default' => 'project'],
+    '2' => ['name' => 'version'],
     'myDir' => ['name' => 'myDir', 'default' => __DIR__],
 ]);
 

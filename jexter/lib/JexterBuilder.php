@@ -45,7 +45,7 @@ class JexterBuilder {
             self::$lastErrorCode = 4041;
             return [];
         }
-        $projectConfig = array_merge($projectConfig, $jexterConfig);
+        $projectConfig = array_replace_recursive($projectConfig, $jexterConfig);
         $projectConfig = self::preparePath($projectConfig, $args);
 
         // read extension items
@@ -114,6 +114,9 @@ class JexterBuilder {
                 out(" not found '{$option}' option!\n", 'red');
                 return false;
             }
+        }
+        if (isset($args['version'])) {
+            $config['version'] = $args['version'];
         }
         $config['type'] = strtolower($config['type']);
         if ($config['type'] === 'package' && empty($config['packageItems'])) {
