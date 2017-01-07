@@ -52,17 +52,17 @@ class DefaultController extends JxController {
      */
     public function actionIndex()
     {
-        JToolBarHelper::title(JText::_('COM_MYCITYSELECTOR_NAME'), 'big-ico');
-        JToolBarHelper::addNew();
-        JToolBarHelper::publishList();
-        JToolBarHelper::unpublishList();
+        JToolbarHelper::title(JText::_('COM_MYCITYSELECTOR_NAME'), 'big-ico');
+        JToolbarHelper::addNew();
+        JToolbarHelper::publishList();
+        JToolbarHelper::unpublishList();
         //TODO Добавить проверку прав доступа
 //        if ($canDo->get('core.admin') || $canDo->get('core.options'))
 //        {
-            JToolbarHelper::preferences('com_mycityselector');
+        JToolbarHelper::preferences('com_mycityselector');
 //            JToolbarHelper::divider();
 //        }
-        JToolBarHelper::custom('drop', 'delete', 'delete', JText::_('COM_MYCITYSELECTOR_ITEM_DELETE'));
+        JToolbarHelper::custom('drop', 'delete', 'delete', JText::_('COM_MYCITYSELECTOR_ITEM_DELETE'));
         $model = $this->getModel('country'); /* @var $model CountryModel */ // (./models/[$modelName].php)
         // sorting
         $this->setStateFromRequest('order_by', $model->filter_fields);
@@ -86,11 +86,11 @@ class DefaultController extends JxController {
     {
         $model = $this->getModel('country'); /* @var $model CountryModel */
         $data = $model->getDefaultRecordValues();
-        JToolBarHelper::title(JText::_('COM_MYCITYSELECTOR_NAME') . ' - ' . JText::_('COM_MYCITYSELECTOR_ITEM_ADDING'), 'big-ico');
-        JToolBarHelper::apply('save');
-        JToolBarHelper::save('saveandclose');
-        JToolBarHelper::save2new('saveandnew');
-        JToolBarHelper::cancel('index');
+        JToolbarHelper::title(JText::_('COM_MYCITYSELECTOR_NAME') . ' - ' . JText::_('COM_MYCITYSELECTOR_ITEM_ADDING'), 'big-ico');
+        JToolbarHelper::apply('save');
+        JToolbarHelper::save('saveandclose');
+        JToolbarHelper::save2new('saveandnew');
+        JToolbarHelper::cancel('index');
         $this->render('edit', [
             'model' => $model,
             'data' => $data,
@@ -111,18 +111,18 @@ class DefaultController extends JxController {
             $id = intval($_POST['cid'][0]);
         }
         $data = $model->getItem($id);
-        JToolBarHelper::title(JText::_('COM_MYCITYSELECTOR_NAME') . ' - ' . JText::_('COM_MYCITYSELECTOR_ITEM_EDITING') . ': ' . $data['name'], 'big-ico');
+        JToolbarHelper::title(JText::_('COM_MYCITYSELECTOR_NAME') . ' - ' . JText::_('COM_MYCITYSELECTOR_ITEM_EDITING') . ': ' . $data['name'], 'big-ico');
         if (!empty($data)) {
-            JToolBarHelper::apply('save');
-            JToolBarHelper::save('saveandclose');
-            JToolBarHelper::save2new('saveandnew');
-            JToolBarHelper::cancel('index');
+            JToolbarHelper::apply('save');
+            JToolbarHelper::save('saveandclose');
+            JToolbarHelper::save2new('saveandnew');
+            JToolbarHelper::cancel('index');
             $this->render('edit', [
                 'model' => $model,
                 'data' => $data,
             ]);
         } else {
-            JToolBarHelper::addNew();
+            JToolbarHelper::addNew();
             $this->render('not_found', []);
         }
 	}

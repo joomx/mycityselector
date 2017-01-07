@@ -39,7 +39,7 @@ class EditorInput extends \JFormFieldEditor {
         $this->name = $name;
         $this->id = str_replace(['[', ']'], '_', $name) . rand(1, 1000);
         $this->value = $value;
-        $this->_config = array_merge($this->getDefaultConfig(), $config);
+        $this->_config = array_replace_recursive($this->getDefaultConfig(), $config);
         // configure xml
         $xml = '<'.'?xml version="1.0"?'.'>'."\n".'<doc>'
             . '<field name="' . $name . '" '

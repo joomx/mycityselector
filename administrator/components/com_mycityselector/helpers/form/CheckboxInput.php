@@ -39,7 +39,7 @@ class CheckboxInput {
         $config['name'] = $name;
         $config['label'] = $label;
         $config['checked'] = $status;
-        $this->_config = array_merge($this->getDefaultConfig(), $config);
+        $this->_config = array_replace_recursive($this->getDefaultConfig(), $config);
     }
 
 

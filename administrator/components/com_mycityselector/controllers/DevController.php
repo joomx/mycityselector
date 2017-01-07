@@ -68,7 +68,7 @@ class DevController extends JxController {
      */
     public function actionIsisIcons()
     {
-        JToolBarHelper::title(JText::_('COM_MYCITYSELECTOR_NAME'), 'big-ico');
+        JToolbarHelper::title(JText::_('COM_MYCITYSELECTOR_NAME'), 'big-ico');
         $path = COM_MCS_PATH . '/../../templates/isis/css/template.css';
         $icons = [];
         if (is_file($path)) {

@@ -50,7 +50,7 @@ class TextInput extends \JFormFieldText {
     {
         $this->name = $name;
         $this->value = $value;
-        $this->_config = array_merge($this->getDefaultConfig(), $config);
+        $this->_config = array_replace_recursive($this->getDefaultConfig(), $config);
         // configure xml
         $xml = '<'.'?xml version="1.0"?'.'>'."\n".'<doc>'
             . '<field name="' . $name . '" '

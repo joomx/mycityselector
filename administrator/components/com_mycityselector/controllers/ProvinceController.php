@@ -52,11 +52,11 @@ class ProvinceController extends JxController {
      */
     public function actionIndex()
     {
-        JToolBarHelper::title(JText::_('COM_MYCITYSELECTOR_PROVINCE'), 'big-ico');
-        JToolBarHelper::addNew();
-        JToolBarHelper::publishList();
-        JToolBarHelper::unpublishList();
-        JToolBarHelper::custom('drop', 'delete', 'delete', JText::_('COM_MYCITYSELECTOR_ITEM_DELETE'));
+        JToolbarHelper::title(JText::_('COM_MYCITYSELECTOR_PROVINCE'), 'big-ico');
+        JToolbarHelper::addNew();
+        JToolbarHelper::publishList();
+        JToolbarHelper::unpublishList();
+        JToolbarHelper::custom('drop', 'delete', 'delete', JText::_('COM_MYCITYSELECTOR_ITEM_DELETE'));
         $countryId = intval($this->input->getCmd('country_id'));
         $country = $this->getModel('country')->getItem($countryId);
         if (empty($country)) {
@@ -91,11 +91,11 @@ class ProvinceController extends JxController {
         $model = $this->getModel('province'); /* @var $model ProvinceModel */
         $data = $model->getDefaultRecordValues();
         $data['countries'] = $model->getCountries();
-        JToolBarHelper::title(JText::_('COM_MYCITYSELECTOR_NAME') . ' - ' . JText::_('COM_MYCITYSELECTOR_ITEM_ADDING'), 'big-ico');
-        JToolBarHelper::apply('save');
-        JToolBarHelper::save('saveandclose');
-        JToolBarHelper::save2new('saveandnew');
-        JToolBarHelper::cancel('index');
+        JToolbarHelper::title(JText::_('COM_MYCITYSELECTOR_NAME') . ' - ' . JText::_('COM_MYCITYSELECTOR_ITEM_ADDING'), 'big-ico');
+        JToolbarHelper::apply('save');
+        JToolbarHelper::save('saveandclose');
+        JToolbarHelper::save2new('saveandnew');
+        JToolbarHelper::cancel('index');
         $this->render('edit', [
             'model' => $model,
             'data' => $data,
@@ -117,18 +117,18 @@ class ProvinceController extends JxController {
         }
         $data = $model->getItem($id);
         $data['countries'] = $model->getCountries();
-        JToolBarHelper::title(JText::_('COM_MYCITYSELECTOR_NAME') . ' - ' . JText::_('COM_MYCITYSELECTOR_ITEM_EDITING') . ': ' . $data['name'], 'big-ico');
+        JToolbarHelper::title(JText::_('COM_MYCITYSELECTOR_NAME') . ' - ' . JText::_('COM_MYCITYSELECTOR_ITEM_EDITING') . ': ' . $data['name'], 'big-ico');
         if (!empty($data)) {
-            JToolBarHelper::apply('save');
-            JToolBarHelper::save('saveandclose');
-            JToolBarHelper::save2new('saveandnew');
-            JToolBarHelper::cancel('index');
+            JToolbarHelper::apply('save');
+            JToolbarHelper::save('saveandclose');
+            JToolbarHelper::save2new('saveandnew');
+            JToolbarHelper::cancel('index');
             $this->render('edit', [
                 'model' => $model,
                 'data' => $data,
             ]);
         } else {
-            JToolBarHelper::addNew();
+            JToolbarHelper::addNew();
             $this->render('not_found', []);
         }
 	}

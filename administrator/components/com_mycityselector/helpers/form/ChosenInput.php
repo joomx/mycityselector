@@ -53,7 +53,7 @@ class ChosenInput {
         $this->_config['name'] = $name;
         $this->_config['value'] = $value;
         $this->_config['label'] = $label;
-        $this->_config = array_merge($this->getDefaultConfig(), $config);
+        $this->_config = array_replace_recursive($this->getDefaultConfig(), $config);
         // check id
         if (empty($this->_config['id'])) {
             $this->_config['id'] = str_replace([']', '['], ['', '-'], $name);

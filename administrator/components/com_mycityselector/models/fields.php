@@ -360,7 +360,6 @@ class FieldsModel extends JModelList
             $isIgnore = isset($data['is_ignore'][$key]) ? $data['is_ignore'][$key] : 0;
             if (substr($key, 0, 1) == '_') {
                 // create
-                if (empty($value) && empty($cities)) continue;
                 $default = (substr($key, -3, 3) == 'DEF') ? '1' : '0';
                 // - value
                 $value = $this->_db->quote($value);
