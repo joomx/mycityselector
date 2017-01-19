@@ -262,8 +262,13 @@ class JexterBuilder {
             }
             out("  - scan files ... ", 'yellow');
             $filesAdmin = glob($copyAdminPath . '/*') + glob($copyAdminPath . '/*.*');
+
             // prepare files list
             foreach ($filesAdmin as $k => &$file) {
+                if (stristr($file, 'com_mycityselector.xml')) {
+                    unset($filesAdmin[$k]);
+                    continue;
+                }
                 $name = basename($file);
                 if (is_dir($file)) {
                     $file = ['tag' => 'folder', 'attr' => [], 'value' => $name]; // if directory
@@ -298,6 +303,7 @@ class JexterBuilder {
         }
         $res = updateManifest($copyAdminPath . '/' . $mainfest, $data);
         removeFileNotes($copyAdminPath . '/' . $mainfest);
+        rename($copyAdminPath . '/' . $mainfest, $config['copy'] . '/' . $ext['id'] . DIRECTORY_SEPARATOR . $mainfest);
         if (!$res) {
             out("error\n", 'red');
             return null;
@@ -349,7 +355,7 @@ class JexterBuilder {
                 if (is_dir($file)) {
                     $file = ['tag' => 'folder', 'attr' => [], 'value' => $name]; // if directory
                 } else {
-                    removeFileNotes($file); 
+                    removeFileNotes($file);
                     // if file
                     if ($name == $ext['script']) { // if it's main script of plugin
                         $file = ['tag' => 'filename', 'attr' => ['plugin' => $ext['id']], 'value' => $name];
@@ -366,7 +372,7 @@ class JexterBuilder {
                 'version' => $config['version'],
                 'files' => $files
             ]);
-            removeFileNotes($copyPath . '/' . $mainfest); 
+            removeFileNotes($copyPath . '/' . $mainfest);
             if (!$res) {
                 out("error\n", 'red');
                 return null;
@@ -422,7 +428,7 @@ class JexterBuilder {
                     $file = ['tag' => 'folder', 'attr' => [], 'value' => $name]; // if directory
                 } else {
                     // if file
-                    removeFileNotes($file); 
+                    removeFileNotes($file);
                     if ($name == $ext['script']) { // if it's main script of plugin
                         $file = ['tag' => 'filename', 'attr' => ['module' => $ext['id']], 'value' => $name];
                     } else {
@@ -438,7 +444,7 @@ class JexterBuilder {
                 'version' => $config['version'],
                 'files' => $files
             ]);
-            removeFileNotes($copyPath . '/' . $mainfest); 
+            removeFileNotes($copyPath . '/' . $mainfest);
             if (!$res) {
                 out("error\n", 'red');
                 return null;
@@ -526,7 +532,7 @@ class JexterBuilder {
             ],
             $config['destination'] . '/' . $manifest
         );
-        removeFileNotes($config['destination'] . '/' . $manifest); 
+        removeFileNotes($config['destination'] . '/' . $manifest);
         if (!$res) {
             out("error on Manifest file updating\n", 'red');
             return null;
