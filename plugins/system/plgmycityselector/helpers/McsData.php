@@ -118,7 +118,7 @@ class McsData
         self::$compSettings = JComponentHelper::getParams('com_mycityselector');
         // load module settings
         $query = JFactory::getDbo()->getQuery(true);
-        $query->select('params')->from('#__extensions')->where("element = 'mod_mycityselector' LIMIT 1");
+        $query->select('params')->from('#__modules')->where("module = 'mod_mycityselector' LIMIT 1");
         $query = JFactory::getDbo()->setQuery($query);
         $result = $query->loadResult();
         self::$modSettings = new \JRegistry($result); // alias of Joomla\Registry\Registry in libraries/vendor/joomla/registry/src/Registry.php
