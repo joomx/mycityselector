@@ -23,7 +23,11 @@ class JexterDbHelper
      */
     private $dbh = null;
 
-    private $lastError = '';
+    private $connectionError = '';
+
+    private $errorCode = 0;
+
+    private $errorInfo = null;
 
     /**
      * Creates new db connection
@@ -38,7 +42,7 @@ class JexterDbHelper
             $this->dbh = new \PDO("mysql:host={$host};dbname={$dbname}", $user, $password);
         } catch (\PDOException $e) {
             $this->dbh = null;
-            $this->lastError = $e->getMessage();
+            $this->connectionError = $e->getMessage();
         }
     }
 
@@ -47,9 +51,14 @@ class JexterDbHelper
         return !empty($this->dbh);
     }
 
+    public function getConnectionError()
+    {
+        return $this->connectionError;
+    }
+
     public function getLastError()
     {
-        return $this->lastError;
+        return $this->errorCode . ': ' . print_r($this->errorInfo, true);
     }
 
     public function dropAllTables()
@@ -65,8 +74,23 @@ class JexterDbHelper
     public function execute($sql, $params = [])
     {
         $sth = $this->dbh->prepare($sql, [\PDO::ATTR_CURSOR => \PDO::CURSOR_FWDONLY]);
-        $sth->execute(empty($params) ? null : $params);
-        //return $sth->fetchAll();
+        if ($sth->execute(empty($params) ? null : $params)) {
+            return true;
+        }
+        $this->errorCode = $sth->errorCode();
+        $this->errorInfo = $sth->errorInfo();
+        return false;
+    }
+
+    public function query($sql, $params = [])
+    {
+        $sth = $this->dbh->prepare($sql, [\PDO::ATTR_CURSOR => \PDO::CURSOR_FWDONLY]);
+        if ($sth->execute(empty($params) ? null : $params)) {
+            return $sth->fetchAll();
+        }
+        $this->errorCode = $sth->errorCode();
+        $this->errorInfo = $sth->errorInfo();
+        return [];
     }
 
 }
