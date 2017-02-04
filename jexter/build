@@ -25,7 +25,8 @@ require 'lib/JexterBuilder.php';
 if (!extension_loaded('zip')) {
     out("The Zip php extension not installed!\n", 'red');
     exit;
-} elseif (!function_exists('simplexml_load_file')) {
+}
+if (!function_exists('simplexml_load_file')) {
     out("The SimpleXml php extension not installed!\n", 'red');
     exit;
 }

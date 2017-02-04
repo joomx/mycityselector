@@ -64,18 +64,65 @@ function out($str, $color = '', $background = '')
     }
 }
 
-
-function input($prompt)
+/**
+ * Reads line from terminal
+ * @param $prompt
+ * @param string $color
+ * @return string
+ */
+function input($prompt, $color = '')
 {
+    out($prompt, $color);
     if (PHP_OS == 'WINNT') {
-        echo $prompt;
         $line = stream_get_line(STDIN, 1024, PHP_EOL);
     } else {
-        $line = readline($prompt);
+        $line = readline('');
     }
     return $line;
 }
 
+
+/**
+ * Backspace for terminal
+ * @param int $num
+ */
+function backspace($num = 1)
+{
+    echo str_repeat(chr(8), $num);
+}
+
+/**
+ * Downloads any big file
+ * @param $file_source
+ * @param $file_target
+ * @param $color
+ * @return bool
+ */
+function downloadFile($file_source, $file_target, $color = '')
+{
+    $size = 0;
+    $source = fopen($file_source, 'rb');
+    $target = fopen($file_target, 'w+b');
+    if (!$source || !$target) {
+        return false;
+    }
+    while (!feof($source)) {
+        $data = fread($source, 4096);
+        if (fwrite($target, $data) === FALSE) {
+            return false;
+        }
+        if (php_sapi_name() == 'cli') {
+            $len = strlen($size);
+            backspace($len);
+            $size += strlen($data);
+            out($size, $color);
+        }
+        flush();
+    }
+    fclose($source);
+    fclose($target);
+    return true;
+}
 
 /**
  * Returns output of out
@@ -218,7 +265,10 @@ function copyDir($source, $dest)
             \RecursiveIteratorIterator::SELF_FIRST) as $item
     ) {
         if ($item->isDir()) {
-            mkdir($dest . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
+            $dir = $dest . DIRECTORY_SEPARATOR . $iterator->getSubPathName();
+            if (!is_dir($dir)) {
+                mkdir($dir);
+            }
         } else {
             copy($item, $dest . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
         }
@@ -659,4 +709,46 @@ function zipping($sourceDir = '', $destinationFile = '', $overwrite = true, $arc
         $zip->close();
     }
     return true;
+}
+
+
+function unzipping($file, $destination)
+{
+    if (!is_dir($destination)) {
+        if (!createDir($destination)) {
+            return false;
+        }
+    } else {
+        clearDir($destination);
+    }
+    $zip = new \ZipArchive();
+    $res = $zip->open($file);
+    if ($res === TRUE) {
+        if ($zip->extractTo($destination)) {
+            $zip->close();
+            return true;
+        }
+        $zip->close();
+    }
+    return false;
+}
+
+/**
+ * Returns joomla configuration object
+ * @param $siteRoot
+ * @return \Joomla\Registry\Registry
+ */
+function loadJoomlaConfig($siteRoot)
+{
+    include_once $siteRoot . '/libraries/vendor/joomla/registry/src/FormatInterface.php';
+    include_once $siteRoot . '/libraries/vendor/joomla/registry/src/AbstractRegistryFormat.php';
+    include_once $siteRoot . '/libraries/vendor/joomla/registry/src/Factory.php';
+    include_once $siteRoot . '/libraries/vendor/joomla/registry/src/Format/Php.php';
+    include_once $siteRoot . '/libraries/vendor/joomla/registry/src/Registry.php';
+    include_once $siteRoot . '/libraries/vendor/joomla/utilities/src/ArrayHelper.php';
+    include_once $siteRoot . '/configuration.php';
+    $config = new \JConfig();
+    $registry = new \Joomla\Registry\Registry();
+    $registry->loadObject($config);
+    return $registry;
 }
