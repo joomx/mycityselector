@@ -6,8 +6,6 @@
 
 namespace adamasantares\jexter;
 
-use Joomla\Registry\Registry;
-
 define('JEXTER_DIR', realpath(__DIR__));
 
 require 'lib/helper.php';
@@ -71,9 +69,13 @@ if (!$dataBaseOnly) {
     $target = JEXTER_DIR . '/tmp/joomla_latest.zip';
     if (is_file($target)) @unlink($target);
     $joomlaFiles = JEXTER_DIR . '/tmp/joomla_latest';
+    if (!is_dir($joomlaFiles)) {
+        createDir($joomlaFiles);
+    }
     $result = downloadFile($download['browser_download_url'], $target, 'cyan');
     if (!$result) {
         out(" downloading failed\n", 'red');
+        exit;
     }
     out("\n  done \n", 'cyan');
 
