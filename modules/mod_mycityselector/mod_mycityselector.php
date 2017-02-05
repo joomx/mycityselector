@@ -124,12 +124,13 @@ class MyCitySelectorModule
                 $yandex = 'true';
             }
         }
+        $debug = McsData::get('debug_mode');
         $script = "window.mcs_dialog={$dialog};"
             . 'window.mcs_base_domain="' . McsData::get('basedomain') . '";'
             . 'window.mcs_cookie_domain="' . McsData::get('cookieDomain') . '";'
             . 'window.mcs_http="' . McsData::get('http') . '";'
             . "window.mcs_yandexgeo={$yandex};"
-            . "window.mcs_debug_mode=" . McsData::get('debug_mode') . ";";
+            . "window.mcs_debug_mode=" . empty($debug) ? false : true . ";";
         JFactory::getDocument()->addScriptDeclaration($script);
     }
 

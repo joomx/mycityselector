@@ -81,6 +81,9 @@ class plgSystemPlgMycityselector extends JPlugin
                     $body = str_replace($forAnyCity['position'], '', $body);
                 }
             }
+            McsLog::add('Замена статичных маркеров');
+            $body = str_replace('{city_name}', McsData::get('city'), $body);
+
             McsLog::add('Анализ закончен');
             // добавим логи
             $body = str_replace('</body>', McsLog::render() . "\n</body>", $body);
