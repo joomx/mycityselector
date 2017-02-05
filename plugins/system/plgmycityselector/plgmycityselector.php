@@ -82,8 +82,11 @@ class plgSystemPlgMycityselector extends JPlugin
                 }
             }
             McsLog::add('Замена статичных маркеров');
-            $body = str_replace('{city_name}', McsData::get('city'), $body);
-
+            $body = str_replace('{city_name}', McsData::get('cityName'), $body);
+            // todo склонения
+            //$body = str_replace('{city_name2}', McsData::get('cityName2'), $body);
+            //$body = str_replace('{city_name3}', McsData::get('cityName3'), $body);
+            //$body = str_replace('{city_name4}', McsData::get('cityName4'), $body);
             McsLog::add('Анализ закончен');
             // добавим логи
             $body = str_replace('</body>', McsLog::render() . "\n</body>", $body);
