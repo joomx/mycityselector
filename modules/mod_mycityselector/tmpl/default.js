@@ -173,7 +173,19 @@
                 if ($(link).data("city") == city) {
                     // переключаем город
                     selectCity.apply(link);
-                    return false;
+                    var domainIndex = location.host.indexOf(window.mcs_base_domain);
+                    var city_code_current = location.host.substr(0, domainIndex - 1);
+                    var city_code = $(link).data("code");
+                    if (window.mcs_subdomain_cities && city_code_current != "" && window.mcs_default_city != city_code_current) {
+                        //var href = window.location.href.replace(/(?:http:\/\/|https:\/\/)([^\/]+)\//, $(link).data("city")+'.'+window.mcs_base_domain);
+                        if (window.mcs_default_city == city_code) {
+                            var href = window.location.href.replace(city_code_current + '.' + window.mcs_base_domain, window.mcs_base_domain);
+                        } else  {
+                            var href = window.location.href.replace(city_code_current + '.' + window.mcs_base_domain, $(link).data("code") + '.' + window.mcs_base_domain);
+                        }
+                        window.location.href = href;
+
+                    }
                 }
             });
         }

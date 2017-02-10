@@ -126,11 +126,13 @@ class MyCitySelectorModule
         }
         $debug = McsData::get('debug_mode');
         $script = "window.mcs_dialog={$dialog};"
-        . 'window.mcs_base_domain="' . McsData::get('basedomain') . '";'
-        . 'window.mcs_cookie_domain="' . McsData::get('cookieDomain') . '";'
-        . 'window.mcs_http="' . McsData::get('http') . '";'
-        . "window.mcs_yandexgeo={$yandex};"
-        . "window.mcs_debug_mode=" . (empty($debug) ? 'false' : 'true') . ";";
+            . 'window.mcs_base_domain="' . McsData::get('basedomain') . '";'
+            . 'window.mcs_cookie_domain="' . McsData::get('cookieDomain') . '";'
+            . 'window.mcs_http="' . McsData::get('http') . '";'
+            . "window.mcs_yandexgeo={$yandex};"
+            . "window.mcs_subdomain_cities=" . McsData::get('subdomain_cities') . ";"
+            . "window.mcs_default_city='" . McsData::get('default_city') . "';"
+            . "window.mcs_debug_mode=" . (empty($debug) ? 'false' : 'true') . ";";
         JFactory::getDocument()->addScriptDeclaration($script);
     }
 
