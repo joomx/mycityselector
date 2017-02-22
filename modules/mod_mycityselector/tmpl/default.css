@@ -56,9 +56,8 @@
     position: fixed;
     z-index: 9000;
     top: 20%;
-    left: 30%;
-    width: 360px;
-    margin-left: -200px;
+    left: 15%;
+    width: 70%;
     height: auto;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
@@ -70,10 +69,6 @@
 
 .mcs-dialog a {
     color: #6b6b6b;
-}
-
-.mcs-dialog {
-    width: 70%;
 }
 
 .mcs-dialog .close {
@@ -235,4 +230,31 @@
 
 .mcs-dialog .cities-wrapper.full-width {
     width: 99%;
+}
+
+/*
+* Responsive
+*/
+
+@media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+    .mcs-dialog {
+        width: 100%;
+        left: 0%;
+        top: 0%;
+        height: 100%;
+    }
+    .mcs-dialog .close {
+        font-size: 0px;
+        padding: 6px 15px 6px 16px;
+        right: 7px;
+    }
+    .mcs-dialog .quick-search input {
+        width: 90%;
+    }
+    .mcs-dialog .inner {
+        height: 100%;
+    }
+    .mcs-dialog .cities-wrapper {
+        height: 400px;
+    }
 }
