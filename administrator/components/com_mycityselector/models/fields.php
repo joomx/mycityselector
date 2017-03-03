@@ -412,7 +412,7 @@ class FieldsModel extends JModelList
             $keys[$i] = intval($key);
         }
         $keys = implode(',', $keys);
-        $this->_db->setQuery("UPDATE `{$this->table}` SET `status`='{$status}' WHERE `id` IN ({$keys})")->execute();
+        $this->_db->setQuery("UPDATE `{$this->table}` SET `published`='{$status}' WHERE `id` IN ({$keys})")->execute();
     }
 
 
