@@ -130,7 +130,7 @@ class MyCitySelectorModule
             . 'window.mcs_cookie_domain="' . $this->get('cookieDomain') . '";'
             . 'window.mcs_http="' . $this->get('http') . '";'
             . "window.mcs_yandexgeo={$yandex};"
-            . "window.mcs_subdomain_cities=" . $this->get('subdomain_cities') . ";"
+            . "window.mcs_subdomain_cities='" . $this->get('subdomain_cities', 0) . "';"
             . "window.mcs_default_city='" . $this->get('default_city') . "';"
             . "window.mcs_debug_mode=" . (empty($debug) ? 'false' : 'true') . ";";
         JFactory::getDocument()->addScriptDeclaration($script);
