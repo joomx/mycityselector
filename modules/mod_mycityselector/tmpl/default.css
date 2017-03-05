@@ -82,6 +82,7 @@
     color: #fbfbfb;
     padding: 5px 29px 7px 8px;
     border-radius: 13px;
+    text-shadow: none;
 }
 
 .mcs-dialog .close:hover {
