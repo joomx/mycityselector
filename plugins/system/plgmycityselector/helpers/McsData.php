@@ -218,7 +218,7 @@ class McsData
         } else {
             McsLog::add('Определяем текущий город');
             if (!empty($_COOKIE['MCS_CITY_CODE'])) {
-                McsLog::add('Ищем город по поддомену');
+                McsLog::add('Смотрим город по кукисам');
                 $city = self::findCity($_COOKIE['MCS_CITY_CODE']);
                 if (!empty($city)) {
                     McsLog::add('Город найден: ' . $city['name']);

@@ -62,13 +62,9 @@ $this->addScript('https://api-maps.yandex.ru/2.1/?lang=ru_RU');
             case 0: //только города
                 $cities = $citiesList['list'];
                 $province = '';
-                ?>
-                <div class="cities-wrapper full-width">
-                    <?php
-                    include($layoutCity);
-                    ?>
-                </div>
-                <?php
+                ?><div class="cities-wrapper full-width">
+                    <?php include($layoutCity); ?>
+                </div><?php
                 break;
             case 1: //регионы и города
                 // если города раздлены по группам, выводим их в отдельный блок
