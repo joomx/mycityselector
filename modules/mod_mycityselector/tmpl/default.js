@@ -219,6 +219,7 @@
      * Переключает группы городов
      */
     function selectGroup() {
+        vardump('click: selectGroup()');
         $(".cities", $dialog).addClass('hidden'); // => прячем все города
         $(".province a", $dialog).removeClass('active'); // => сбрасываем активную группу
         $(".province", $dialog).removeClass('active');
