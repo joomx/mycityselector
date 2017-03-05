@@ -105,7 +105,8 @@ class plgSystemPlgMycityselector extends JPlugin
      * Alias for APP->getBody();
      * @return string
      */
-    private function getPageBody(){
+    private function getPageBody()
+    {
         $app = JFactory::getApplication();
         if (method_exists($app, 'getBody')) {
             return $app->getBody(); // Joomla 3.x
@@ -118,7 +119,8 @@ class plgSystemPlgMycityselector extends JPlugin
     /**
      * Alias for APP->setBody();
      */
-    private function setPageBody($body){
+    private function setPageBody($body)
+    {
         $app = JFactory::getApplication();
         if (method_exists($app, 'setBody')) {
             $app->setBody($body); // Joomla 3.x
