@@ -5,6 +5,7 @@
 
 $siteRoot = realpath(JEXTER_DIR . '/../');
 
+$db = JFactory::getDbo();
 $config = JFactory::getConfig();
 $dbUser = $config->get('user');
 $dbPwd = $config->get('password');
@@ -36,7 +37,7 @@ INSERT INTO `{$dbPrefix}modules` (`asset_id`, `title`, `note`, `content`, `order
 (0, 'My City Selector MOD', '', '', 0, 'position-0', 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 1, 'mod_mycityselector', 1, 1, '', 0, '*');
 SQL;
 foreach ($query as $q) {
-    if (!$db->execute($q)) {
+    if (!$db->setQuery($q) || !$db->execute()) {
         $err = $db->getLastError();
         out("failed. Error: {$err}\n", 'red');
         exit;
