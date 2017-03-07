@@ -12,19 +12,19 @@ class McsData
 
     /**
      * Component's settings
-     * @var JConfig
+     * @var $compSettings Joomla\Registry\Registry
      */
     private static $compSettings = null;
 
     /**
      * Module's settings
-     * @var JConfig
+     * @var $modSettings Joomla\Registry\Registry
      */
     private static $modSettings = null;
 
     /**
      * ID of current city
-     * @var string
+     * @var $cityId string
      */
     private static $cityId = 0;
 
@@ -44,7 +44,7 @@ class McsData
      * Will set to TRUE if a city was already selected by user
      * @var bool
      */
-    private static $isUserHasSelected = false;
+    private static $isCitySelected = false;
 
     /**
      * If need redirect to some subdomain
@@ -137,7 +137,7 @@ class McsData
         // http || https ?
         self::$http = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] == 443) ?
             'https://' : 'http://';
-        self::$isUserHasSelected = empty($_COOKIE['MCS_CITY_CODE']) ? false : true; // if cookies exists then used has selected a city
+        self::$isCitySelected = empty($_COOKIE['MCS_CITY_CODE']) ? false : true; // if cookies exists then used has selected a city
         // current city
         self::detectCurrentCity();
     }
@@ -148,30 +148,34 @@ class McsData
      */
     private static function detectCurrentCity()
     {
+        // если включено автоопределение города IpGeobase и город еще не был выбран
+        if (!self::$isCitySelected && self::get('baseip') == 'ipgeobase') {
+            McsLog::add('Автоопределение города IpGeobase');
+            include(__DIR__ . '/geo.php');
+            $geo = new Geo(); // @see /_dev/geo_demo_todo.php
+            $geo->get_value(); // $_COOKIE['geobase'] будет содержать все гео-данные из результата запроса
+            $city = $geo->get_value('city', true);
+            McsLog::add('Город определен как ' . $city);
+            $city = self::findCity($city);
+            if (!empty($city)) {
+                McsLog::add('Город найден в базе: ' . $city['name']);
+                self::$cityId = $city['id'];
+                self::$city = $city['subdomain'];
+                self::$cityName = $city['name'];
+                $_COOKIE['MCS_CITY_CODE'] = self::$city;
+            }
+        }
+        // прочие варианты
         if (self::get('subdomain_cities') == '1') { // города на поддоменах?
             // проверяем базовый домен
             if (!empty(self::$compSettings) && self::$compSettings->get('basedomain')) {
                 $baseDomain = self::$compSettings->get('basedomain');
-                McsLog::add('Базовый домен: ' . $baseDomain );
             } else {
                 // иначе, пытаемся определить базовый домен самостоятельно
-                McsLog::add('Базовый домен не определен', McsLog::WARN);
-                $baseDomain = $_SERVER['HTTP_HOST'];
-                $parts = explode('.', $baseDomain);
-                if (count($parts) > 2) {
-                    if ($parts[0] == 'www') {
-                        $baseDomain = str_replace('www.', '', $_SERVER['HTTP_HOST']);
-                    } else {
-                        // возможно, это поддомен. попытаемся его найти в базе
-                        $city = self::findCity($parts[0]);
-                        if (!empty($city)) {
-                            unset($parts[0]); // да это поддомен, удаляем его и остается только имя домена
-                        }
-                        $baseDomain = implode('.', $parts);
-                    }
-                }
-                McsLog::add('Автоопределение: ' . $baseDomain, McsLog::WARN);
+                McsLog::add('Базовый домен не определен, автоопределение ...', McsLog::WARN);
+                $baseDomain = self::defineBaseDomain($_SERVER['HTTP_HOST']);
             }
+            McsLog::add('Базовый домен: ' . $baseDomain );
             McsLog::add('Определяем текущий город');
             // проверяем текущий поддомен
             $subDomain = str_replace([$baseDomain, '.'], ['', ''], $_SERVER['HTTP_HOST']);
@@ -218,7 +222,7 @@ class McsData
         } else {
             McsLog::add('Определяем текущий город');
             if (!empty($_COOKIE['MCS_CITY_CODE'])) {
-                McsLog::add('Ищем город по поддомену');
+                McsLog::add('Смотрим город по кукисам');
                 $city = self::findCity($_COOKIE['MCS_CITY_CODE']);
                 if (!empty($city)) {
                     McsLog::add('Город найден: ' . $city['name']);
@@ -249,6 +253,29 @@ class McsData
 
         // обновляем кукис
         setcookie('MCS_CITY_CODE', self::$city, time() + 3600 * 24 * 30, '/', self::$cookieDomain, false, false);
+    }
+
+
+    /**
+     * @param $host
+     * @return mixed|string
+     */
+    private static function defineBaseDomain($host)
+    {
+        $parts = explode('.', $host);
+        if (count($parts) > 2) {
+            if ($parts[0] == 'www') {
+                $baseDomain = str_replace('www.', '', $_SERVER['HTTP_HOST']);
+            } else {
+                // возможно, это поддомен. попытаемся его найти в базе
+                $city = self::findCity($parts[0]);
+                if (!empty($city)) {
+                    unset($parts[0]); // да это поддомен, удаляем его и остается только имя домена
+                }
+                $baseDomain = implode('.', $parts);
+            }
+        }
+        return $baseDomain;
     }
 
 

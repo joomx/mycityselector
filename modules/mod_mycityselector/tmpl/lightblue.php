@@ -1,6 +1,6 @@
 <?php
 /**
- * Default Template
+ * Light blue Template
  *
  * @var $this MyCitySelectorModule
  * @var $layoutUrl string
@@ -16,7 +16,7 @@ defined('_JEXEC') or exit(header("HTTP/1.0 404 Not Found") . '404 Not Found');
 
 $this->addJQuery();
 $this->addScript($layoutUrl . 'default.js');
-$this->addStyle($layoutUrl . 'default.css');
+$this->addStyle($layoutUrl . 'lightblue.css');
 
 // YandexGeoLocation
 $this->addScript('https://api-maps.yandex.ru/2.1/?lang=ru_RU');
@@ -28,7 +28,7 @@ $this->addScript('https://api-maps.yandex.ru/2.1/?lang=ru_RU');
     <a class="city" href="javascript:void(0)" title="Выбрать другой город"><?= $cityCode ?></a>
     <?= $this->get('text_after') ?>
     <div class="question" style="display:none;"><?php JText::printf('MOD_MYCITYSELECTOR_IS_THIS_YOUR_CITY', '<span id="yaCity"></span>') ?>&nbsp;&nbsp;&nbsp;<a
-            href="javascript:void(0)" class="close">x</a>
+                href="javascript:void(0)" class="close">x</a>
         <div>
             <button id="mcs-button-yes"><?= JText::_('JYES') ?></button>
             <button id="mcs-button-no"><?= JText::_('JNO') ?></button>
@@ -42,9 +42,9 @@ $this->addScript('https://api-maps.yandex.ru/2.1/?lang=ru_RU');
 // При создании своей html разметки необходимо сохранить имена классов основных элементов (.mcs-dialog, .close и т.д.).
 ?>
 <div
-    class="mcs-dialog <?= $cities_list_type == 1 ? 'has-groups' : '' ?>
+        class="mcs-dialog <?= $cities_list_type == 1 ? 'has-groups' : '' ?>
 <?= $cities_list_type == 2 ? 'has-groups-countries' : '' ?>"
-    style="display:none;">
+        style="display:none;">
     <a class="close" href="javascript:void(0)" title=""><?= JText::_('MOD_MYCITYSELECTOR_CLOSE') ?></a>
     <div class="title"><?= $this->get('dialog_title') ?></div>
     <?php
@@ -63,7 +63,7 @@ $this->addScript('https://api-maps.yandex.ru/2.1/?lang=ru_RU');
                 $cities = $citiesList['list'];
                 $province = '';
                 ?><div class="cities-wrapper full-width">
-                    <?php include($layoutCity); ?>
+                <?php include($layoutCity); ?>
                 </div><?php
                 break;
             case 1: //регионы и города

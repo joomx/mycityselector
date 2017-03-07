@@ -85,7 +85,7 @@ class MyCitySelectorModule
         }
 
         $citiesList = $this->loadCities();
-        $this->layout = JModuleHelper::getLayoutPath('mod_mycityselector', McsData::get('layout', 'default'));
+        $this->layout = JModuleHelper::getLayoutPath('mod_mycityselector', $this->get('layout', 'default'));
         $this->module = $module;
         $this->variables = [
             'modID' => $module->id,
@@ -107,30 +107,32 @@ class MyCitySelectorModule
         ];
         McsData::set('moduleId', $module->id);
         McsData::set('modSettings', $params);
-        if ($this->variables['cities_list_type'] > 1 ) { // Нужно узнать какой регион выбран, иначе в шаблоне придется перебирать весь массив
+        if ($this->variables['cities_list_type'] > 1) { // Нужно узнать какой регион выбран, иначе в шаблоне придется перебирать весь массив
             $db = JFactory::getDbo();
             $query = $db->getQuery(true)->select('a.subdomain')->from('#__mycityselector_province a')
                 ->leftJoin('#__mycityselector_city b on a.id = b.province_id')
-                ->where('a.status = 1 AND b.status = 1 AND b.subdomain ='. $db->quote($this->variables['city']));
+                ->where('a.status = 1 AND b.status = 1 AND b.subdomain =' . $db->quote($this->variables['city']));
             $this->variables['province'] = $db->setQuery($query)->loadResult();
         } else {
             $this->variables['province'] = null;
         }
         $dialog = '0';
         $yandex = 'false';
-        if (!McsData::get('isUserHasSelected')) {
-            $dialog = (McsData::get('let_select', '1') == '1') ? '1' : '2';
+        if (!$this->get('isCitySelected')) {
+            $dialog = ($this->get('let_select', '1') == '1') ? '1' : '2';
             if ($this->get('baseip', 'none') == 'yandexgeo') { // Yandex geolocation
                 $yandex = 'true';
             }
         }
-        $debug = McsData::get('debug_mode');
+        $debug = $this->get('debug_mode');
         $script = "window.mcs_dialog={$dialog};"
-            . 'window.mcs_base_domain="' . McsData::get('basedomain') . '";'
-            . 'window.mcs_cookie_domain="' . McsData::get('cookieDomain') . '";'
-            . 'window.mcs_http="' . McsData::get('http') . '";'
+            . 'window.mcs_base_domain="' . $this->get('basedomain') . '";'
+            . 'window.mcs_cookie_domain="' . $this->get('cookieDomain') . '";'
+            . 'window.mcs_http="' . $this->get('http') . '";'
             . "window.mcs_yandexgeo={$yandex};"
-            . "window.mcs_debug_mode=" . empty($debug) ? false : true . ";";
+            . "window.mcs_subdomain_cities='" . $this->get('subdomain_cities', 0) . "';"
+            . "window.mcs_default_city='" . $this->get('default_city') . "';"
+            . "window.mcs_debug_mode=" . (empty($debug) ? 'false' : 'true') . ";";
         JFactory::getDocument()->addScriptDeclaration($script);
     }
 
@@ -172,7 +174,7 @@ class MyCitySelectorModule
                 ->where('a.status = 1 AND b.status = 1 AND c.status = 1')
                 ->order('a.ordering, b.ordering, c.ordering');
             $result = $db->setQuery($query)->loadAssocList();
-            foreach($result as $item) {
+            foreach ($result as $item) {
                 $data['list'][$item['country_subdomain']]['list'][$item['province_subdomain']]['list'][$item['city_subdomain']] = $item['city_name'];
                 $data['list'][$item['country_subdomain']]['name'] = $item['country_name'];
                 $data['list'][$item['country_subdomain']]['list'][$item['province_subdomain']]['name'] = $item['province_name'];

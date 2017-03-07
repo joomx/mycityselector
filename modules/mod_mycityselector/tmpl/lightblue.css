@@ -1,5 +1,5 @@
 /**
-* MCS Orange template
+* MCS Light blue template
 */
 .mcs-module {
     position: relative;
@@ -61,21 +61,30 @@
     height: auto;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
-    background-color: #ffd060;
+    background-color: #6c82f8;
     box-shadow: 0px 0px 10px #c7c7c7;
     -moz-box-shadow: 0px 0px 10px #c7c7c7;
     -webkit-box-shadow: 0px 0px 10px #c7c7c7;
 }
 
 .mcs-dialog a {
-    color: #f89406;
+    color: #6c82f8;
+}
+
+.mcs-dialog .countries a {
+    color: #fff;
+    text-decoration: none;
+}
+.mcs-dialog .countries a:hover {
+    color: #eee;
+    text-decoration: none;
 }
 
 .mcs-dialog .close {
     position: absolute;
     top: 8px;
     right: 19px;
-    background: #f89406 url(close.png) right 8px center no-repeat;
+    background: #2431f8 url(close.png) right 8px center no-repeat;
     opacity: 0.5;
     border: none;
     font-size: 12pt;
@@ -94,7 +103,7 @@
     font-size: 24px;
     padding: 20px;
     margin: 0;
-    color: #232323;
+    color: #fff;
 }
 
 .mcs-dialog .provinces {
@@ -120,14 +129,14 @@
 }
 
 .mcs-dialog a {
-    border-bottom: 1px dashed #f89406;
+    border-bottom: 1px dashed #6c82f8;
     font-size: 14pt;
-    color: #f89406;
+    color: #6c82f8;
 }
 
 .mcs-dialog a:hover {
-    color: #f89406;
-    border-bottom-color: #f89406;
+    color: #4354f8;
+    border-bottom-color: #4354f8;
     text-decoration: none;
 }
 
