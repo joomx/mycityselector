@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="component" version="3.2" method="upgrade">
     <name>Mycityselector</name>
-    <creationDate>Jan 2017</creationDate>
+    <creationDate>Mar 2017</creationDate>
     <author>Konstantin Kutsevalov &amp; Vladislav Smolenskiy</author>
     <authorEmail>konstantin@kutsevalov.name</authorEmail>
     <authorUrl>http://kutsevalov.name</authorUrl>
     <copyright>All rights reserved</copyright>
     <license>GNU/GPL v3</license>
-    <version>2.0.24</version>
+    <version></version>
     <description>COM_MYCITYSELECTOR_DESCRIPTION</description>
 
     <install>
@@ -26,7 +26,7 @@
         </sql>
     </uninstall>
 
-    <files folder="site"><filename>index.html</filename><folder>language</folder><filename>license.txt</filename><filename>mycityselector.php</filename></files>
+    <files folder="site"><filename>index.html</filename><folder>language</folder><filename>license.txt</filename><filename>mycityselector.php</filename><filename>robots.txt.php</filename></files>
 
     <languages folder="site">
         <language tag="en-GB">language/en-GB/en-GB.com_mycityselector.sys.ini</language>
@@ -43,7 +43,7 @@
             <menu link="option=com_config&amp;view=component&amp;component=com_mycityselector" img="class:module">COM_MYCITYSELECTOR_OPTIONS</menu>
         </submenu>
 
-        <files folder="admin"><folder>assets</folder><filename>com_mycityselector.xml</filename><filename>config.xml</filename><folder>controllers</folder><folder>helpers</folder><folder>images</folder><filename>index.html</filename><filename>installer.php</filename><folder>language</folder><filename>license.txt</filename><folder>models</folder><filename>mycityselector.php</filename><folder>sql</folder><folder>views</folder></files>
+        <files folder="admin"><folder>assets</folder><filename>config.xml</filename><folder>controllers</folder><folder>helpers</folder><folder>images</folder><filename>index.html</filename><filename>installer.php</filename><folder>language</folder><filename>license.txt</filename><folder>models</folder><filename>mycityselector.php</filename><folder>sql</folder><folder>views</folder></files>
 
         <languages folder="admin">
             <language tag="en-GB">language/en-GB/en-GB.com_mycityselector.sys.ini</language>
