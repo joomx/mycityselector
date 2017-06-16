@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="3.2" type="package" method="upgrade">
+	<name>My City Selector</name>
+	<packagename>mycityselector</packagename>
+	<creationDate>{cdate}</creationDate>
+	<author>Konstantin Kutsevalov &amp; Vladislav Smolenskiy</author>
+	<authorEmail>konstantin@kutsevalov.name</authorEmail>
+	<authorUrl>http://www.kutsevalov.name/2013/08/12/modul-vibora-goroda-dlya-joomla/</authorUrl>
+	<copyright>All rights reserved</copyright>
+    <license>GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html</license>
+	<version>{version}</version>
+	<description>
+		<!-- @devnote описание генерируется во время установки -->
+	</description>
+
+	<scriptfile>installer.php</scriptfile>
+    <files>
+		<!-- генерируется автоматически -->
+    </files>
+</extension>
+

@@ -1,0 +1,176 @@
+#!/usr/bin/env php
+<?php
+/**
+ * This script will help to automatically install the latest Joomla version over this project
+ */
+
+namespace adamasantares\jexter;
+
+define('JEXTER_DIR', realpath(__DIR__));
+
+require 'lib/helper.php';
+require 'lib/curl.php';
+require 'lib/db.php';
+
+// check extensions
+if (!extension_loaded('zip')) {
+    out("The Zip php extension not installed!\n", 'red');
+    exit;
+}
+if (!function_exists('simplexml_load_file')) {
+    out("The SimpleXml php extension not installed!\n", 'red');
+    exit;
+}
+if (!function_exists('curl_version')) {
+    out("The CURL php extension not installed!\n", 'red');
+    exit;
+}
+
+$dataBaseOnly = false;
+$siteRoot = realpath(JEXTER_DIR . '/../');
+
+// check joomla
+if (is_file(JEXTER_DIR . '/../configuration.php') && is_dir(JEXTER_DIR . '/../libraries')) {
+    out(" Joomla already installed.\n", 'yellow');
+    $resp = input("  Do you really want to reinstall it?\n  y) Yes\n  n) No\n  d) Database only\n Choice [n]: ", 'yellow');
+    if (strtolower($resp) != 'y' && strtolower($resp) != 'd') {
+        exit;
+    }
+    if (strtolower($resp) == 'd') {
+        $dataBaseOnly = true;
+    }
+    echo "\n";
+}
+
+if (!$dataBaseOnly) {
+    out(" Downloading latest Joomla ...", 'light_blue');
+    $releases = curl_githubGetLastReleases('joomla/joomla-cms');
+    if (!isset($releases['tag_name']) || empty($releases['assets'])) {
+        out("FAIL\n", 'red');
+        exit;
+    }
+    backspace(8);
+    out("\n  version ({$releases['tag_name']}) ...", 'cyan');
+    // looking for ZIP of full stable package
+    $download = [];
+    foreach ($releases['assets'] as $release) {
+        if ($release['content_type'] == 'application/zip') {
+            if (stripos($release['name'], 'full') !== false && stripos($release['name'], 'package') !== false) {
+                $download = $release;
+                break;
+            }
+        }
+    }
+    if (empty($download)) {
+        out("FAIL (full package not found!)\n", 'red');
+    }
+    backspace(8);
+    out("\n  {$download['name']} [{$download['size']}] ...  ", 'cyan');
+    $target = JEXTER_DIR . '/tmp/joomla_latest.zip';
+    if (is_file($target)) @unlink($target);
+    $joomlaFiles = JEXTER_DIR . '/tmp/joomla_latest';
+    if (!is_dir($joomlaFiles)) {
+        createDir($joomlaFiles);
+    }
+    $result = downloadFile($download['browser_download_url'], $target, 'cyan');
+    if (!$result) {
+        out(" downloading failed\n", 'red');
+        exit;
+    }
+    out("\n  done \n", 'cyan');
+
+    out(" Extracting files ... ", 'light_blue');
+    if (!unzipping($target, $joomlaFiles)) {
+        out("failed\n", 'red');
+        exit;
+    }
+    out("done\n", 'light_blue');
+    @unlink($target);
+
+    out(" Moving files ... ", 'light_blue');
+    if (!copyDir($joomlaFiles, $siteRoot)) {
+        out("failed\n", 'red');
+        exit;
+    }
+    // copy config
+    copy($siteRoot . '/installation/configuration.php-dist', $siteRoot . '/configuration.php');
+    out("done\n", 'light_blue');
+    dropDir($joomlaFiles);
+} else {
+    out(" Reinstall DB only\n", 'light_blue');
+}
+
+// ask few questions
+out(" DB settings\n", 'light_blue');
+$database = input("  Database name [mcs]: ", 'green');
+$database = empty($database) ? 'mcs' : $database;
+$dbUser = input("  Database user [root]: ", 'green');
+$dbUser = empty($dbUser) ? 'root' : $dbUser;
+$dbPwd = input("  Database password: ", 'green');
+$dbHost = input("  Database host [localhost]: ", 'green');
+$dbHost = empty($dbHost) ? 'localhost' : $dbHost;
+$dbPrefix = 'mcs_';
+
+// check DB connection
+out(" Connect to DB ... ", 'light_blue');
+$db = new JexterDbHelper($database, $dbUser, $dbPwd, $dbHost);
+if (!$db->isConnected()) {
+    $err = $db->getConnectionError();
+    out("failed\n   {$err}", 'red');
+    exit;
+}
+out("OK\n", 'light_blue');
+// remove all tables if exists
+$db->dropAllTables();
+
+out(" Creating tables ... ", 'light_blue');
+// load sql file and replace prefixes
+$sqlFile = $siteRoot . '/installation/sql/mysql/joomla.sql';
+$sqlFile2 = $siteRoot . '/installation/sql/mysql/sample_brochure.sql';
+if (!is_file($sqlFile) || !is_file($sqlFile2)) {
+    out("failed. SQL instructions not found.\n", 'red');
+    exit;
+}
+foreach ([$sqlFile, $sqlFile2] as $file) {
+    $lines = file($file);
+    foreach ($lines as &$line) {
+        $line = str_replace('#__', $dbPrefix, $line);
+    }
+    $lines = implode('', $lines);
+    file_put_contents(JEXTER_DIR . '/tmp/_install.sql', $lines);
+    $path = realpath(JEXTER_DIR . '/tmp/_install.sql');
+    system("mysql -u {$dbUser} -p{$dbPwd} {$database} < {$path}", $res);
+    if ($res !== 0) {
+        out("failed.\n", 'red');
+        exit;
+    }
+}
+// create admin account
+$db->execute("INSERT INTO `{$dbPrefix}users` (`id`,`name`, `username`, `email`, `password`, `block`, `sendEmail`, `registerDate`, `lastvisitDate`, `activation`, `params`, `lastResetTime`, `resetCount`, `otpKey`, `otep`, `requireReset`) VALUES (1, 'Super User', 'admin', 'mail@mcs.dev', '$2y$10$6dUEWDYUpagKKRq5.4nRKuCHV4hCB5oIWZCwlh//JFfEaUTNo.RDG', 0, 1, '2017-02-04 10:15:22', '0000-00-00 00:00:00', '0', '', '0000-00-00 00:00:00', 0, '', '', 0)");
+$db->execute("INSERT INTO `{$dbPrefix}user_usergroup_map` (`user_id`, `group_id`) VALUES (1, 8)");
+out("OK\n", 'light_blue');
+
+// save config file
+$registry = loadJoomlaConfig($siteRoot);
+createDir($siteRoot . '/tmp');
+$registry->loadArray([
+    'log_path' => $siteRoot . '/tmp',
+    'tmp_path' => $siteRoot . '/tmp',
+    'MetaDesc' => 'MCS',
+    'MetaKeys' => '',
+    'sitename' => 'MCS',
+    'dbtype' => 'mysqli',
+    'host' => $dbHost,
+    'user' => $dbUser,
+    'password' => $dbPwd,
+    'db' => $database,
+    'dbprefix' => $dbPrefix,
+]);
+$config = $registry->toString('PHP', ['class' => 'JConfig', 'closingtag' => false]);
+file_put_contents($siteRoot . '/configuration.php', $config);
+
+// drop installation folder
+dropDir($siteRoot . '/installation');
+
+out(" Finished\n  Administrator account\n   Login: admin\n   Password: admin\n", 'green');
+out(" Thank you for your help!\n", 'light_cyan');

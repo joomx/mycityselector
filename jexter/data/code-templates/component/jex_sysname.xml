@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="component" version="3.2" method="upgrade">
+    <name>{jex_classname}</name>
+    <creationDate>{jex_date}</creationDate>
+    <author>{jex_author}</author>
+    <authorEmail>{jex_author_email}</authorEmail>
+    <authorUrl>{jex_author_url}</authorUrl>
+    <copyright>All rights reserved</copyright>
+    <license>GNU/GPL v3</license>
+    <version>1.0.0</version>
+    <description>T_JEX_DESCRIPTION</description>
+
+    <install>
+        <sql>
+            <file driver="mysql" charset="utf8">install.sql</file>
+        </sql>
+    </install>
+    <uninstall>
+        <sql>
+            <file driver="mysql" charset="utf8">uninstall.sql</file>
+        </sql>
+    </uninstall>
+
+    <files folder="site">
+        <folder>language</folder>
+        <filename>{jex_shortname}.php</filename>
+        <filename>index.html</filename>
+    </files>
+
+    <languages folder="site">
+        <language tag="en-GB">language/en-GB/en-GB.{jex_sysname}.sys.ini</language>
+        <language tag="ru-RU">language/ru-RU/ru-RU.{jex_sysname}.sys.ini</language>
+    </languages>
+
+    <administration>
+        <menu img="/administrator/components/{jex_sysname}/images/{menu-icon}">T_JEX_NAME</menu>
+        <submenu>
+            <menu link="option={jex_sysname}" img="class:module">T_JEX_ITEMS</menu>
+        </submenu>
+
+        <files folder="admin">
+            <folder>images</folder>
+            <folder>language</folder>
+            <folder>models</folder>
+            <folder>helpers</folder>
+            <folder>views</folder>
+            <filename>admin-scripts.js</filename>
+            <filename>admin-style.css</filename>
+            <filename>{jex_shortname}.php</filename>
+            <filename>controller.php</filename>
+            <filename>install.sql</filename>
+            <filename>uninstall.sql</filename>
+            <filename>index.html</filename>
+        </files>
+
+        <languages folder="admin">
+            <language tag="en-GB">language/en-GB/en-GB.{jex_sysname}.sys.ini</language>
+            <language tag="en-GB">language/en-GB/en-GB.{jex_sysname}.ini</language>
+            <language tag="ru-RU">language/ru-RU/ru-RU.{jex_sysname}.sys.ini</language>
+            <language tag="ru-RU">language/ru-RU/ru-RU.{jex_sysname}.ini</language>
+        </languages>
+    </administration>
+
+    <!--updateservers>
+        <server type="extension" priority="1" name="{jex_name} Update server">{update_url}</server>
+    </updateservers-->
+
+</extension>
