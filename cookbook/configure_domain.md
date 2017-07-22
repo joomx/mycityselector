@@ -5,7 +5,7 @@
 Для начала, вам неоходимо иметь доступ в DNS записям вашего домена.
 Там нужно сохдать А запись такого вида:
 
-<img src="https://raw.githubusercontent.com/art-programming-team/mycityselector/develop/doc_images/domain-1.jpg" alt="" />
+<img src="https://raw.githubusercontent.com/art-programming-team/mycityselector/free/doc_images/domain-1.jpg" alt="" />
 
 Эта запись будет перенаправлять лобой запрошенный поддомен на тот же сервер где и основной сайт.
 
