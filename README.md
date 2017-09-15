@@ -154,8 +154,8 @@ server {
      
      ... other instructions ..
      
-     location /robots.txt {
-         rewrite "^.*+$" /components/com_mycityselector/robots.txt.php;
+     location = /robots.txt {
+         rewrite ^(.*)$ /components/com_mycityselector/robots.txt.php last;
      }
 }
 ```
