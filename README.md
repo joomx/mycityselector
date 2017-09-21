@@ -8,6 +8,7 @@ Version:     2.0.25
 
 Joomla >= 3.3.0<br>
 PHP >= 5.5
+PHP Extension [ionCube](http://jbzoo.ru/docs/ioncube-installing)
 
 ## Общие сведения
 
@@ -29,6 +30,7 @@ My City Selector (MCS) - это расширение для CMS Joomla, позв
 
 Расширение включает в себя два плагина (system/plgmycityselector & editors-xtd/mcsinsert), компонент (com_mycityselector) и модуль (mod_mycityselector). Все они ставяться одним пакетом,
 поэтому загруженный архив распаковывать не нужно. Устанавливайте как есть.
+Помимо самого расширения, вам потребуется установленный php модуль [ionCube](loader.md).
 
 ## Настройка
 
