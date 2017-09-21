@@ -7,7 +7,7 @@ Version:     2.0.25
 ##Системные требования
 
 Joomla >= 3.3.0<br>
-PHP >= 5.5
+PHP >= 5.5<br>
 PHP Extension [ionCube](http://jbzoo.ru/docs/ioncube-installing)
 
 ## Общие сведения
