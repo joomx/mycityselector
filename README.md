@@ -2,12 +2,12 @@ My City Selector Joomla Extension
 =================================
 
 Package:     component + module + plugins<br>
-Version:     2.0.25
+Version:     2.1.0b
 
 ##Системные требования
 
-Joomla >= 3.3.0<br>
-PHP >= 5.5<br>
+Joomla >= 3.3.0 (последний тест на 3.8.0)<br>
+PHP >= 5.6<br>
 PHP Extension [ionCube](http://jbzoo.ru/docs/ioncube-installing)
 
 ## Общие сведения
@@ -69,11 +69,9 @@ kiev.krakozyabra.org<br>
 
  - [city Город] текст [/city] - из первой версии
  - {mcs-N} - новый маркер, появился во второй версии.
- - {city_name} - спец. маркер возвращающий название текущего города. Можно использовать в meta тегах и заголовках.
- 
-Скоро будут добавлены маркеры склонений {city_name2}, {city_name3}, ... 
+ - {city_name} - спец. маркеры возвращающие выводить название города в мета теги (подробнее ниже)
 
-А еще, вы можете получить название текущего города в своем коде черезе команды
+Еще, Вы можете получить название текущего города в своем коде черезе команды
 
 ```
 $cityCode = McsData::get('city');
@@ -128,6 +126,19 @@ MSC в админке. Основной недостаток этих тегов
 
 <img src="https://raw.githubusercontent.com/art-programming-team/mycityselector/free/doc_images/image-7.jpg" alt="" />
 
+## Специальные маркеры
+
+Как было сказано выше имеются дополнительные маркеры, позволяющие выводить название города в title или meta тегах.
+Вот их полный перечень:
+
+ - {city_name} или {cityName} (как больше нравится) => Именительный (Омск)
+ - {city_name2} или {cityName2} или {cityGenitive} => Родительный (Омска)
+ - {city_name3} или {cityName3} или {cityDative} => Дательный (Омску)
+ - {city_name4} или {cityName4} или {cityAccusative} => Винительный (Омск)
+ - {city_name5} или {cityName5} или {cityAblative} => Творительный (Омском)
+ - {city_name6} или {cityName6} или {cityPrepositional} => Предложный (Омске)
+
+Эти маркеры можно использовать как в шаблоне так и в полях ввода при редактировании контента.
 
 ## Кастомизация
 
