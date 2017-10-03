@@ -2,7 +2,7 @@ My City Selector Joomla Extension
 =================================
 
 Package:     component + module + plugins<br>
-Version:     2.1.0b
+Version:     2.0.3
 
 ##Системные требования
 
