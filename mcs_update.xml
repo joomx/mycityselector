@@ -13,5 +13,5 @@
     </tags>
     <maintainer>Konstantin Kutsevalov and Vladislav Smolenskiy</maintainer>
     <maintainerurl>https://github.com/active-programming/mycityselector/graphs/contributors</maintainerurl>
-    <targetplatform name="joomla" version=".*"/>
+    <targetplatform name="joomla" version="3.*"/>
 </update>
