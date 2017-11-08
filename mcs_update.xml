@@ -3,13 +3,14 @@
     <description>Mycityselector Component for Joomla</description>
     <element>pkg_mycityselector</element>
     <type>package</type>
+    <client>0</client>
     <version>2.0.3</version>
     <infourl title="MyCitySelector">https://github.com/active-programming/mycityselector</infourl>
     <downloads>
         <downloadurl type="full" format="zip">https://github.com/active-programming/mycityselector/releases/download/2.0.3/pkg_mycityselector.zip</downloadurl>
     </downloads>
     <tags>
-        <tag>rc</tag>
+        <tag>stable</tag>
     </tags>
     <maintainer>Konstantin Kutsevalov and Vladislav Smolenskiy</maintainer>
     <maintainerurl>https://github.com/active-programming/mycityselector/graphs/contributors</maintainerurl>
