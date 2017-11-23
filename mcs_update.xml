@@ -1,18 +1,20 @@
-<update>
-    <name>Mycityselector</name>
-    <description>Mycityselector Component for Joomla</description>
-    <element>pkg_mycityselector</element>
-    <type>package</type>
-    <client>0</client>
-    <version>2.0.3</version>
-    <infourl title="MyCitySelector">https://github.com/active-programming/mycityselector</infourl>
-    <downloads>
-        <downloadurl type="full" format="zip">https://act-prog.ru/product/mcs-download</downloadurl>
-    </downloads>
-    <tags>
-        <tag>alpha</tag>
-    </tags>
-    <maintainer>Konstantin Kutsevalov and Vladislav Smolenskiy</maintainer>
-    <maintainerurl>https://github.com/active-programming/mycityselector/graphs/contributors</maintainerurl>
-    <targetplatform name="joomla" version="3.[0123456789]"/>
-</update>
+<updates>
+    <update>
+        <name>Mycityselector</name>
+        <description>Mycityselector Component for Joomla</description>
+        <element>pkg_mycityselector</element>
+        <type>package</type>
+        <client>0</client>
+        <version>2.0.3</version>
+        <infourl title="MyCitySelector">https://github.com/active-programming/mycityselector</infourl>
+        <downloads>
+            <downloadurl type="full" format="zip">https://act-prog.ru/product/mcs-download</downloadurl>
+        </downloads>
+        <tags>
+            <tag>alpha</tag>
+        </tags>
+        <maintainer>Konstantin Kutsevalov and Vladislav Smolenskiy</maintainer>
+        <maintainerurl>https://github.com/active-programming/mycityselector/graphs/contributors</maintainerurl>
+        <targetplatform name="joomla" version="3.[0123456789]"/>
+    </update>
+</updates>
