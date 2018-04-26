@@ -6,7 +6,7 @@ Package:     component + module + plugins<br>
 
 ##Системные требования
 
-Joomla >= 3.3.0 (последний тест на 3.8.0)<br>
+Joomla >= 3.3.0 (последний тест на 3.8.6)<br>
 PHP >= 5.6<br>
 PHP Extension [ionCube](http://jbzoo.ru/docs/ioncube-installing)
 
