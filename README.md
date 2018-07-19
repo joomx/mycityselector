@@ -14,7 +14,7 @@ PHP Extension [ionCube](http://jbzoo.ru/docs/ioncube-installing)
 
 My City Selector (MCS) - это расширение для CMS Joomla, позволяющее отображать разную информацию для разных городов.
 
-<img src="https://raw.githubusercontent.com/art-programming-team/mycityselector/free/doc_images/image-1.jpg" alt="" />
+<img src="https://raw.githubusercontent.com/art-programming-team/mycityselector/free/doc_images/image-1.png" alt="" />
 
 В новой 2й версии основной упор сделан на использование поддоменов для разных городов, так как это самый
 лучший способ разделять контент с точки зрения поисковиков.
