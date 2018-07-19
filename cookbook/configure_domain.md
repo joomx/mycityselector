@@ -5,7 +5,7 @@
 Для начала, вам неоходимо иметь доступ в DNS записям вашего домена.
 Там нужно сохдать А запись такого вида:
 
-<img src="https://raw.githubusercontent.com/art-programming-team/mycityselector/develop/doc_images/domain-1.jpg" alt="" />
+<img src="https://raw.githubusercontent.com/art-programming-team/mycityselector/free/doc_images/domain-1.jpg" alt="" />
 
 Эта запись будет перенаправлять лобой запрошенный поддомен на тот же сервер где и основной сайт.
 
@@ -40,4 +40,8 @@ server {
 После обновления DNS записей и перезагрузки веб сервера, все должно заработать как нужно.
 Какой поддомен Вы бы не ввели (хоть figace.site.ru), запрос все равно будет уходить на основной сайт site.ru.
 
+<<<<<<< HEAD
 **Если у Вас есть пример настроек для конкретного сервера или хостера, милости просим [делиться](https://github.com/active-programming/mycityselector/issues/new)**
+=======
+**Если у Вас есть пример настроек для конкретного сервера или хостера, милости просим [делиться](https://github.com/active-programming/mycityselector/issues/new)**
+>>>>>>> 0be36ce3757a20f4dba1d69eea040756f034bde8

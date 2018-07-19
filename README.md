@@ -2,19 +2,19 @@ My City Selector Joomla Extension
 =================================
 
 Package:     component + module + plugins<br>
-Version:     2.0.25
+*для получения расширенной версии (без ограничений) просьба писать на konstantin(dog)kutsevalov(dot)name или vlad[at]smolensky(dot)info*
 
 ##Системные требования
 
-Joomla >= 3.3.0<br>
-PHP >= 5.5
+Joomla >= 3.3.0 (последний тест на 3.8.8)<br>
+PHP >= 5.6<br>
+PHP Extension [ionCube](http://jbzoo.ru/docs/ioncube-installing)
 
 ## Общие сведения
 
 My City Selector (MCS) - это расширение для CMS Joomla, позволяющее отображать разную информацию для разных городов.
 
-<img src="https://raw.githubusercontent.com/art-programming-team/mycityselector/master/doc_images/image-1.jpg" alt="" />
-
+<img src="https://raw.githubusercontent.com/art-programming-team/mycityselector/free/doc_images/image-1.jpg" alt="" />
 
 В новой 2й версии основной упор сделан на использование поддоменов для разных городов, так как это самый
 лучший способ разделять контент с точки зрения поисковиков.
@@ -28,10 +28,9 @@ My City Selector (MCS) - это расширение для CMS Joomla, позв
 
 Скачиваете отсюда: https://github.com/art-programming-team/mycityselector/releases
 
-(Предыдущая версия 1.8 доступна здесь https://github.com/art-programming-team/mycityselector/tree/v1.8.x/builder/package)
-
 Расширение включает в себя два плагина (system/plgmycityselector & editors-xtd/mcsinsert), компонент (com_mycityselector) и модуль (mod_mycityselector). Все они ставяться одним пакетом,
 поэтому загруженный архив распаковывать не нужно. Устанавливайте как есть.
+Помимо самого расширения, вам потребуется установленный php модуль [ionCube](loader.md).
 
 ## Настройка
 
@@ -40,7 +39,7 @@ My City Selector (MCS) - это расширение для CMS Joomla, позв
  - Включить модуль "My City Selector MOD" и настроить его.
  - Прописать в настройках компонента "MyCitySelector" базовый домен вашего сайта.
  
-<img src="https://raw.githubusercontent.com/art-programming-team/mycityselector/master/doc_images/config.jpg" alt="" />
+<img src="https://raw.githubusercontent.com/art-programming-team/mycityselector/free/doc_images/config.jpg" alt="" />
 
 После чего, при определенном уровне удачи все должно заработать :)
 
@@ -61,17 +60,25 @@ kiev.krakozyabra.org<br>
 Управление текстами происходит через компонент MyCitySelector в админке, там же и управление
 списком городов и настройки компонента.
 
-<img src="https://raw.githubusercontent.com/art-programming-team/mycityselector/master/doc_images/image-2.png" alt="" />
+<img src="https://raw.githubusercontent.com/art-programming-team/mycityselector/free/doc_images/image-2.png" alt="" />
 
 Часть настроек находится в модуле, который отвечает за отображаемое окно выбора города на сайте.
 
 Для вставки заготовленных текстов на страницы сайта используются специальные маркеры (теги).
-Всего есть два вида маркеров:
+Всего есть три вида маркеров:
 
  - [city Город] текст [/city] - из первой версии
  - {mcs-N} - новый маркер, появился во второй версии.
+ - {city_name} - спец. маркеры позволяющие выводить название города в мета теги (подробнее ниже)
 
-Тег [city] удобен для небольших надписей или сообщений (и для небольшего количества городов).
+Еще, Вы можете получить название текущего города в своем коде черезе команды
+
+```
+$cityCode = McsData::get('city');
+$cityName = McsData::get('cityName');
+```
+
+Итак, тег [city] удобен для небольших надписей или сообщений (и для небольшего количества городов).
 Но если городов много и информация для каждого своя, то лучше воспользоваться компонентом
 MSC в админке. Основной недостаток этих тегов в том, что на одной странице все теги взаимосвязаны
 и отобразить разную информацию в нескольких местах страницы может быть невозможным.
@@ -91,13 +98,13 @@ MSC в админке. Основной недостаток этих тегов
 и у каждого свои условия по городам. Кроме того, вам не нужно вводить их вручную.
 В редакторе Вы можете найти кнопку для вставки маркера в текущую позицию курсора.
 
-<img src="https://raw.githubusercontent.com/art-programming-team/mycityselector/master/doc_images/image-3.jpg" alt="" />
+<img src="https://raw.githubusercontent.com/art-programming-team/mycityselector/free/doc_images/image-3.jpg" alt="" />
 
-Просто выбираете нужный контент из списка и вставляете маркер в текст. Все просто.
+Выбираете нужный контент из списка и вставляете маркер в текст. Все просто.
 
 Перейдем к рассмотрению компонента "MyCitySelector". Откройте подпункт "Страны".
 
-<img src="https://raw.githubusercontent.com/art-programming-team/mycityselector/master/doc_images/image-5.png" alt="" />
+<img src="https://raw.githubusercontent.com/art-programming-team/mycityselector/free/doc_images/image-5.png" alt="" />
 
 При клике по ссылке "регионы" вы сможете открыть список регионов, относящихся к данной стране. Аналогично и в списке
 регионов, так есть ссылка "города". Делая элементы списков неактывными, вы запрещаете их отображение в окне выбора города.
@@ -108,7 +115,7 @@ MSC в админке. Основной недостаток этих тегов
 
 Перейдем к управлению текстами. Что тут у нас...?
 
-<img src="https://raw.githubusercontent.com/art-programming-team/mycityselector/master/doc_images/image-6.jpg" alt="" />
+<img src="https://raw.githubusercontent.com/art-programming-team/mycityselector/free/doc_images/image-6.jpg" alt="" />
 
 эммм...ну тут собственно пусто. Самое время что-нибудь создать. Предположим (совершенно точно), нам нужно для разных
 городов отображать разные адреса и контакты.
@@ -117,9 +124,21 @@ MSC в админке. Основной недостаток этих тегов
 кнопкой "Добавить поле". В добавленное поле вбиваем желаемый город и вводим для него
 текст (адрес).
 
-<img src="https://raw.githubusercontent.com/art-programming-team/mycityselector/master/doc_images/image-7.jpg" alt="" />
+<img src="https://raw.githubusercontent.com/art-programming-team/mycityselector/free/doc_images/image-7.jpg" alt="" />
 
+## Специальные маркеры
 
+Как было сказано выше имеются дополнительные маркеры, позволяющие выводить название города в title или meta тегах.
+Вот их полный перечень:
+
+ - {city_name} или {cityName} (как больше нравится) => Именительный (Омск)
+ - {city_name2} или {cityName2} или {cityGenitive} => Родительный (Омска)
+ - {city_name3} или {cityName3} или {cityDative} => Дательный (Омску)
+ - {city_name4} или {cityName4} или {cityAccusative} => Винительный (Омск)
+ - {city_name5} или {cityName5} или {cityAblative} => Творительный (Омском)
+ - {city_name6} или {cityName6} или {cityPrepositional} => Предложный (Омске)
+
+Эти маркеры можно использовать как в шаблоне так и в полях ввода при редактировании контента.
 
 ## Кастомизация
 
@@ -156,8 +175,8 @@ server {
      
      ... other instructions ..
      
-     location /robots.txt {
-         rewrite "^.*+$" /components/com_mycityselector/robots.txt.php;
+     location = /robots.txt {
+         rewrite ^(.*)$ /components/com_mycityselector/robots.txt.php last;
      }
 }
 ```
