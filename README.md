@@ -4,6 +4,8 @@ My City Selector Joomla Extension
 Package:     component + module + plugins<br>
 *для получения расширенной версии (без ограничений) просьба писать на konstantin(dog)kutsevalov(dot)name или vlad[at]smolensky(dot)info*
 
+Пиратские копии: https://joomlok.com/products/citychanger-vybor-goroda-v-joomla - если вы купили тут, мы не оказываем поддержку. Поймите правильно, стоимость нашего расширения не окупает затрачиваемых усилий даже на 20%, то есть мы ежемесячно выкладываем до 80% своих усилий и денег на поддержку просто ради хобби.
+
 ##Системные требования
 
 Joomla >= 3.3.0 (последний тест на 3.8.8)<br>
