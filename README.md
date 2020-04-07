@@ -8,7 +8,7 @@ Package:     component + module + plugins<br>
 
 ##Системные требования
 
-Joomla >= 3.3.0 (последний тест на 3.8.8)<br>
+Joomla >= 3.3.0 (последний тест на 3.9.16)<br>
 PHP >= 5.6<br>
 PHP Extension [ionCube](http://jbzoo.ru/docs/ioncube-installing)
 
@@ -18,6 +18,8 @@ My City Selector (MCS) - это расширение для CMS Joomla, позв
 
 <img src="https://raw.githubusercontent.com/art-programming-team/mycityselector/free/doc_images/image-1.png" alt="" />
 
+В новой 2й версии основной упор сделан на использование поддоменов для разных городов, так как это самый
+лучший способ разделять контент с точки зрения поисковиков.
 
 > *!* Ваш домен должен быть настроен так, чтобы любой произвольный поддомен открывал основной сайт.
 > Не нужно создавать много сайтов :) это неверно. Подробнее о настройках домена можно прочитать [тут](cookbook/configure_domain.md).
@@ -38,7 +40,7 @@ My City Selector (MCS) - это расширение для CMS Joomla, позв
 
  - Включить модуль "My City Selector MOD" и настроить его.
  - Прописать в настройках компонента "MyCitySelector" базовый домен вашего сайта.
- 
+
 <img src="https://raw.githubusercontent.com/art-programming-team/mycityselector/free/doc_images/config.jpg" alt="" />
 
 После чего, при определенном уровне удачи все должно заработать :)
@@ -68,8 +70,8 @@ kiev.krakozyabra.org<br>
 Всего есть три вида маркеров:
 
  - [city Город] текст [/city] - из первой версии
- - [mcs-N Название] - новый маркер, появился во второй версии, можно вставлять с помощью редактора (см. ниже)
- - {city_name} - спец. маркеры позволяющие выводить название города в мета теги (подробнее ниже)
+ - {mcs-N} - новый маркер, появился во второй версии.
+ - {city_name} , {location_name} - спец. маркеры позволяющие выводить название города либо локации в мета теги (подробнее ниже)
  - {city_code}, {cityCode}, {province_code}, {provinceCode}, {country_code}, {countryCode} - символьные коды города, региона, страны
 
 Еще, Вы можете получить название текущего города в своем коде черезе команды
@@ -151,17 +153,63 @@ MSC в админке. Основной недостаток этих тегов
  - McsData::isBaseUrl() - (true|false) является ли текущий хост базовым доменом
  - McsData::findCityByName($name) - (array|null) ищет город в базе по название (Омск, Владивосток) и возвращает в виде массива
  - McsData::findCityByCode($code) - (array|false) ищет город в базе по коду (совпадает с названием поддомена: omsk)
+ - McsData::findProvinceByCode($code) - (array|false) ищет область в базе по коду
+ - McsData::findCountryByCode($code) - (array|false) ищет страну в базе по коду
+ - McsData::findLocationByCode($code) - (array|false) ищет локацию (страну, область, город) в базе по коду
+ - McsData::findLocationByDomain($domain) - (array|false) ищет локацию (страну, область, город) по домену
+
  - McsData::get('isCitySelected') - (true|false) делал ли пользователь выбор города?
  - McsData::get('moduleId') - идентификатор модуля расширения в базе Joomla
  - McsData::get('basedomain') - домен указанный в настройках расширения
  - McsData::get('cityId') - ID текущего города в базе
  - McsData::get('city') - код текущего города в базе (omsk)
- - McsData::get('cityName') - название текущего города в базе (Омск) 
- - McsData::get('default_city') - город по умолчанию (указанный в настройках расширения) 
+ - McsData::get('cityName') - название текущего города в базе (Омск)
 
- Формат вызова get метода: ```McsData::get($paramName, $defaultValue = null);```
- 
- Получить склонения аналогичным способом не получится, только через спец. маркеры описанные выше.
+ - McsData::get('provinceName') - название текущей области в базе (Омская область)
+ - McsData::get('countryName') - название текущей страны
+ - McsData::get('locationName') - название текущей локации (если выбран город, то название города; если выбрана область, то название области)
+ - McsData::getCurrentLocation() - возвращет массив с текущими страной, областью, городом
+ - McsData::get('default_city') - город по умолчанию (указанный в настройках расширения)
+
+
+Формат вызова get метода: ```McsData::get($paramName, $defaultValue = null);```
+
+Получить склонения аналогичным способом не получится, только через спец. маркеры описанные выше.
+
+## Замена маркеров в собственных скриптах
+
+Иногда бывает необходимость в создании отдельных скриптов, которые не относятся к фронтенду. Например генерация файлов xml или других задач. В этом случае Вам потребуется вызвать плагин напрямую и передать ему текст содержащий метки для замены.
+Вот пример кода:
+
+```
+<?php
+// инициализация ядра Joomla
+define('_JEXEC', 1);
+define('JPATH_BASE', dirname(__FILE__));
+// ReMark: предполагается, что этот скрипт в корне сайта
+require_once(JPATH_BASE . DIRECTORY_SEPARATOR . 'includes' . DIRECTORY_SEPARATOR . 'defines.php');
+require_once(JPATH_BASE . DIRECTORY_SEPARATOR . 'includes' . DIRECTORY_SEPARATOR . 'framework.php');
+$app = JFactory::getApplication('site');
+$app->initialise();
+
+// TODO тут ваш код в котором Вы делаете что-то очень важное
+
+$content = '<div>[mcs-1 Phone]</div>'; // ваш контент с метками который Вы сгенерировали выше
+
+// запуск плагина для замены меток
+JPluginHelper::importPlugin('system');
+if (method_exists($app, 'setBody')) {
+	$app->setBody($content); // Joomla 3.x
+} else {
+	JResponse::setBody($content); // joomla 2.5
+}
+$dispatcher = JDispatcher::getInstance();
+$dispatcher->trigger('onAfterRender');
+$content = (method_exists($app, 'getBody')) ? $app->getBody() : JResponse::getBody();
+
+echo $content;
+```
+
 
 ## Кастомизация
 
@@ -169,7 +217,7 @@ MSC в админке. Основной недостаток этих тегов
 
  - переопределение шаблона модуля из админки
  - создание своего шаблона
- 
+
 Первый способ достаточно прост, необходимо зайти в менеджер шаблонов сайта, кликнуть по названию своего текущего шаблона перейти во вкладку "Переопределение", найти в списке модуль "mod_mycityselector" и кликнуть по нему. После чего в папке шаблона сайта появится копия шаблона модуля. Его можно будет менять как вам вздумается.
 
 Второй способ в общем-то делается также как и первый, но после дублирования также необходимо переименовать файлы шаблона (придумать свое имя для шаблона) и на основе данной копии сделать свой шаблон.
@@ -195,9 +243,9 @@ RewriteRule ^robots.txt$ /components/com_mycityselector/robots.txt.php [QSA,L]
 
 ```
 server {
-     
+
      ... other instructions ..
-     
+
      location = /robots.txt {
          rewrite ^(.*)$ /components/com_mycityselector/robots.txt.php last;
      }
@@ -215,6 +263,6 @@ server {
 
 Спасибо [Renderlife](https://github.com/renderlife) за первую версию дизана.
 
-Спасибо VidoksRu за пожертвование на обновление дизайна. 
+Спасибо VidoksRu за пожертвование на обновление дизайна.
 
 И конечно же, спасибо всем, кто помогал в тестировании и/или делал пожертвования.
