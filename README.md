@@ -43,7 +43,7 @@ My City Selector (MCS) - это расширение для CMS Joomla, позв
 
 <img src="https://raw.githubusercontent.com/art-programming-team/mycityselector/free/doc_images/config.jpg" alt="" />
 
-После чего, все должно заработать
+После этого, всё должно заработать.
 
 ## Как это использовать?
 
@@ -151,7 +151,7 @@ MSC в админке. Основной недостаток этих тегов
 Вот перечень данных, которые вы можете получить в своем коде:
 
  - McsData::isBaseUrl() - (true|false) является ли текущий хост базовым доменом
- - McsData::findCityByName($name) - (array|null) ищет город в базе по название (Омск, Владивосток) и возвращает в виде массива
+  - McsData::findCityByName($name) - (array|null) ищет город в базе по название (Омск, Владивосток) и возвращает в виде массива
  - McsData::findCityByCode($code) - (array|false) ищет город в базе по коду (совпадает с названием поддомена: omsk)
  - McsData::findProvinceByCode($code) - (array|false) ищет область в базе по коду
  - McsData::findCountryByCode($code) - (array|false) ищет страну в базе по коду
@@ -227,16 +227,17 @@ echo $content;
 
 *Если вам кажется, что некоторые моменты можно бы было описать лучше или где-то закралась неточность, то можете написать мне об этом на почту или сделать pull request.*
 
-## Robots.txt
+## Robots.txt и Sitemap.xml
 
-Если используется вариант с поддоменами, возможно Вам будет полезно использовать скрипт robots.txt.php для подмены директивы Host в вашем robots.txt.
-Чтобы им воспользоваться, необходимо прописать правило редиректа для "/robots.txt" в настройках вашего сервера.
+Если используется вариант с поддоменами, то необходимо подменять имя хоста в файлах robots.txt и sitemap.xml.
+Чтобы это настроить, нужно добавить несколько строк в конфигурацию web сервера.
 
 Для Apache в файле ".htaccess" добавьте строку
 
 ```
 RewriteEngine On # эту строку только если такой директивы в htaccess еще нет
 RewriteRule ^robots.txt$ /components/com_mycityselector/robots.txt.php [QSA,L]
+RewriteRule ^sitemap(.*).xml$ /components/com_mycityselector/sitemap.xml.php [QSA,L]
 ```
 
 Для Nginx:
@@ -244,10 +245,13 @@ RewriteRule ^robots.txt$ /components/com_mycityselector/robots.txt.php [QSA,L]
 ```
 server {
 
-     ... other instructions ..
+     ... other instructions ...
 
      location = /robots.txt {
          rewrite ^(.*)$ /components/com_mycityselector/robots.txt.php last;
+     }
+     location ~ ^(.*)sitemap(.*)\.xml$ {
+         rewrite ^(.*)$ /components/com_mycityselector/sitemap.xml.php last;
      }
 }
 ```
