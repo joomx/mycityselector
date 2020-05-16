@@ -16,7 +16,7 @@ PHP Extension [ionCube](http://jbzoo.ru/docs/ioncube-installing)
 
 My City Selector (MCS) - это расширение для CMS Joomla, позволяющее отображать разную информацию для разных городов.
 
-<img src="https://raw.githubusercontent.com/art-programming-team/mycityselector/free/doc_images/image-1.png" alt="" />
+<img src="https://raw.githubusercontent.com/joomx/mycityselector/free/doc_images/image-1.png" alt="" />
 
 В новой 2й версии основной упор сделан на использование поддоменов для разных городов, так как это самый
 лучший способ разделять контент с точки зрения поисковиков.
@@ -41,7 +41,7 @@ My City Selector (MCS) - это расширение для CMS Joomla, позв
  - Включить модуль "My City Selector MOD" и настроить его.
  - Прописать в настройках компонента "MyCitySelector" базовый домен вашего сайта.
 
-<img src="https://raw.githubusercontent.com/art-programming-team/mycityselector/free/doc_images/config.jpg" alt="" />
+<img src="https://raw.githubusercontent.com/joomx/mycityselector/free/doc_images/config.jpg" alt="" />
 
 После этого, всё должно заработать.
 
@@ -62,7 +62,7 @@ kiev.krakozyabra.org<br>
 Управление текстами происходит через компонент MyCitySelector в админке, там же и управление
 списком городов и настройки компонента.
 
-<img src="https://raw.githubusercontent.com/art-programming-team/mycityselector/free/doc_images/image-2.png" alt="" />
+<img src="https://raw.githubusercontent.com/joomx/mycityselector/free/doc_images/image-2.png" alt="" />
 
 Часть настроек находится в модуле, который отвечает за отображаемое окно выбора города на сайте.
 
@@ -101,13 +101,13 @@ MSC в админке. Основной недостаток этих тегов
 и у каждого свои условия по городам. Кроме того, вам не нужно вводить их вручную.
 В редакторе Вы можете найти кнопку для вставки маркера в текущую позицию курсора.
 
-<img src="https://raw.githubusercontent.com/art-programming-team/mycityselector/free/doc_images/image-3.jpg" alt="" />
+<img src="https://raw.githubusercontent.com/joomx/mycityselector/free/doc_images/image-3.jpg" alt="" />
 
 Выбираете нужный контент из списка и вставляете маркер в текст. Все просто.
 
 Перейдем к рассмотрению компонента "MyCitySelector". Откройте подпункт "Страны".
 
-<img src="https://raw.githubusercontent.com/art-programming-team/mycityselector/free/doc_images/image-5.png" alt="" />
+<img src="https://raw.githubusercontent.com/joomx/mycityselector/free/doc_images/image-5.png" alt="" />
 
 При клике по ссылке "регионы" вы сможете открыть список регионов, относящихся к данной стране. Аналогично и в списке
 регионов, так есть ссылка "города". Делая элементы списков неактывными, вы запрещаете их отображение в окне выбора города.
@@ -118,7 +118,7 @@ MSC в админке. Основной недостаток этих тегов
 
 Перейдем к управлению текстами. Что тут у нас...?
 
-<img src="https://raw.githubusercontent.com/art-programming-team/mycityselector/free/doc_images/image-6.jpg" alt="" />
+<img src="https://raw.githubusercontent.com/joomx/mycityselector/free/doc_images/image-6.jpg" alt="" />
 
 эммм...ну тут собственно пусто. Самое время что-нибудь создать. Предположим (совершенно точно), нам нужно для разных
 городов отображать разные адреса и контакты.
@@ -127,7 +127,7 @@ MSC в админке. Основной недостаток этих тегов
 кнопкой "Добавить поле". В добавленное поле вбиваем желаемый город и вводим для него
 текст (адрес).
 
-<img src="https://raw.githubusercontent.com/art-programming-team/mycityselector/free/doc_images/image-7.jpg" alt="" />
+<img src="https://raw.githubusercontent.com/joomx/mycityselector/free/doc_images/image-7.jpg" alt="" />
 
 ## Специальные маркеры
 
