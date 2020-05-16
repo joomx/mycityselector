@@ -43,7 +43,7 @@ My City Selector (MCS) - это расширение для CMS Joomla, позв
 
 <img src="https://raw.githubusercontent.com/art-programming-team/mycityselector/free/doc_images/config.jpg" alt="" />
 
-После чего, при определенном уровне удачи все должно заработать :)
+После чего, все должно заработать
 
 ## Как это использовать?
 
