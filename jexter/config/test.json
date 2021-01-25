@@ -1,8 +1,0 @@
-{
-    "name": "SitemapJen",
-    "id": "com_sitemapjen",
-    "version": "1.3.0",
-    "type": "component",
-    "script": "sitemapjen.php",
-    "license": "@builder/license.txt"
-}
