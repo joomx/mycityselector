@@ -147,27 +147,30 @@ MSC в админке. Основной недостаток этих тегов
 
 Вот перечень данных, которые вы можете получить в своем коде:
 
- - McsData::isBaseUrl() - (true|false) является ли текущий хост базовым доменом
-  - McsData::findCityByName($name) - (array|null) ищет город в базе по название (Омск, Владивосток) и возвращает в виде массива
- - McsData::findCityByCode($code) - (array|false) ищет город в базе по коду (совпадает с названием поддомена: omsk)
- - McsData::findProvinceByCode($code) - (array|false) ищет область в базе по коду
- - McsData::findCountryByCode($code) - (array|false) ищет страну в базе по коду
- - McsData::findLocationByCode($code) - (array|false) ищет локацию (страну, область, город) в базе по коду
- - McsData::findLocationByDomain($domain) - (array|false) ищет локацию (страну, область, город) по домену
+```
+use activeprogramming\mcs\plugin\helpers\McsData;
 
- - McsData::get('isCitySelected') - (true|false) делал ли пользователь выбор города?
- - McsData::get('moduleId') - идентификатор модуля расширения в базе Joomla
- - McsData::get('basedomain') - домен указанный в настройках расширения
- - McsData::get('cityId') - ID текущего города в базе
- - McsData::get('city') - код текущего города в базе (omsk)
- - McsData::get('cityName') - название текущего города в базе (Омск)
+McsData::isBaseUrl(); // (true|false) является ли текущий хост базовым доменом
+McsData::findCityByName($name); // (array|null) ищет город в базе по название (Омск, Владивосток) и возвращает в виде массива
+McsData::findCityByCode($code); // (array|false) ищет город в базе по коду (совпадает с названием поддомена: omsk)
+McsData::findProvinceByCode($code); // (array|false) ищет область в базе по коду
+McsData::findCountryByCode($code); // (array|false) ищет страну в базе по коду
+McsData::findLocationByCode($code); // (array|false) ищет локацию (страну, область, город) в базе по коду
+McsData::findLocationByDomain($domain); // (array|false) ищет локацию (страну, область, город) по домену
 
- - McsData::get('provinceName') - название текущей области в базе (Омская область)
- - McsData::get('countryName') - название текущей страны
- - McsData::get('locationName') - название текущей локации (если выбран город, то название города; если выбрана область, то название области)
- - McsData::getCurrentLocation() - возвращет массив с текущими страной, областью, городом
- - McsData::get('default_city') - город по умолчанию (указанный в настройках расширения)
+McsData::get('isCitySelected'); // (true|false) делал ли пользователь выбор города?
+McsData::get('moduleId'); // идентификатор модуля расширения в базе Joomla
+McsData::get('basedomain'); // домен указанный в настройках расширения
+McsData::get('cityId'); // ID текущего города в базе
+McsData::get('city'); // код текущего города в базе (omsk)
+McsData::get('cityName'); // название текущего города в базе (Омск)
 
+McsData::get('provinceName'); // название текущей области в базе (Омская область)
+McsData::get('countryName'); // название текущей страны
+McsData::get('locationName'); // название текущей локации (если выбран город, то название города; если выбрана область, то название области)
+McsData::getCurrentLocation(); // возвращет массив с текущими страной, областью, городом
+McsData::get('default_city'); // город по умолчанию (указанный в настройках расширения)
+```
 
 Формат вызова get метода: ```McsData::get($paramName, $defaultValue = null);```
 
