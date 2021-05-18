@@ -131,12 +131,12 @@ MSC в админке. Основной недостаток этих тегов
 Как было сказано выше имеются дополнительные маркеры, позволяющие выводить название города в title или meta тегах.
 Вот их полный перечень:
 
- - {city_name} или {cityName} (как больше нравится) => Именительный (Омск)
- - {city_name2} или {cityName2} или {cityGenitive} => Родительный (Омска)
- - {city_name3} или {cityName3} или {cityDative} => Дательный (Омску)
- - {city_name4} или {cityName4} или {cityAccusative} => Винительный (Омск)
- - {city_name5} или {cityName5} или {cityAblative} => Творительный (Омском)
- - {city_name6} или {cityName6} или {cityPrepositional} => Предложный (Омске)
+ - {cityName} => Именительный (Омск)
+ - {cityGenitive} => Родительный (Омска)
+ - {cityDative} => Дательный (Омску)
+ - {cityAccusative} => Винительный (Омск)
+ - {cityAblative} => Творительный (Омском)
+ - {cityPrepositional} => Предложный (Омске)
 
 Эти маркеры можно использовать как в шаблоне так и в полях ввода при редактировании контента.
 
@@ -171,6 +171,17 @@ McsData::get('locationName'); // название текущей локации 
 McsData::getCurrentLocation(); // возвращет массив с текущими страной, областью, городом
 McsData::get('default_city'); // город по умолчанию (указанный в настройках расширения)
 ```
+
+Аналогично можно запросить склонения:
+
+```
+ McsData::get('cityGenitive');
+ McsData::get('cityDative');
+ McsData::get('regionGenitive');
+ McsData::get('countryPrepositional');
+ ```
+ 
+ Названия аналогичны спец маркерам склонений.
 
 Формат вызова get метода: ```McsData::get($paramName, $defaultValue = null);```
 
