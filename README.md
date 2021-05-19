@@ -140,12 +140,12 @@ MSC в админке. Основной недостаток этих тегов
  
  (аналогично для страны и региона)
  
- - {regionName}, {countryName}
- - {regionGenitive}, {countryGenitive}
- - {regionDative}, {countryDative}
- - {regionAccusative}, {countryAccusative}
- - {regionAblative}, {countryAblative}
- - {regionPrepositional}, {countryPrepositional}
+ - {provinceName}, {countryName}
+ - {provinceGenitive}, {countryGenitive}
+ - {provinceDative}, {countryDative}
+ - {provinceAccusative}, {countryAccusative}
+ - {provinceAblative}, {countryAblative}
+ - {provincePrepositional}, {countryPrepositional}
 
 Эти маркеры можно использовать как в шаблоне так и в полях ввода при редактировании контента.
 
@@ -179,16 +179,13 @@ McsData::get('countryName'); // название текущей страны
 McsData::get('locationName'); // название текущей локации (если выбран город, то название города; если выбрана область, то название области)
 McsData::getCurrentLocation(); // возвращет массив с текущими страной, областью, городом
 McsData::get('default_city'); // город по умолчанию (указанный в настройках расширения)
-```
 
-Аналогично можно запросить склонения:
-
+// Склонения (город, регион, страна)
+McsData::get('cityGenitive');
+McsData::get('cityDative');
+McsData::get('provinceGenitive');
+McsData::get('countryPrepositional');
 ```
- McsData::get('cityGenitive');
- McsData::get('cityDative');
- McsData::get('regionGenitive');
- McsData::get('countryPrepositional');
- ```
  
  Названия аналогичны спец маркерам склонений.
 
