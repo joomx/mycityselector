@@ -137,6 +137,15 @@ MSC в админке. Основной недостаток этих тегов
  - {cityAccusative} => Винительный (Омск)
  - {cityAblative} => Творительный (Омском)
  - {cityPrepositional} => Предложный (Омске)
+ 
+ (аналогично для страны и региона)
+ 
+ - {regionName}, {countryName}
+ - {regionGenitive}, {countryGenitive}
+ - {regionDative}, {countryDative}
+ - {regionAccusative}, {countryAccusative}
+ - {regionAblative}, {countryAblative}
+ - {regionPrepositional}, {countryPrepositional}
 
 Эти маркеры можно использовать как в шаблоне так и в полях ввода при редактировании контента.
 
