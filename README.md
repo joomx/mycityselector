@@ -157,7 +157,8 @@ MSC в админке. Основной недостаток этих тегов
 Вот перечень данных, которые вы можете получить в своем коде:
 
 ```
-use activeprogramming\mcs\plugin\helpers\McsData;
+// use activeprogramming\mcs\plugin\helpers\McsData; - старый namespace!
+use joomx\mcs\plugin\helpers\McsData;
 
 McsData::isBaseUrl(); // (true|false) является ли текущий хост базовым доменом
 McsData::findCityByName($name); // (array|null) ищет город в базе по название (Омск, Владивосток) и возвращает в виде массива
@@ -185,6 +186,17 @@ McsData::get('cityGenitive');
 McsData::get('cityDative');
 McsData::get('provinceGenitive');
 McsData::get('countryPrepositional');
+
+// Новое!
+// Получение текста для текущего города прямо в коде
+$content = McsContentHelper::getMcsTagValue($textID);
+// пример:
+$content = McsContentHelper::getMcsTagValue('[mcs-43]');
+// или
+$content = McsContentHelper::getMcsTagValue('mcs-43');
+// или
+$content = McsContentHelper::getMcsTagValue(43);
+
 ```
  
  Названия аналогичны спец маркерам склонений.
