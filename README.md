@@ -2,7 +2,7 @@ My City Selector Joomla Extension
 =================================
 
 Package:     component + module + plugins<br>
-*для получения расширенной версии (без ограничений) просьба писать на vlad[at]smolensky(dot)info или зарегистрируйтесь тут https://joomx.site*
+*для получения расширенной версии (без ограничений) просьба писать на vlad[at]smolensky(dot)info или зарегистрируйтесь тут https://joomla.mycityselector.com/*
 
 Пиратские копии: https://joomlok.com/products/citychanger-vybor-goroda-v-joomla, https://joomlok.com/products/my-city-option-joomla-3 - если вы купили тут, мы не оказываем поддержку. Поймите правильно, стоимость нашего расширения не окупает затрачиваемых усилий.
 
