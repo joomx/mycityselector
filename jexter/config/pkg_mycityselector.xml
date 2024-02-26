@@ -19,6 +19,6 @@
     </files>
 
 	<!--updateservers>
-		<server type="extension" name="My City Selector Update Server">https://raw.githubusercontent.com/active-programming/mycityselector/free/mcs_update.xml</server>
+		<server type="extension" name="My City Selector Update Server">https://raw.githubusercontent.com/active-programming/mycityselector/master/mcs_update.xml</server>
 	</updateservers-->
 </extension>

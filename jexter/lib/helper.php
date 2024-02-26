@@ -653,25 +653,25 @@ function removeFileNotes($file)
 /**
  * @param $file
  */
-function setMcsFree($file)
-{
-	if (defined('IS_FREE'))
-	{
-		if (is_file($file) && in_array(pathinfo($file, PATHINFO_EXTENSION), ['php', 'js', 'html', 'txt', 'xml']))
-		{
-			$lines = file($file);
-			foreach ($lines as $k => $line)
-			{
-				if (preg_match('/const\s+MCS_FREE\s+=\s*(\w+);/i', $line, $match))
-				{
-					$lines[$k] = str_replace($match[1], IS_FREE, $line);
-				}
-			}
-			$lines = implode('', $lines);
-			file_put_contents($file, $lines);
-		}
-	}
-}
+//function setMcsFree($file)
+//{
+//	if (defined('IS_FREE'))
+//	{
+//		if (is_file($file) && in_array(pathinfo($file, PATHINFO_EXTENSION), ['php', 'js', 'html', 'txt', 'xml']))
+//		{
+//			$lines = file($file);
+//			foreach ($lines as $k => $line)
+//			{
+//				if (preg_match('/const\s+MCS_FREE\s+=\s*(\w+);/i', $line, $match))
+//				{
+//					$lines[$k] = str_replace($match[1], IS_FREE, $line);
+//				}
+//			}
+//			$lines = implode('', $lines);
+//			file_put_contents($file, $lines);
+//		}
+//	}
+//}
 
 function insertPackageDomain($file, $domain = 'unknown')
 {

@@ -44,16 +44,16 @@ class JexterBuilder
 	 */
 	public static function run($args)
 	{
-		if (isset($args['free']) && $args['free'] == '0')
-		{
-			out("Building PAID/UNLIMITED version\n", 'light_cyan');
+//		if (isset($args['free']) && $args['free'] == '0')
+//		{
+//			out("Building PAID/UNLIMITED version\n", 'light_cyan');
 			define('IS_FREE', 'false');
-		}
-		else
-		{
-			out("Building FREE/LIMITED version!\n", 'orange');
-			define('IS_FREE', 'true');
-		}
+//		}
+//		else
+//		{
+//			out("Building FREE/LIMITED version!\n", 'orange');
+//			define('IS_FREE', 'true');
+//		}
 		$packages     = [];
 		$jexterConfig = loadMyConfig();
 		// load {project}.json
@@ -310,7 +310,7 @@ class JexterBuilder
 					$filesSite = array_merge($filesSite, $subFiles);
 				} else {
 					//removeFileNotes($file);
-					setMcsFree($file);
+					//setMcsFree($file);
 				}
 			}
 			$filesSite        = glob($copySitePath . SE . '*') + glob($copySitePath . SE . '*.*');
@@ -372,7 +372,7 @@ class JexterBuilder
 				else
 				{
 					//removeFileNotes($file);
-					setMcsFree($file);
+					//setMcsFree($file);
 					insertPackageDomain($file, $domain);
 				}
 			}
@@ -495,7 +495,7 @@ class JexterBuilder
 				else
 				{
 					//removeFileNotes($file);
-					setMcsFree($file);
+					//setMcsFree($file);
 				}
 			}
 			// формируем xml
@@ -611,7 +611,7 @@ class JexterBuilder
 				else
 				{
 					//removeFileNotes($file);
-					setMcsFree($file);
+					//setMcsFree($file);
 				}
 			}
 

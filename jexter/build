@@ -36,7 +36,7 @@ if (!function_exists('simplexml_load_file'))
 // parsing console arguments
 $args = prepareArguments($argv, [
 	'1'      => ['name' => 'config', 'default' => 'project'],
-	'free'   => ['name' => 'free'],
+    //	'free'   => ['name' => 'free'],
 	'myDir'  => ['name' => 'myDir', 'default' => __DIR__],
 	'domain' => ['name' => 'domain'],
 	'no_copy' => ['name' => 'no_copy', 'default' => 'false'],
