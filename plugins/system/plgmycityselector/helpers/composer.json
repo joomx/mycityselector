@@ -1,0 +1,17 @@
+{
+    "name": "mycityselector/helpers",
+    "require": {
+        "wapmorgan/morphos": "^3.2",
+        "true/punycode": "2.0.3"
+    },
+    "authors": [
+        {
+            "name": "Konstantin",
+            "email": "konstantin@kutsevalov.name"
+        },
+        {
+            "name": "Vlad",
+            "email": "vlad@smolensky.info"
+        }
+    ]
+}

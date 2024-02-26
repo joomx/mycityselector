@@ -1,0 +1,508 @@
+<?xml version="1.0" encoding="utf-8"?>
+<componentdata>
+    <country name="Россия" subdomain="russia">
+        <province name="Алтайский край" subdomain="altajskij-kraj">
+            <city name="Барнаул" subdomain="barnaul"/>
+            <city name="Бийск" subdomain="bijsk"/>
+            <city name="Рубцовск" subdomain="rubtsovsk"/>
+        </province>
+        <province name="Амурская область" subdomain="amurskaya-oblast">
+            <city name="Благовещенск" subdomain="blagoveschensk"/>
+        </province>
+        <province name="Архангельская область" subdomain="arhangelskaya-oblast">
+            <city name="Архангельск" subdomain="arhangelsk"/>
+            <city name="Северодвинск" subdomain="severodvinsk"/>
+        </province>
+        <province name="Астраханская область" subdomain="astrahanskaya-oblast">
+            <city name="Астрахань" subdomain="astrahan"/>
+        </province>
+        <province name="Белгородская область" subdomain="belgorodskaya-oblast">
+            <city name="Белгород" subdomain="belgorod"/>
+            <city name="Старый Оскол" subdomain="staryj-oskol"/>
+        </province>
+        <province name="Брянская область" subdomain="bryanskaya-oblast">
+            <city name="Брянск" subdomain="bryansk"/>
+        </province>
+        <province name="Владимирская область" subdomain="vladimirskaya-oblast">
+            <city name="Владимир" subdomain="vladimir"/>
+            <city name="Ковров" subdomain="kovrov"/>
+            <city name="Муром" subdomain="murom"/>
+        </province>
+        <province name="Волгоградская область" subdomain="volgogradskaya-oblast">
+            <city name="Волгоград" subdomain="volgograd"/>
+            <city name="Волжский" subdomain="volzhskij"/>
+            <city name="Камышин" subdomain="kamyshin"/>
+        </province>
+        <province name="Вологодская область" subdomain="vologodskaya-oblast">
+            <city name="Череповец" subdomain="cherepovets"/>
+            <city name="Вологда" subdomain="vologda"/>
+        </province>
+        <province name="Воронежская область" subdomain="voronezhskaya-oblast">
+            <city name="Воронеж" subdomain="voronezh"/>
+        </province>
+        <province name="Еврейская автономная область" subdomain="evrejskaya-avtonomnaya-oblast">
+        </province>
+        <province name="Забайкальский край" subdomain="zabajkalskij-kraj">
+            <city name="Чита" subdomain="chita"/>
+        </province>
+        <province name="Ивановская область" subdomain="ivanovskaya-oblast">
+            <city name="Иваново" subdomain="ivanovo"/>
+        </province>
+        <province name="Иркутская область" subdomain="irkutskaya-oblast">
+            <city name="Иркутск" subdomain="irkutsk"/>
+            <city name="Братск" subdomain="bratsk"/>
+            <city name="Ангарск" subdomain="angarsk"/>
+        </province>
+        <province name="Кабардино-Балкарская Республика" subdomain="kabardino-balkarskaya-respublika">
+            <city name="Нальчик" subdomain="nalchik"/>
+        </province>
+        <province name="Калининградская область" subdomain="kaliningradskaya-oblast">
+            <city name="Калининград" subdomain="kaliningrad"/>
+        </province>
+        <province name="Калужская область" subdomain="kaluzhskaya-oblast">
+            <city name="Калуга" subdomain="kaluga"/>
+            <city name="Обнинск" subdomain="obninsk"/>
+        </province>
+        <province name="Камчатский край" subdomain="kamchatskij-kraj">
+            <city name="Петропавловск-Камчатский" subdomain="petropavlovsk-kamchatskij"/>
+        </province>
+        <province name="Карачаево-Черкесская Республика" subdomain="karachaevo-cherkesskaya-respublika">
+            <city name="Черкесск" subdomain="cherkessk"/>
+        </province>
+        <province name="Кемеровская область" subdomain="kemerovskaya-oblast">
+            <city name="Новокузнецк" subdomain="novokuznetsk"/>
+            <city name="Кемерово" subdomain="kemerovo"/>
+            <city name="Прокопьевск" subdomain="prokopevsk"/>
+        </province>
+        <province name="Кировская область" subdomain="kirovskaya-oblast">
+            <city name="Киров" subdomain="kirov"/>
+        </province>
+        <province name="Костромская область" subdomain="kostromskaya-oblast">
+            <city name="Кострома" subdomain="kostroma"/>
+        </province>
+        <province name="Краснодарский край" subdomain="krasnodarskij-kraj">
+            <city name="Краснодар" subdomain="krasnodar"/>
+            <city name="Сочи" subdomain="sochi"/>
+            <city name="Новороссийск" subdomain="novorossijsk"/>
+            <city name="Армавир" subdomain="armavir"/>
+        </province>
+        <province name="Красноярский край" subdomain="krasnoyarskij-kraj">
+            <city name="Красноярск" subdomain="krasnoyarsk"/>
+            <city name="Норильск" subdomain="norilsk"/>
+            <city name="Ачинск" subdomain="achinsk"/>
+        </province>
+        <province name="Курганская область" subdomain="kurganskaya-oblast">
+            <city name="Курган" subdomain="kurgan"/>
+        </province>
+        <province name="Курская область" subdomain="kurskaya-oblast">
+            <city name="Курск" subdomain="kursk"/>
+        </province>
+        <province name="Ленинградская область" subdomain="leningradskaya-oblast">
+            <city name="Санкт-Петербург" subdomain="sankt-peterburg"/>
+        </province>
+        <province name="Липецкая область" subdomain="lipetskaya-oblast">
+            <city name="Липецк" subdomain="lipetsk"/>
+            <city name="Елец" subdomain="elets"/>
+        </province>
+        <province name="Магаданская область" subdomain="magadanskaya-oblast">
+            <city name="Магадан" subdomain="magadan"/>
+        </province>
+        <province name="Москва" subdomain="moskva">
+            <city name="Москва" subdomain="moskva"/>
+        </province>
+        <province name="Московская область" subdomain="moskovskaya-oblast">
+            <city name="Балашиха" subdomain="balashiha"/>
+            <city name="Химки" subdomain="himki"/>
+            <city name="Подольск" subdomain="podolsk"/>
+            <city name="Королёв" subdomain="korolev"/>
+            <city name="Люберцы" subdomain="lyubertsy"/>
+            <city name="Мытищи" subdomain="mytischi"/>
+            <city name="Электросталь" subdomain="elektrostal"/>
+            <city name="Коломна" subdomain="kolomna"/>
+            <city name="Одинцово" subdomain="odintsovo"/>
+            <city name="Красногорск" subdomain="krasnogorsk"/>
+            <city name="Серпухов" subdomain="serpuhov"/>
+            <city name="Орехово-Зуево" subdomain="orehovo-zuevo"/>
+            <city name="Щёлково" subdomain="schelkovo"/>
+            <city name="Домодедово" subdomain="domodedovo"/>
+            <city name="Жуковский" subdomain="zhukovskij"/>
+            <city name="Сергиев Посад" subdomain="sergiev-posad"/>
+            <city name="Пушкино" subdomain="pushkino"/>
+            <city name="Раменское" subdomain="ramenskoe"/>
+            <city name="Ногинск" subdomain="noginsk"/>
+            <city name="Долгопрудный" subdomain="dolgoprudnyj"/>
+        </province>
+        <province name="Мурманская область" subdomain="murmanskaya-oblast">
+            <city name="Мурманск" subdomain="murmansk"/>
+        </province>
+        <province name="Ненецкий автономный округ" subdomain="nenetskij-avtonomnyj-okrug">
+        </province>
+        <province name="Нижегородская область" subdomain="nizhegorodskaya-oblast">
+            <city name="Нижний Новгород" subdomain="nizhnij-novgorod"/>
+            <city name="Дзержинск" subdomain="dzerzhinsk"/>
+            <city name="Арзамас" subdomain="arzamas"/>
+        </province>
+        <province name="Новгородская область" subdomain="novgorodskaya-oblast">
+            <city name="Великий Новгород" subdomain="velikij-novgorod"/>
+        </province>
+        <province name="Новосибирская область" subdomain="novosibirskaya-oblast">
+            <city name="Новосибирск" subdomain="novosibirsk"/>
+            <city name="Бердск" subdomain="berdsk"/>
+        </province>
+        <province name="Омская область" subdomain="omskaya-oblast">
+            <city name="Омск" subdomain="omsk"/>
+        </province>
+        <province name="Оренбургская область" subdomain="orenburgskaya-oblast">
+            <city name="Оренбург" subdomain="orenburg"/>
+            <city name="Орск" subdomain="orsk"/>
+        </province>
+        <province name="Орловская область" subdomain="orlovskaya-oblast">
+            <city name="Орёл" subdomain="orel"/>
+        </province>
+        <province name="Пензенская область" subdomain="penzenskaya-oblast">
+            <city name="Пенза" subdomain="penza"/>
+        </province>
+        <province name="Пермский край" subdomain="permskij-kraj">
+            <city name="Пермь" subdomain="perm"/>
+            <city name="Березники" subdomain="berezniki"/>
+        </province>
+        <province name="Приморский край" subdomain="primorskij-kraj">
+            <city name="Владивосток" subdomain="vladivostok"/>
+            <city name="Уссурийск" subdomain="ussurijsk"/>
+            <city name="Находка" subdomain="nahodka"/>
+            <city name="Артём" subdomain="artem"/>
+        </province>
+        <province name="Псковская область" subdomain="pskovskaya-oblast">
+            <city name="Псков" subdomain="pskov"/>
+        </province>
+        <province name="Республика Адыгея" subdomain="respublika-adygeya">
+            <city name="Майкоп" subdomain="majkop"/>
+        </province>
+        <province name="Республика Алтай" subdomain="respublika-altaj">
+        </province>
+        <province name="Республика Башкортостан" subdomain="respublika-bashkortostan">
+            <city name="Уфа" subdomain="ufa"/>
+            <city name="Стерлитамак" subdomain="sterlitamak"/>
+            <city name="Салават" subdomain="salavat"/>
+            <city name="Нефтекамск" subdomain="neftekamsk"/>
+            <city name="Октябрьский" subdomain="oktyabrskij"/>
+        </province>
+        <province name="Республика Бурятия" subdomain="respublika-buryatiya">
+            <city name="Улан-Удэ" subdomain="ulan-ude"/>
+        </province>
+        <province name="Республика Дагестан" subdomain="respublika-dagestan">
+            <city name="Махачкала" subdomain="mahachkala"/>
+            <city name="Хасавюрт" subdomain="hasavyurt"/>
+            <city name="Дербент" subdomain="derbent"/>
+            <city name="Каспийск" subdomain="kaspijsk"/>
+        </province>
+        <province name="Республика Ингушетия" subdomain="respublika-ingushetiya">
+            <city name="Назрань" subdomain="nazran"/>
+        </province>
+        <province name="Республика Калмыкия" subdomain="respublika-kalmykiya">
+            <city name="Элиста" subdomain="elista"/>
+        </province>
+        <province name="Республика Карелия" subdomain="respublika-kareliya">
+            <city name="Петрозаводск" subdomain="petrozavodsk"/>
+        </province>
+        <province name="Республика Коми" subdomain="respublika-komi">
+            <city name="Сыктывкар" subdomain="syktyvkar"/>
+        </province>
+        <province name="Республика Крым" subdomain="respublika-krym">
+            <city name="Симферополь" subdomain="simferopol"/>
+            <city name="Керчь" subdomain="kerch"/>
+            <city name="Евпатория" subdomain="evpatoriya"/>
+        </province>
+        <province name="Республика Марий Эл" subdomain="respublika-marij-el">
+            <city name="Йошкар-Ола" subdomain="joshkar-ola"/>
+        </province>
+        <province name="Республика Мордовия" subdomain="respublika-mordoviya">
+            <city name="Саранск" subdomain="saransk"/>
+        </province>
+        <province name="Республика Саха" subdomain="respublika-saha">
+        </province>
+        <province name="Республика Северная Осетия" subdomain="respublika-severnaya-osetiya">
+            <city name="Владикавказ" subdomain="vladikavkaz"/>
+        </province>
+        <province name="Республика Татарстан" subdomain="respublika-tatarstan">
+            <city name="Казань" subdomain="kazan"/>
+            <city name="Набережные Челны" subdomain="naberezhnye-chelny"/>
+            <city name="Нижнекамск" subdomain="nizhnekamsk"/>
+            <city name="Альметьевск" subdomain="almetevsk"/>
+        </province>
+        <province name="Республика Тыва" subdomain="respublika-tyva">
+            <city name="Кызыл" subdomain="kyzyl"/>
+        </province>
+        <province name="Республика Хакасия" subdomain="respublika-hakasiya">
+            <city name="Абакан" subdomain="abakan"/>
+        </province>
+        <province name="Ростовская область" subdomain="rostovskaya-oblast">
+            <city name="Ростов-на-Дону" subdomain="rostov-na-donu"/>
+            <city name="Таганрог" subdomain="taganrog"/>
+            <city name="Шахты" subdomain="shahty"/>
+            <city name="Новочеркасск" subdomain="novocherkassk"/>
+            <city name="Волгодонск" subdomain="volgodonsk"/>
+            <city name="Батайск" subdomain="batajsk"/>
+            <city name="Новошахтинск" subdomain="novoshahtinsk"/>
+        </province>
+        <province name="Рязанская область" subdomain="ryazanskaya-oblast">
+            <city name="Рязань" subdomain="ryazan"/>
+        </province>
+        <province name="Самарская область" subdomain="samarskaya-oblast">
+            <city name="Самара" subdomain="samara"/>
+            <city name="Тольятти" subdomain="tolyatti"/>
+            <city name="Сызрань" subdomain="syzran"/>
+            <city name="Новокуйбышевск" subdomain="novokujbyshevsk"/>
+        </province>
+        <province name="Санкт-Петербург" subdomain="sankt-peterburg">
+            <city name="Санкт-Петербург" subdomain="sankt-peterburg"/>
+        </province>
+        <province name="Саратовская область" subdomain="saratovskaya-oblast">
+            <city name="Саратов" subdomain="saratov"/>
+            <city name="Энгельс" subdomain="engels"/>
+            <city name="Балаково" subdomain="balakovo"/>
+        </province>
+        <province name="Сахалинская область" subdomain="sahalinskaya-oblast">
+            <city name="Южно-Сахалинск" subdomain="yuzhno-sahalinsk"/>
+        </province>
+        <province name="Свердловская область" subdomain="sverdlovskaya-oblast">
+            <city name="Екатеринбург" subdomain="ekaterinburg"/>
+            <city name="Нижний Тагил" subdomain="nizhnij-tagil"/>
+            <city name="Каменск-Уральский" subdomain="kamensk-uralskij"/>
+            <city name="Первоуральск" subdomain="pervouralsk"/>
+        </province>
+        <province name="Севастополь" subdomain="sevastopol">
+        </province>
+        <province name="Смоленская область" subdomain="smolenskaya-oblast">
+            <city name="Смоленск" subdomain="smolensk"/>
+        </province>
+        <province name="Ставропольский край" subdomain="stavropolskij-kraj">
+            <city name="Ставрополь" subdomain="stavropol"/>
+            <city name="Пятигорск" subdomain="pyatigorsk"/>
+            <city name="Кисловодск" subdomain="kislovodsk"/>
+            <city name="Невинномысск" subdomain="nevinnomyssk"/>
+            <city name="Ессентуки" subdomain="essentuki"/>
+        </province>
+        <province name="Тамбовская область" subdomain="tambovskaya-oblast">
+            <city name="Тамбов" subdomain="tambov"/>
+        </province>
+        <province name="Тверская область" subdomain="tverskaya-oblast">
+            <city name="Тверь" subdomain="tver"/>
+        </province>
+        <province name="Томская область" subdomain="tomskaya-oblast">
+            <city name="Томск" subdomain="tomsk"/>
+            <city name="Северск" subdomain="seversk"/>
+        </province>
+        <province name="Тульская область" subdomain="tulskaya-oblast">
+            <city name="Тула" subdomain="tula"/>
+            <city name="Новомосковск" subdomain="novomoskovsk"/>
+        </province>
+        <province name="Тюменская область" subdomain="tyumenskaya-oblast">
+            <city name="Тюмень" subdomain="tyumen"/>
+        </province>
+        <province name="Удмуртская Республика" subdomain="udmurtskaya-respublika">
+            <city name="Ижевск" subdomain="izhevsk"/>
+        </province>
+        <province name="Ульяновская область" subdomain="ulyanovskaya-oblast">
+            <city name="Ульяновск" subdomain="ulyanovsk"/>
+            <city name="Димитровград" subdomain="dimitrovgrad"/>
+        </province>
+        <province name="Хабаровский край" subdomain="habarovskij-kraj">
+            <city name="Хабаровск" subdomain="habarovsk"/>
+            <city name="Комсомольск-на-Амуре" subdomain="komsomolsk-na-amure"/>
+        </province>
+        <province name="Ханты-Мансийский автономный округ" subdomain="hanty-mansijskij-avtonomnyj-okrug">
+            <city name="Сургут" subdomain="surgut"/>
+            <city name="Нижневартовск" subdomain="nizhnevartovsk"/>
+            <city name="Нефтеюганск" subdomain="nefteyugansk"/>
+        </province>
+        <province name="Челябинская область" subdomain="chelyabinskaya-oblast">
+            <city name="Челябинск" subdomain="chelyabinsk"/>
+            <city name="Магнитогорск" subdomain="magnitogorsk"/>
+            <city name="Златоуст" subdomain="zlatoust"/>
+            <city name="Миасс" subdomain="miass"/>
+            <city name="Копейск" subdomain="kopejsk"/>
+        </province>
+        <province name="Чеченская Республика" subdomain="chechenskaya-respublika">
+            <city name="Грозный" subdomain="groznyj"/>
+        </province>
+        <province name="Чувашская Республика" subdomain="chuvashskaya-respublika">
+            <city name="Чебоксары" subdomain="cheboksary"/>
+            <city name="Новочебоксарск" subdomain="novocheboksarsk"/>
+        </province>
+        <province name="Чукотский автономный округ" subdomain="chukotskij-avtonomnyj-okrug">
+        </province>
+        <province name="Ямало-Ненецкий автономный округ" subdomain="yamalo-nenetskij-avtonomnyj-okrug">
+            <city name="Новый Уренгой" subdomain="novyj-urengoj"/>
+            <city name="Ноябрьск" subdomain="noyabrsk"/>
+        </province>
+        <province name="Ярославская область" subdomain="yaroslavskaya-oblast">
+            <city name="Ярославль" subdomain="yaroslavl"/>
+            <city name="Рыбинск" subdomain="rybinsk"/>
+        </province>
+    </country>
+    <country name="Беларусь" subdomain="belarus">
+        <province name="Брестская область" subdomain="brestskaya-oblast">
+            <city name="Брест" subdomain="brest"/>
+            <city name="Барановичи" subdomain="baranovichi"/>
+            <city name="Пинск" subdomain="pinsk"/>
+        </province>
+        <province name="Витебская область" subdomain="vitebskaya-oblast">
+            <city name="Витебск" subdomain="vitebsk"/>
+            <city name="Орша" subdomain="orsha"/>
+            <city name="Новополоцк" subdomain="novopolotsk"/>
+            <city name="Полоцк" subdomain="polotsk"/>
+        </province>
+        <province name="Гомельская область" subdomain="gomelskaya-oblast">
+            <city name="Гомель" subdomain="gomel"/>
+            <city name="Мозырь" subdomain="mozyr"/>
+            <city name="Жлобин" subdomain="zhlobin"/>
+            <city name="Светлогорск" subdomain="svetlogorsk"/>
+            <city name="Речица" subdomain="rechitsa"/>
+        </province>
+        <province name="Гродненская область" subdomain="grodnenskaya-oblast">
+            <city name="Гродно" subdomain="grodno"/>
+            <city name="Лида" subdomain="lida"/>
+        </province>
+        <province name="Минск" subdomain="minsk">
+            <city name="Минск" subdomain="minsk"/>
+        </province>
+        <province name="Минская область" subdomain="minskaya-oblast">
+            <city name="Борисов" subdomain="borisov"/>
+            <city name="Солигорск" subdomain="soligorsk"/>
+            <city name="Молодечно" subdomain="molodechno"/>
+        </province>
+        <province name="Могилёвская область" subdomain="mogilevskaya-oblast">
+            <city name="Могилёв" subdomain="mogilev"/>
+            <city name="Бобруйск" subdomain="bobrujsk"/>
+        </province>
+    </country>
+    <country name="Україна" subdomain="ukraine">
+        <province name="Івано-Франківська область" subdomain="Іvano-frankіvska-oblast">
+        </province>
+        <province name="Автономна Республіка Крим" subdomain="avtonomna-respublіka-krim">
+        </province>
+        <province name="Волинська область" subdomain="volinska-oblast">
+        </province>
+        <province name="Вінницька область" subdomain="vіnnitska-oblast">
+        </province>
+        <province name="Дніпропетровська область" subdomain="dnіpropetrovska-oblast">
+        </province>
+        <province name="Донецька область" subdomain="donetska-oblast">
+        </province>
+        <province name="Житомирська область" subdomain="zhitomirska-oblast">
+        </province>
+        <province name="Закарпатська область" subdomain="zakarpatska-oblast">
+        </province>
+        <province name="Запорізька область" subdomain="zaporіzka-oblast">
+        </province>
+        <province name="Київ" subdomain="kiїv">
+        </province>
+        <province name="Київська область" subdomain="kiїvska-oblast">
+        </province>
+        <province name="Кіровоградська область" subdomain="kіrovogradska-oblast">
+        </province>
+        <province name="Луганська область" subdomain="luganska-oblast">
+        </province>
+        <province name="Львівська область" subdomain="lvіvska-oblast">
+        </province>
+        <province name="Миколаївська область" subdomain="mikolaїvska-oblast">
+        </province>
+        <province name="Одеська область" subdomain="odeska-oblast">
+        </province>
+        <province name="Полтавська область" subdomain="poltavska-oblast">
+        </province>
+        <province name="Рівненська область" subdomain="rіvnenska-oblast">
+        </province>
+        <province name="Севастополь" subdomain="sevastopol">
+        </province>
+        <province name="Сумська область" subdomain="sumska-oblast">
+        </province>
+        <province name="Тернопільська область" subdomain="ternopіlska-oblast">
+        </province>
+        <province name="Харківська область" subdomain="harkіvska-oblast">
+        </province>
+        <province name="Херсонська область" subdomain="hersonska-oblast">
+        </province>
+        <province name="Хмельницька область" subdomain="hmelnitska-oblast">
+        </province>
+        <province name="Черкаська область" subdomain="cherkaska-oblast">
+        </province>
+        <province name="Чернівецька область" subdomain="chernіvetska-oblast">
+        </province>
+        <province name="Чернігівська область" subdomain="chernіgіvska-oblast">
+        </province>
+    </country>
+    <country name="Казахстан" subdomain="kazahstan">
+        <province name="Западно-Казахстанская область" subdomain="zapadno-kazahstanskaya-oblast">
+            <city name="Уральск" subdomain="uralsk"/>
+            <city name="Аксай" subdomain="aksay"/>
+            <city name="Таскала" subdomain="taskala"/>
+        </province>
+        <province name="Актюбинская область" subdomain="aktubinskaya-oblast">
+            <city name="Актобе" subdomain="aktobe"/>
+            <city name="Хромтау" subdomain="hromtau"/>
+            <city name="Мартук" subdomain="martuk"/>
+            <city name="Кандыагаш" subdomain="kandyagash"/>
+        </province>
+        <province name="Карагандинская область" subdomain="karagandinskaya-ovlast">
+            <city name="Караганда" subdomain="karaganda"/>
+            <city name="Жезказган" subdomain="jezkazgan"/>
+            <city name="Балхаш" subdomain="balhash"/>
+        </province>
+        <province name="Костанайская область" subdomain="kostanayskaya-oblast">
+            <city name="Костанай" subdomain="kostanay"/>
+            <city name="Рудный" subdomain="rudniy"/>
+            <city name="Житикара" subdomain="jitikara"/>
+            <city name="Аркалык" subdomain="arkalyk"/>
+        </province>
+        <province name="Северо-Казахстанская область" subdomain="severo-kazahstanskaya-oblast">
+            <city name="Петропавловск" subdomain="petropavlovsk"/>
+            <city name="Новоишимское" subdomain="novoishimskoe"/>
+        </province>
+        <province name="Павлодарская область" subdomain="pavlodarskaya-oblast">
+            <city name="Павлодар" subdomain="pavlodar"/>
+        </province>
+        <province name="Восточно-Казахстанская область" subdomain="vostochno-kazahctanskaya-oblast">
+            <city name="Экибастуз" subdomain="ekibastuz"/>
+            <city name="Усть-Каменогорск" subdomain="ust-kamenogorsk"/>
+            <city name="Семей" subdomain="Semey"/>
+        </province>
+        <province name="Алматинская область" subdomain="almatinskaya-oblast">
+            <city name="Алматы" subdomain="almaty"/>
+            <city name="Ушарал" subdomain="usharal"/>
+            <city name="Талдыкорган" subdomain="taldukorgan"/>
+            <city name="Уштобе" subdomain="ushtobe"/>
+            <city name="Сарыозек" subdomain="saryozek"/>
+            <city name="Узынагаш" subdomain="uzynagash"/>
+            <city name="Капшагай" subdomain="kapshagai"/>
+        </province>
+        <province name="Кызылординская область" subdomain="kyzylordinskaya-oblast">
+            <city name="Кызылорда" subdomain="kyzylorda"/>
+            <city name="Байконур" subdomain="bajkonur"/>
+            <city name="Калалинск" subdomain="kazalinsk"/>
+        </province>
+        <province name="Мангистаустская область" subdomain="mangistaustskaya-oblast">
+            <city name="Актау" subdomain="aktau"/>
+            <city name="Жанаозен" subdomain="janaozen"/>
+            <city name="Бейнеу" subdomain="bejneu"/>
+        </province>
+        <province name="Жамбылская область" subdomain="jambylskaya-oblast">
+            <city name="Тараз" subdomain="taraz"/>
+            <city name="Каратау" subdomain="karatau"/>
+            <city name="Шу" subdomain="shu"/>
+        </province>
+        <province name="Южно-Казахстанская область" subdomain="uzhno-kazahstanskaya-oblast">
+            <city name="Щымкент" subdomain="shymkent"/>
+            <city name="Туркестан" subdomain="turkestan"/>
+            <city name="Кентау" subdomain="kentau"/>
+            <city name="Карнак" subdomain="karnak"/>
+            <city name="Арысь" subdomain="arys"/>
+        </province>
+        <province name="Атырауская область" subdomain="atyrauskaya-oblast">
+            <city name="Атырау" subdomain="atyrau"/>
+            <city name="Кульсары" subdomain="kulsary"/>
+            <city name="Ганюшкино" subdomain="ganushkino"/>
+        </province>
+    </country>
+</componentdata>

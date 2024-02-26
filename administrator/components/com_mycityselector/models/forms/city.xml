@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+    <fieldset name="edit"
+              addfieldpath="/administrator/components/com_mycityselector/models/fields"
+    >
+        <field
+                name="published"
+                type="radio"
+                label="COM_MYCITYSELECTOR_FORM_TITLE_STATUS"
+                description="COM_MYCITYSELECTOR_FORM_TITLE_STATUS"
+                class="btn-group btn-group-yesno"
+                default="0"
+                size="1"
+        >
+            <option value="1">COM_MYCITYSELECTOR_ITEM_PUBLISHED</option>
+            <option value="0">COM_MYCITYSELECTOR_ITEM_UNPUBLISHED</option>
+        </field>
+        <field
+                name="name"
+                type="Citynames"
+                label="COM_MYCITYSELECTOR_FORM_TITLE_NAME"
+                description="COM_MYCITYSELECTOR_FORM_TITLE_NAME"
+                hint="COM_MYCITYSELECTOR_FORM_CITY_PLACEHOLDER"
+        />
+        <field
+                name="subdomain"
+                type="text"
+                label="COM_MYCITYSELECTOR_FORM_TITLE_SUBDOMAIN"
+                description="COM_MYCITYSELECTOR_FORM_TITLE_SUBDOMAIN"
+                hint="COM_MYCITYSELECTOR_FORM_TITLE_SUBDOMAIN"
+        />
+        <field
+                name="province_id"
+                type="ProvinceList"
+                label="COM_MYCITYSELECTOR_PROVINCE"
+        />
+        <field
+                name="city_case_2"
+                type="citycase2"
+                label="COM_MYCITYSELECTOR_CITY_CASE_2"
+                description="COM_MYCITYSELECTOR_CITY_CASE_2"
+                hint="COM_MYCITYSELECTOR_FORM_CITY_PLACEHOLDER_CASE2"
+        />
+        <field
+                name="city_case_3"
+                type="citycase3"
+                label="COM_MYCITYSELECTOR_CITY_CASE_3"
+                description="COM_MYCITYSELECTOR_CITY_CASE_3"
+                hint="COM_MYCITYSELECTOR_FORM_CITY_PLACEHOLDER_CASE3"
+        />
+        <field
+                name="city_case_4"
+                type="citycase4"
+                label="COM_MYCITYSELECTOR_CITY_CASE_4"
+                description="COM_MYCITYSELECTOR_CITY_CASE_4"
+                hint="COM_MYCITYSELECTOR_FORM_CITY_PLACEHOLDER_CASE4"
+        />
+        <field
+                name="city_case_5"
+                type="citycase5"
+                label="COM_MYCITYSELECTOR_CITY_CASE_5"
+                description="COM_MYCITYSELECTOR_CITY_CASE_5"
+                hint="COM_MYCITYSELECTOR_FORM_CITY_PLACEHOLDER_CASE5"
+        />
+        <field
+                name="city_case_6"
+                type="citycase6"
+                label="COM_MYCITYSELECTOR_CITY_CASE_6"
+                description="COM_MYCITYSELECTOR_CITY_CASE_6"
+                hint="COM_MYCITYSELECTOR_FORM_CITY_PLACEHOLDER_CASE6"
+        />
+        <field
+                name="ordering"
+                type="hidden"
+        />
+        <field
+                name="id"
+                type="hidden"
+                default="0"
+        />
+    </fieldset>
+</form>

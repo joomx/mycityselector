@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="component" version="3.2" method="upgrade">
+    <name>SqlQuery</name>
+    <creationDate>Jul 2018</creationDate>
+    <author>Konstantin Kutsevalov</author>
+    <authorEmail>konstantin@kutsevalov.name</authorEmail>
+    <authorUrl>http://kutsevalov.name</authorUrl>
+    <copyright>All rights reserved</copyright>
+    <license>GNU/GPL v3</license>
+    <version>0.1.0</version>
+    <description>COM_SQLQUERY_DESCRIPTION</description>
+
+    <files folder="site"><filename>controller.php</filename><filename>index.html</filename><filename>sqlquery.php</filename></files>
+
+    <administration>
+        <menu img="/administrator/components/com_sqlquery/images/sql16.png">COM_SQLQUERY</menu>
+        <submenu>
+            <menu link="option=com_sqlquery" img="class:module">COM_SQLQUERY_MENU1</menu>
+            <menu link="option=com_config&amp;view=component&amp;component=com_sqlquery" img="class:module">COM_SQLQUERY_MENU_SETTINGS</menu>
+        </submenu>
+
+        <files folder="admin"><filename>access.xml</filename><filename>com_sqlquery.xml</filename><folder>compatibilities</folder><filename>config.xml</filename><filename>controller.php</filename><folder>images</folder><filename>index.html</filename><folder>language</folder><filename>sqlquery.php</filename><folder>views</folder></files>
+
+        <languages folder="admin">
+            <language tag="en-GB">language/en-GB/en-GB.com_sqlquery.sys.ini</language>
+            <language tag="en-GB">language/en-GB/en-GB.com_sqlquery.ini</language>
+            <language tag="ru-RU">language/ru-RU/ru-RU.com_sqlquery.sys.ini</language>
+            <language tag="ru-RU">language/ru-RU/ru-RU.com_sqlquery.ini</language>
+        </languages>
+    </administration>
+</extension>

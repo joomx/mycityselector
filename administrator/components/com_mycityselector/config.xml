@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+    <fieldset name="component"
+              addfieldpath="/administrator/components/com_mycityselector/models/fields"
+    >
+        <field
+                name="basedomain"
+                type="text"
+                label="COM_MYCITYSELECTOR_BASE_DOMAIN"
+                description="COM_MYCITYSELECTOR_BASE_DOMAIN_DESCRIPTION" />
+        <field
+                name="default_city"
+                type="Cityselect"
+                label="COM_MYCITYSELECTOR_DEFAULTCITY" />
+        <field
+                name="seo_mode"
+                type="radio"
+                label="COM_MYCITYSELECTOR_SEO"
+                default="0" >
+            <option value="0">JNO</option>
+            <option value="1">COM_MYCITYSELECTOR_INSUBDOMAINS</option>
+            <option value="2">COM_MYCITYSELECTOR_INURL</option>
+            <option value="3">COM_MYCITYSELECTOR_BY_UTM</option>
+            <option value="4">COM_MYCITYSELECTOR_BY_UTM_WITH_SAVE</option>
+        </field>
+        <field
+                name="redirect_mode"
+                type="radio"
+                label="COM_MYCITYSELECTOR_REDIRECT"
+                default="0" >
+            <option value="0">COM_MYCITYSELECTOR_SAME_URL</option>
+            <option value="1">COM_MYCITYSELECTOR_ROOT_URL</option>
+        </field>
+        <field
+                name="force_http_url"
+                type="radio"
+                class="btn-group btn-group-yesno"
+                label="COM_MYCITYSELECTOR_FORCE_HTTP_URL"
+                default="0" >
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+        <field
+                name="baseip"
+                type="radio"
+                class="btn-group btn-group-yesno"
+                label="COM_MYCITYSELECTOR_BASEIP"
+                default="ip-api" >
+            <option value="ip-api">ip-api.com</option>
+            <option value="yandexgeo">YandexGeo (HTTPS only!)</option>
+            <option value="none">JNO</option>
+        </field>
+        <field
+                name="yandex_api_key"
+                type="text"
+                label="COM_MYCITYSELECTOR_YANDEX_API_KEY" />
+        <field
+                name="allow_select_whole"
+                type="radio"
+                class="btn-group btn-group-yesno"
+                label="COM_MYCITYSELECTOR_ALLOW_SELECT_WHOLE"
+                default="0" >
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+        <field
+                name="let_select"
+                type="radio"
+                label="COM_MYCITYSELECTOR_LETSELECT"
+                default="1" >
+            <option value="1">COM_MYCITYSELECTOR_LET1</option>
+            <option value="2">COM_MYCITYSELECTOR_LET2</option>
+            <option value="3">COM_MYCITYSELECTOR_LET3</option>
+        </field>
+
+        <field
+                name="autoswitch_city"
+                type="radio"
+                class="btn-group btn-group-yesno"
+                label="COM_MYCITYSELECTOR_AUTOSWITCH_CITY"
+                default="1" >
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+        <!--field
+                name="experimental_mode"
+                type="radio"
+                class="btn-group btn-group-yesno"
+                label="COM_MYCITYSELECTOR_EXPERIMENTAL"
+                default="0" >
+            <option value="1">JON</option>
+            <option value="0">JOFF</option>
+        </field-->
+        <field
+                name="debug_mode"
+                type="radio"
+                class="btn-group btn-group-yesno"
+                label="COM_MYCITYSELECTOR_DEBUG"
+                default="0" >
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+        <field
+                name="debug_mode_hidden"
+                type="radio"
+                class="btn-group btn-group-yesno"
+                label="COM_MYCITYSELECTOR_DEBUG_HIDDEN"
+                default="0" >
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+        <field
+                name="log_to_file"
+                type="radio"
+                class="btn-group btn-group-yesno"
+                label="COM_MYCITYSELECTOR_LOG_TO_FILE"
+                default="0" >
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+    </fieldset>
+
+    <fieldset name="permissions" label="JCONFIG_PERMISSIONS_LABEL" description="JCONFIG_PERMISSIONS_DESC">
+        <field name="rules"
+               type="rules"
+               label="JCONFIG_PERMISSIONS_LABEL"
+               filter="rules"
+               validate="rules"
+               component="com_users"
+               section="component" />
+    </fieldset>
+</config>

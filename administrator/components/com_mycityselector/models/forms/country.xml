@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+    <fieldset name="edit"
+          addfieldpath="/administrator/components/com_mycityselector/models/fields"
+          addrulepath="/administrator/components/com_mycityselector/models/rules"
+    >
+        <field
+                name="published"
+                type="radio"
+                label="COM_MYCITYSELECTOR_FORM_TITLE_STATUS"
+                description="COM_MYCITYSELECTOR_FORM_TITLE_STATUS"
+                class="btn-group btn-group-yesno"
+                default="0"
+                size="1"
+        >
+            <option value="1">COM_MYCITYSELECTOR_ITEM_PUBLISHED</option>
+            <option value="0">COM_MYCITYSELECTOR_ITEM_UNPUBLISHED</option>
+        </field>
+        <field
+                name="name"
+                type="Countrynames"
+                label="COM_MYCITYSELECTOR_FORM_TITLE_NAME"
+                description="COM_MYCITYSELECTOR_FORM_TITLE_NAME"
+                hint="COM_MYCITYSELECTOR_FORM_TITLE_NAME"
+                required="true"
+        />
+        <field
+                name="subdomain"
+                type="text"
+                label="COM_MYCITYSELECTOR_FORM_TITLE_SUBDOMAIN"
+                description="COM_MYCITYSELECTOR_FORM_TITLE_SUBDOMAIN"
+                hint="COM_MYCITYSELECTOR_FORM_TITLE_SUBDOMAIN"
+        />
+        <field
+                name="domain"
+                type="text"
+                label="COM_MYCITYSELECTOR_FORM_TITLE_DOMAIN"
+                description="COM_MYCITYSELECTOR_FORM_TITLE_DOMAIN"
+                hint="COM_MYCITYSELECTOR_FORM_TITLE_DOMAIN"
+        />
+        <field
+                name="code"
+                type="text"
+                label="COM_MYCITYSELECTOR_FORM_TITLE_CODE"
+                description="COM_MYCITYSELECTOR_FORM_TITLE_CODE"
+                hint="COM_MYCITYSELECTOR_FORM_TITLE_CODE"
+                required="true"
+                validate="customrule"
+        />
+        <field
+                name="default_city_id"
+                type="Citiesofcountrylist"
+                label="COM_MYCITYSELECTOR_FORM_TITLE_DEFAULT_CITY_ID"
+                description="COM_MYCITYSELECTOR_FORM_TITLE_DEFAULT_CITY_ID"
+                hint="COM_MYCITYSELECTOR_FORM_TITLE_DEFAULT_CITY_ID"
+        />
+        <field
+                name="id"
+                type="hidden"
+                default="0"
+        />
+    </fieldset>
+</form>

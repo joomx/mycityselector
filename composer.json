@@ -1,0 +1,6 @@
+{
+    "require": {
+        "joomla-projects/joomla-browser": "dev-develop",
+        "codeception/codeception": "^2.3"
+    }
+}

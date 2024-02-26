@@ -1,0 +1,32 @@
+# Codeception Test Suite Configuration
+#
+# Suite for acceptance tests.
+# Perform tests in browser using the WebDriver or PhpBrowser.
+# If you need both WebDriver and PHPBrowser tests - create a separate suite.
+
+actor: AcceptanceTester
+modules:
+    enabled:
+        - PhpBrowser:
+            url: http://localhost/myapp
+        - \Helper\Acceptance
+    config:
+        JoomlaBrowser:
+            url: 'http://mcs.dev'     # the url that points to the joomla installation at /tests/system/joomla-cms
+            browser: 'chrome'
+            window_size: 1200x800
+            capabilities:
+              unexpectedAlertBehaviour: 'accept'
+            username: 'admin'
+            password: 'admin'
+            database host: 'localhost'             # place where the Application is Hosted #server Address
+            database user: 'root'                  # MySQL Server user ID, usually root
+            database password: 'root'                  # MySQL Server password, usually empty or root
+            database name: 'mcs'            # DB Name, at the Server
+            database type: 'mysqli'                # type in lowercase one of the options: MySQL\MySQLi\PDO
+            database prefix: 'jos_'                # DB Prefix for tables
+            install sample data: 'Yes'              # Do you want to Download the Sample Data Along with Joomla Installation, then keep it Yes
+            sample data: 'Default English (GB) Sample Data'    # Default Sample Data
+            admin email: 'admin@mydomain.com'      # email Id of the Admin
+            language: 'English (United Kingdom)'   # Language in which you want the Application to be Installed
+            joomla folder: '/www/mcs.dev' # Path to Joomla installation where we execute the tests

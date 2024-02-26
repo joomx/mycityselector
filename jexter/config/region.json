@@ -1,0 +1,7 @@
+{
+    "name": "MCS Region",
+    "id": "mod_mcsregion",
+    "version": "0.0.1",
+    "type": "module",
+    "script": "mod_mcsregion.php"
+}

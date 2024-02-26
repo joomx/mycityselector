@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="My City Selector" option="Default">
+		<message>
+			<![CDATA[COM_MYCITYSELECTOR_MENU_CITIES_MESSAGE]]>
+		</message>
+	</layout>
+
+	<fields name="request">
+		<!-- Add fields to the request variables for the layout. -->
+		<fieldset name="request">
+			<field name="country_id"
+				type="sql"
+				label="COM_MYCITYSELECTOR_MENU_CITIES_COUNTRY"
+				query="SELECT c.id AS value, cn.name AS title
+						FROM #__mycityselector_countries c
+         				LEFT JOIN #__mycityselector_country_names cn on c.id = cn.country_id
+						WHERE published = 1
+						ORDER BY ordering"
+                value_field="title"
+				header="Please select your option"/>
+		</fieldset>
+	</fields>
+
+	<fields name="params">
+		<fieldset name="basic" label="COM_MYCITYSELECTOR_MENU_PARAMS_BASIC_LABEL">
+            <field name="show_country_name" type="radio" default="1"
+                   label="COM_MYCITYSELECTOR_MENU_PARAMS_DISPLAY_COUNTRY_NAME" description="" class="btn-group">
+                <option value="0">JHIDE</option>
+                <option value="1">JSHOW</option>
+            </field>
+            <field name="show_province_name" type="radio" default="1"
+                   label="COM_MYCITYSELECTOR_MENU_PARAMS_DISPLAY_PROVINCE_NAME" description="" class="btn-group">
+                <option value="0">JHIDE</option>
+                <option value="1">JSHOW</option>
+            </field>
+		</fieldset>
+		<!--fieldset name="advanced" label="Advanced">  </fieldset-->
+	</fields>
+</metadata>

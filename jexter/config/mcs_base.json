@@ -1,0 +1,7 @@
+{
+  "name": "com_mcs_base",
+  "id": "mcs_base",
+  "version": "1.0.0",
+  "type": "component",
+  "excludes": []
+}

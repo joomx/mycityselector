@@ -1,0 +1,206 @@
+#!/usr/bin/env php
+<?php
+/**
+ * This script will help to automatically install the latest Joomla version over this project
+ */
+
+namespace adamasantares\jexter;
+
+define('JEXTER_DIR', realpath(__DIR__));
+
+require 'lib/helper.php';
+require 'lib/curl.php';
+require 'lib/db.php';
+
+// check extensions
+if (!extension_loaded('zip')) {
+    out("The Zip php extension not installed!\n", 'red');
+    exit;
+}
+if (!function_exists('simplexml_load_file')) {
+    out("The SimpleXml php extension not installed!\n", 'red');
+    exit;
+}
+if (!function_exists('curl_version')) {
+    out("The CURL php extension not installed!\n", 'red');
+    exit;
+}
+
+$dataBaseOnly = false;
+$siteRoot = realpath(JEXTER_DIR . '/../');
+
+// check joomla
+if (is_file(JEXTER_DIR . '/../configuration.php') && is_dir(JEXTER_DIR . '/../libraries')) {
+    out(" Joomla already installed.\n", 'yellow');
+    $resp = input("  Do you really want to reinstall it?\n  y) Yes\n  n) No\n  d) Database only\n Choice [n]: ", 'yellow');
+    if (strtolower($resp) != 'y' && strtolower($resp) != 'd') {
+        exit;
+    }
+    if (strtolower($resp) == 'd') {
+        $dataBaseOnly = true;
+    }
+    echo "\n";
+}
+
+if (!$dataBaseOnly) {
+    out(" Downloading latest Joomla ...", 'light_blue');
+    $releases = curl_githubGetLastReleases('joomla/joomla-cms');
+    if (!isset($releases['tag_name']) || empty($releases['assets'])) {
+        out("FAIL\n", 'red');
+        exit;
+    }
+    backspace(8);
+    out("\n  version ({$releases['tag_name']}) ...", 'cyan');
+    // looking for ZIP of full stable package
+    $download = [];
+    foreach ($releases['assets'] as $release) {
+        if ($release['content_type'] == 'application/zip') {
+            if (stripos($release['name'], 'full') !== false && stripos($release['name'], 'package') !== false) {
+                $download = $release;
+                break;
+            }
+        }
+    }
+    if (empty($download)) {
+        out("FAIL (full package not found!)\n", 'red');
+    }
+    backspace(8);
+    out("\n  {$download['name']} [{$download['size']}] ...  ", 'cyan');
+    $target = JEXTER_DIR . '/tmp/joomla_latest.zip';
+    if (is_file($target)) @unlink($target);
+    $joomlaFiles = JEXTER_DIR . '/tmp/joomla_latest';
+    if (!is_dir($joomlaFiles)) {
+        createDir($joomlaFiles);
+    }
+    $result = downloadFile($download['browser_download_url'], $target, 'cyan');
+    if (!$result) {
+        out(" downloading failed\n", 'red');
+        exit;
+    }
+    out("\n  done \n", 'cyan');
+
+    out(" Extracting files ... ", 'light_blue');
+    if (!unzipping($target, $joomlaFiles)) {
+        out("failed\n", 'red');
+        exit;
+    }
+    out("done\n", 'light_blue');
+    @unlink($target);
+
+    out(" Moving files ... ", 'light_blue');
+    if (!copyDir($joomlaFiles, $siteRoot)) {
+        out("failed\n", 'red');
+        exit;
+    }
+    // copy config
+    copy($siteRoot . '/installation/configuration.php-dist', $siteRoot . '/configuration.php');
+    out("done\n", 'light_blue');
+    dropDir($joomlaFiles, true);
+} else {
+    out(" Reinstall DB only\n", 'light_blue');
+}
+
+// ask few questions
+out(" DB settings\n", 'light_blue');
+$database = input("  Database name [mcs]: ", 'green');
+$database = empty($database) ? 'mcs' : $database;
+$dbUser = input("  Database user [root]: ", 'green');
+$dbUser = empty($dbUser) ? 'root' : $dbUser;
+$dbPwd = input("  Database password: ", 'green');
+$dbHost = input("  Database host [localhost]: ", 'green');
+$dbHost = empty($dbHost) ? 'localhost' : $dbHost;
+$dbPrefix = 'mcs_';
+
+// check DB connection
+out(" Connect to DB ... ", 'light_blue');
+$db = new JexterDbHelper($database, $dbUser, $dbPwd, $dbHost);
+if (!$db->isConnected()) {
+    $err = $db->getConnectionError();
+    out("failed\n   {$err}", 'red');
+    exit;
+}
+out("OK\n", 'light_blue');
+// remove all tables if exists
+$db->dropAllTables();
+
+out(" Creating tables ... ", 'light_blue');
+// load sql file and replace prefixes
+$sqlFile = $siteRoot . '/installation/sql/mysql/joomla.sql';
+$sqlFile2 = $siteRoot . '/installation/sql/mysql/sample_brochure.sql';
+if (!is_file($sqlFile) || !is_file($sqlFile2)) {
+    out("failed. SQL instructions not found.\n", 'red');
+    exit;
+}
+foreach ([$sqlFile, $sqlFile2] as $file) {
+    $lines = file($file);
+    foreach ($lines as &$line) {
+        $line = str_replace('#__', $dbPrefix, $line);
+    }
+    $lines = implode('', $lines);
+    file_put_contents(JEXTER_DIR . '/tmp/_install.sql', $lines);
+    $path = realpath(JEXTER_DIR . '/tmp/_install.sql');
+    system("mysql -u {$dbUser} -p{$dbPwd} {$database} < {$path}", $res);
+    if ($res !== 0) {
+        out("failed.\n", 'red');
+        exit;
+    }
+}
+// create admin account
+$admin = $db->execute("INSERT INTO `{$dbPrefix}users` "
+    . "(`id`,`name`, `username`, `email`, `password`, `block`, `sendEmail`, `registerDate`, `lastvisitDate`, `activation`, `params`, `lastResetTime`, `resetCount`, `otpKey`, `otep`, `requireReset`) "
+    . "VALUES (1, 'Super User', 'admin', 'mail@mcs.dev', '$2y$10$6dUEWDYUpagKKRq5.4nRKuCHV4hCB5oIWZCwlh//JFfEaUTNo.RDG', 0, 1, '2017-02-04 10:15:22', '2017-02-04 10:15:22', '0', '', '2017-02-04 10:15:22', 0, '', '', 0)");
+if (!$admin) {
+    echo "Cannot create user\n";
+    print_r($db->getLastError());
+    exit;
+}
+$db->execute("INSERT INTO `{$dbPrefix}user_usergroup_map` (`user_id`, `group_id`) VALUES (1, 8)");
+out("OK\n", 'light_blue');
+
+//register MCS
+$res = $db->execute("INSERT INTO `{$dbPrefix}extensions` (`package_id`, `name`, `type`, `element`, `folder`, `client_id`, `enabled`, `access`, `protected`, `manifest_cache`, `params`, `custom_data`, `system_data`, `checked_out`, `checked_out_time`, `ordering`, `state`) VALUES
+(10070, 'plg_editors-xtd_mcsinsert', 'plugin', 'mcsinsert', 'editors-xtd', 0, 1, 1, 0, '{\\\"name\\\":\\\"plg_editors - xtd_mcsinsert\\\",\\\"type\\\":\\\"plugin\\\",\\\"creationDate\\\":\\\"Jun 2018\\\",\\\"author\\\":\\\"Konstantin Kutsevalov & Vladislav Smolenskiy\\\",\\\"copyright\\\":\\\"\\\",\\\"authorEmail\\\":\\\"konstantin@kutsevalov . name\\\",\\\"authorUrl\\\":\\\"www . kutsevalov . name\\\",\\\"version\\\":\\\"2.0.43\\\",\\\"description\\\":\\\"\\n\\t < h3 class=\\\\\"description-module-header\\\\\" > My City Selector < \\ / h3>\\n\\t < div class=\\\\\"description-module\\\\\" style = \\\\\"text-align:left;\\\\\" > \\n\\t\\t\\u0414\\u0430\\u043d\\u043d\\u044b\\u0439 \\u043f\\u043b\\u0430\\u0433\\u0438\\u043d \\u044f\\u0432\\u043b\\u044f\\u0435\\u0442\\u0441\\u044f \\u0447\\u0430\\u0441\\u0442\\u044c\\u044e \\u0440\\u0430\\u0441\\u0448\\u0438\\u0440\\u0435\\u043d\\u0438\\u044f \\\\\"MyCitySelector\\\\\" . \\n\\t < \\ / div>\\n\\t\\\",\\\"group\\\":\\\"\\\",\\\"filename\\\":\\\"mcsinsert\\\"}', '{}', '', '', 0, '2017-01-01 10:20:20', 9991, 0),
+(10070, 'System - My City Selector', 'plugin', 'plgmycityselector', 'system', 0, 1, 1, 0, '{\\\"name\\\":\\\"System - My City Selector\\\",\\\"type\\\":\\\"plugin\\\",\\\"creationDate\\\":\\\"Jun 2018\\\",\\\"author\\\":\\\"Konstantin Kutsevalov & Vladislav Smolenskiy\\\",\\\"copyright\\\":\\\"\\\",\\\"authorEmail\\\":\\\"konstantin@kutsevalov . name\\\",\\\"authorUrl\\\":\\\"www . kutsevalov . name\\\",\\\"version\\\":\\\"2.0.43\\\",\\\"description\\\":\\\"\\n\\t\\n\\t < h3>My City Selector(Content plugin)<\\ / h3 > \\n\\t\\u0414\\u0430\\u043d\\u043d\\u044b\\u0439 \\u043f\\u043b\\u0430\\u0433\\u0438\\u043d \\u044f\\u0432\\u043b\\u044f\\u0435\\u0442\\u0441\\u044f \\u0447\\u0430\\u0441\\u0442\\u044c\\u044e \\u0440\\u0430\\u0441\\u0448\\u0438\\u0440\\u0435\\u043d\\u0438\\u044f \\\\\"MyCitySelector\\\\\" . \\n\\t < br\\ />\\n\\t@devnote TODO \\u0418\\u0417\\u041c\\u0415\\u041d\\u0418\\u0422\\u042c \\u041e\\u041f\\u0418\\u0421\\u0410\\u041d\\u0418\\u0415 \\u0418 \\u0421\\u0421\\u042b\\u041b\\u041a\\u0423 \\u041d\\u0410 \\u0421\\u0410\\u0419\\u0422\\n\\t\\u0411\\u043e\\u043b\\u0435\\u0435 \\u043f\\u043e\\u0434\\u0440\\u043e\\u0431\\u043d\\u043e\\u0435 \\u043e\\u043f\\u0438\\u0441\\u0430\\u043d\\u0438\\u0435 \\u0447\\u0438\\u0442\\u0430\\u0439\\u0442\\u0435 < a href = \\\\\"http:\\/\\/www.kutsevalov.name\\/2013\\/08\\/13\\/modul-vibora-goroda-dlya-joomla\\/\\\\\" title = \\\\\"\\u043f\\u0435\\u0440\\u0435\\u0439\\u0442\\u0438\\\\\" target = \\\\\"_blank\\\\\" > \\u043d\\u0430 \\u0441\\u0442\\u0440\\u0430\\u043d\\u0438\\u0446\\u0435 \\u043c\\u043e\\u0434\\u0443\\u043b\\u044f < \\ / a>.\\n\\t\\n\\t\\\",\\\"group\\\":\\\"\\\",\\\"filename\\\":\\\"plgmycityselector\\\"}', '{}', '', '', 0, '2017-01-01 10:20:20', 9990, 0),
+(10070, 'My City Selector MOD', 'module', 'mod_mycityselector', '', 0, 1, 0, 0, '{\\\"name\\\":\\\"My City Selector MOD\\\",\\\"type\\\":\\\"module\\\",\\\"creationDate\\\":\\\"Jun 2018\\\",\\\"author\\\":\\\"Konstantin Kutsevalov & Vladislav Smolenskiy\\\",\\\"copyright\\\":\\\"All rights reserved\\\",\\\"authorEmail\\\":\\\"konstantin@kutsevalov . name\\\",\\\"authorUrl\\\":\\\"http:\\ / \\ / www . kutsevalov . name\\ / 2013\\ / 08\\ / 12\\ / modul - vibora - goroda - dlya - joomla\\ / \\\",\\\"version\\\":\\\"2.0.43\\\",\\\"description\\\":\\\"\\n\\t < h3 class=\\\\\"description-module-header\\\\\" > My City Selector < \\ / h3>\\n\\t < div class=\\\\\"description-module\\\\\" style = \\\\\"text-align:left;\\\\\" > \\n\\t\\t\\u0414\\u0430\\u043d\\u043d\\u044b\\u0439 \\u043c\\u043e\\u0434\\u0443\\u043b\\u044c \\u044f\\u0432\\u043b\\u044f\\u0435\\u0442\\u0441\\u044f \\u0447\\u0430\\u0441\\u0442\\u044c\\u044e \\u0440\\u0430\\u0441\\u0448\\u0438\\u0440\\u0435\\u043d\\u0438\\u044f \\\\\"MyCitySelector\\\\\" . \\n\\t < \\ / div>\\n\\t\\\",\\\"group\\\":\\\"\\\",\\\"filename\\\":\\\"mod_mycityselector\\\"}', '{\\\"dialog_title\\\":\\\"\\u041f\\u043e\\u0436\\u0430\\u043b\\u0443\\u0439\\u0441\\u0442\\u0430, \\u0432\\u044b\\u0431\\u0435\\u0440\\u0438\\u0442\\u0435 \\u0432\\u0430\\u0448 \\u0433\\u043e\\u0440\\u043e\\u0434\\\",\\\"cities_list_type\\\":\\\"0\\\",\\\"cache\\\":\\\"0\\\",\\\"cache_time\\\":\\\"900\\\"}', '', '', 0, '2017-01-01 10:20:20', 0, 0),
+(10070, 'Mycityselector', 'component', 'com_mycityselector', '', 1, 1, 0, 0, '{\\\"name\\\":\\\"Mycityselector\\\",\\\"type\\\":\\\"component\\\",\\\"creationDate\\\":\\\"Jun 2018\\\",\\\"author\\\":\\\"Konstantin Kutsevalov & Vladislav Smolenskiy\\\",\\\"copyright\\\":\\\"All rights reserved\\\",\\\"authorEmail\\\":\\\"konstantin@kutsevalov . name\\\",\\\"authorUrl\\\":\\\"http:\\ / \\ / kutsevalov . name\\\",\\\"version\\\":\\\"2.0.43\\\",\\\"description\\\":\\\"COM_MYCITYSELECTOR_DESCRIPTION\\\",\\\"group\\\":\\\"\\\",\\\"filename\\\":\\\"com_mycityselector\\\"}', '{\\\"basedomain\\\":\\\"mcs . test\\\",\\\"default_city\\\":\\\"astrahan\\\",\\\"seo_mode\\\":\\\"1\\\",\\\"baseip\\\":\\\"ipgeobase\\\",\\\"let_select\\\":\\\"2\\\",\\\"autoswitch_city\\\":\\\"0\\\",\\\"debug_mode\\\":\\\"1\\\",\\\"debug_mode_hidden\\\":\\\"0\\\"}', '', '', 0, '2017-01-01 10:20:20', 0, 0),
+(0, 'My City Selector', 'package', 'pkg_mycityselector', '', 0, 1, 1, 0, '{\\\"name\\\":\\\"My City Selector\\\",\\\"type\\\":\\\"package\\\",\\\"creationDate\\\":\\\"Jun 2018\\\",\\\"author\\\":\\\"Konstantin Kutsevalov & Vladislav Smolenskiy\\\",\\\"copyright\\\":\\\"All rights reserved\\\",\\\"authorEmail\\\":\\\"konstantin@kutsevalov . name\\\",\\\"authorUrl\\\":\\\"http:\\ / \\ / www . kutsevalov . name\\ / 2013\\ / 08\\ / 12\\ / modul - vibora - goroda - dlya - joomla\\ / \\\",\\\"version\\\":\\\"2.0.43\\\",\\\"description\\\":\\\"\\n\\t\\t\\n\\t\\\",\\\"group\\\":\\\"\\\",\\\"filename\\\":\\\"pkg_mycityselector\\\"}', '{}', '', '', 0, '2017-01-01 10:20:20', 0, 0)");
+if (!$res) {
+    echo "Cannot register MCS extension\n";
+    print_r($db->getLastError());
+    exit;
+}
+// find com_modules asset
+$res = $db->query("SELECT `id` FROM `{$dbPrefix}assets` WHERE `name` = 'com_modules'");
+if (!empty($res)) {
+    $db->execute("INSERT INTO `{$dbPrefix}modules` (`asset_id`, `title`, `note`, `content`, `ordering`, `position`, `checked_out`, `checked_out_time`, `publish_up`, `publish_down`, `published`, `module`, `access`, `showtitle`, `params`, `client_id`, `language`) VALUES "
+        . "({$res[0]['id']}, 'My City Selector MOD', '', '', 1, 'position-0', 0, '2017-01-01 10:20:20', '2000-01-01 10:20:20', '2100-01-01 10:20:20', 1, 'mod_mycityselector', 1, 1, '{\"dialog_title\":\"\\u041f\\u043e\\u0436\\u0430\\u043b\\u0443\\u0439\\u0441\\u0442\\u0430, \\u0432\\u044b\\u0431\\u0435\\u0440\\u0438\\u0442\\u0435 \\u0432\\u0430\\u0448 \\u0433\\u043e\\u0440\\u043e\\u0434\",\"cities_list_type\":\"0\",\"layout\":\"_:light\",\"moduleclass_sfx\":\"\",\"text_before\":\"\",\"text_after\":\"\",\"cache\":\"0\",\"cache_time\":\"900\",\"module_tag\":\"div\",\"bootstrap_size\":\"0\",\"header_tag\":\"h3\",\"header_class\":\"\",\"style\":\"0\"}', 0, '*')");
+}
+
+
+// TODO здесь прописать установку миграций компонента из третьей версии компонента
+
+
+// save config file
+$registry = loadJoomlaConfig($siteRoot);
+createDir($siteRoot . '/tmp');
+$registry->loadArray([
+    'log_path' => $siteRoot . '/tmp',
+    'tmp_path' => $siteRoot . '/tmp',
+    'MetaDesc' => 'MCS',
+    'MetaKeys' => '',
+    'sitename' => 'MCS',
+    'dbtype' => 'mysqli',
+    'host' => $dbHost,
+    'user' => $dbUser,
+    'password' => $dbPwd,
+    'db' => $database,
+    'dbprefix' => $dbPrefix,
+]);
+$config = $registry->toString('PHP', ['class' => 'JConfig', 'closingtag' => false]);
+file_put_contents($siteRoot . '/configuration.php', $config);
+
+// drop installation folder
+dropDir($siteRoot . '/installation');
+
+out(" Finished\n  Administrator account\n   Login: admin\n   Password: admin\n", 'green');
+out(" Thank you for your help!\n", 'light_cyan');

@@ -1,0 +1,7 @@
+{
+    "name": "SqlQuery",
+    "id": "com_sqlquery",
+    "version": "0.1.0",
+    "type": "component",
+    "script": "sqlquery.php"
+}

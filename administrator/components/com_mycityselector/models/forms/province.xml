@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+    <fieldset name="edit"
+              addfieldpath="/administrator/components/com_mycityselector/models/fields"
+    >
+        <field
+                name="published"
+                type="radio"
+                label="COM_MYCITYSELECTOR_FORM_TITLE_STATUS"
+                description="COM_MYCITYSELECTOR_FORM_TITLE_STATUS"
+                class="btn-group btn-group-yesno"
+                default="0"
+                size="1"
+        >
+            <option value="1">COM_MYCITYSELECTOR_ITEM_PUBLISHED</option>
+            <option value="0">COM_MYCITYSELECTOR_ITEM_UNPUBLISHED</option>
+        </field>
+        <field
+                name="name"
+                type="Provincenames"
+                label="COM_MYCITYSELECTOR_FORM_TITLE_NAME"
+                description="COM_MYCITYSELECTOR_FORM_TITLE_NAME"
+                hint="COM_MYCITYSELECTOR_FORM_TITLE_NAME"
+        />
+        <field
+                name="subdomain"
+                type="text"
+                label="COM_MYCITYSELECTOR_FORM_TITLE_SUBDOMAIN"
+                description="COM_MYCITYSELECTOR_FORM_TITLE_SUBDOMAIN"
+                hint="COM_MYCITYSELECTOR_FORM_TITLE_SUBDOMAIN"
+        />
+        <field
+                name="country_id"
+                type="CountriesList"
+                label="COM_MYCITYSELECTOR_COUNTRY"
+        />
+        <field
+                name="id"
+                type="hidden"
+                default="0"
+        />
+    </fieldset>
+</form>

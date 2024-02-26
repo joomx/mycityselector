@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+    <fieldset name="component">
+        <field
+                name="is_enabled"
+                type="radio"
+                label="COM_SQLQUERY_ENABLED_TITLE"
+                default="1" >
+            <option value="0">JNO</option>
+            <option value="1">JYES</option>
+        </field>
+    </fieldset>
+</config>

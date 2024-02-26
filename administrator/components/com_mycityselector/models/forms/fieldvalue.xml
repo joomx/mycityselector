@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+    <fieldset name="edit">
+        <field
+                name="title"
+                type="hidden"
+        />
+        <field
+                name="cities"
+                type="Citymultiselect"
+                multiple="true"
+                label="COM_MYCITYSELECTOR_CITIES"
+                required="false"
+        />
+
+        <field
+                name="provinces"
+                type="Provincemultiselect"
+                multiple="true"
+                label="COM_MYCITYSELECTOR_PROVINCES"
+                required="false"
+        />
+
+        <field
+                name="countries"
+                type="Countrymultiselect"
+                multiple="true"
+                label="COM_MYCITYSELECTOR_COUNTRIES"
+                required="false"
+        />
+
+        <field
+                name="value"
+                type="editor"
+                filter="raw"
+                label="COM_MYCITYSELECTOR_FIELD_VALUES"
+        />
+        <field
+                name="field_id"
+                type="hidden"
+                default="0"
+        />
+        <field
+                name="default"
+                type="hidden"
+                default="0"
+        />
+        <field
+                name="id"
+                type="hidden"
+                default="0"
+        />
+    </fieldset>
+</form>
