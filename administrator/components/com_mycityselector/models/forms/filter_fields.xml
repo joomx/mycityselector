@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+    <fields name="filter">
+        <field
+                name="search"
+                type="text"
+                hint="JSEARCH_FILTER"
+                noresults="COM_MYCITYSELECTOR_MSG_NOT_FOUND"
+        />
+        <field
+                name="published"
+                type="status"
+                label="COM_CATEGORIES_FILTER_PUBLISHED"
+                description="COM_CATEGORIES_FILTER_PUBLISHED_DESC"
+                filter="0,1"
+                onchange="this.form.submit();"
+        >
+        <option value="">JOPTION_SELECT_PUBLISHED</option>
+        </field>
+        <field
+                name="country"
+                type="countrieslist"
+                label="COM_MYCITYSELECTOR_COUNTRY"
+                onchange="this.form.submit();"
+        >
+            <option value="">COM_MYCITYSELECTOR_SELECT_COUNTRY</option>
+        </field>
+        <field
+                name="province"
+                type="provincelist"
+                label="COM_MYCITYSELECTOR_PROVINCE"
+                onchange="this.form.submit();"
+        >
+            <option value="">COM_MYCITYSELECTOR_SELECT_PROVINCE</option>
+        </field>
+        <field
+                name="city"
+                type="citieslist"
+                label="COM_MYCITYSELECTOR_CITY"
+                onchange="this.form.submit();"
+        >
+            <option value="">COM_MYCITYSELECTOR_SELECT_CITY</option>
+        </field>
+
+
+    </fields>
+    <fields name="list">
+        <field
+                name="fullordering"
+                type="list"
+                label="JGLOBAL_SORT_BY"
+                description="JGLOBAL_SORT_BY"
+                statuses="*,0,1,-2"
+                onchange="this.form.submit();"
+                default="name ASC"
+        >
+            <option value="">JGLOBAL_SORT_BY</option>
+            <option value="published ASC">JSTATUS_ASC</option>
+            <option value="published DESC">JSTATUS_DESC</option>
+            <option value="name ASC">COM_MYCITYSELECTOR_HEADING_NAME_ASC</option>
+            <option value="name DESC">COM_MYCITYSELECTOR_HEADING_NAME_DESC</option>
+            <option value="subdomain ASC">COM_MYCITYSELECTOR_SUBDOMAIN_ASC</option>
+            <option value="subdomain DESC">COM_MYCITYSELECTOR_SUBDOMAIN_DESC</option>
+            <option value="country ASC">COM_MYCITYSELECTOR_COUNTRY_ASC</option>
+            <option value="country DESC">COM_MYCITYSELECTOR_COUNTRY_DESC</option>
+            <option value="province ASC">COM_MYCITYSELECTOR_PROVINCE_ASC</option>
+            <option value="province DESC">COM_MYCITYSELECTOR_PROVINCE_DESC</option>
+            <option value="city ASC">COM_MYCITYSELECTOR_CITY_ASC</option>
+            <option value="city DESC">COM_MYCITYSELECTOR_CITY_DESC</option>
+            <option value="id ASC">JGRID_HEADING_ID_ASC</option>
+            <option value="id DESC">JGRID_HEADING_ID_DESC</option>
+        </field>
+        <field
+                name="limit"
+                type="limitbox"
+                label="COM_MYCITYSELECTOR_LIST_LIMIT"
+                description="JFIELD_PLG_SEARCH_SEARCHLIMIT_DESC"
+                class="input-mini"
+                default="25"
+                onchange="this.form.submit();"
+        />
+    </fields>
+</form>

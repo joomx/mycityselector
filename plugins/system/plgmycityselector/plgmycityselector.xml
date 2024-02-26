@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--@devnote https://docs.joomla.org/Manifest_files -->
+<extension version="3.2" type="plugin" group="system" method="upgrade">
+	<name>System - My City Selector</name>
+	<creationDate>Dec 2022</creationDate>
+	<author>Konstantin Kutsevalov &amp; Vladislav Smolenskiy</author>
+	<license>Proprietary</license>
+	<authorEmail>konstantin@kutsevalov.name</authorEmail>
+	<authorUrl>www.kutsevalov.name</authorUrl>
+	<version>3.40.0</version>
+	<description>
+		<![CDATA[
+		<h3>My City Selector (Content plugin)</h3>
+		Данный плагин является частью расширения "MyCitySelector".
+		<br/>
+		Более подробное описание читайте <a href="https://github.com/active-programming/mycityselector" title="перейти" target="_blank">на странице модуля</a>.
+		]]>
+	</description>
+	<scriptfile>installer.php</scriptfile>
+	<files><folder>compatibilities</folder><folder>components</folder><filename>ext_plugin_mini.png</filename><folder>helpers</folder><filename>installer.php</filename><filename plugin="plgmycityselector">plgmycityselector.php</filename><filename>plgmycityselector.xml</filename></files>
+</extension>

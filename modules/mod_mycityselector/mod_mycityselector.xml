@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module" version="3.2" method="upgrade" client="site">
+	<name>My City Selector MOD</name>
+	<creationDate>Dec 2022</creationDate>
+	<author>Konstantin Kutsevalov &amp; Vladislav Smolenskiy</author>
+	<authorEmail>konstantin@kutsevalov.name</authorEmail>
+	<authorUrl>http://www.kutsevalov.name/2013/08/12/modul-vibora-goroda-dlya-joomla/</authorUrl>
+	<copyright>All rights reserved</copyright>
+	<license>Proprietary</license>
+	<version>3.40.0</version>
+	<description><![CDATA[
+	<![CDATA[
+	<h3>My City Selector (Module)</h3>
+	Данный модуль является частью расширения "MyCitySelector".
+	<br/>
+	Более подробное описание читайте <a href="https://github.com/active-programming/mycityselector" title="перейти" target="_blank">на странице модуля</a>.
+	]]></description>
+
+    <files><filename>McsModHelper.php</filename><filename>MyCitySelectorModule.php</filename><filename>ext_mod_mini.png</filename><folder>language</folder><filename module="mod_mycityselector">mod_mycityselector.php</filename><filename>mod_mycityselector.xml</filename><folder>tmpl</folder></files>
+
+    <languages>
+        <language tag="en-GB">language/en-GB/en-GB.mod_mycityselector.sys.ini</language>
+        <language tag="en-GB">language/en-GB/en-GB.mod_mycityselector.ini</language>
+        <language tag="ru-RU">language/ru-RU/ru-RU.mod_mycityselector.sys.ini</language>
+        <language tag="ru-RU">language/ru-RU/ru-RU.mod_mycityselector.ini</language>
+    </languages>
+
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="dialog_title" type="text" default="Пожалуйста, выберите ваш город" label="MOD_MYCITYSELECTOR_TEXT_DIALOG_TITLE" description=""/>
+                <field name="cities_list_type" type="list" default="0" label="MOD_MYCITYSELECTOR_TEXT_LIST_TYPE" description="">
+                    <option value="0">MOD_MYCITYSELECTOR_TEXT_LIST_FLAT</option>
+                    <option value="1">MOD_MYCITYSELECTOR_TEXT_LIST_PROVINCES</option>
+                    <option value="2">MOD_MYCITYSELECTOR_TEXT_LIST_COUNTRIES</option>
+                    <option value="3">MOD_MYCITYSELECTOR_TEXT_LIST_CITIES</option>
+                </field>
+			</fieldset>
+            <fieldset name="advanced">
+                <field name="layout" type="modulelayout" template="default" label="MOD_MYCITYSELECTOR_TEMPLATE" description="Шаблон который будет использован модулем"/>
+                <field name="moduleclass_sfx" type="text" label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL" description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC"/>
+                <field name="text_before" type="textarea" label="MOD_MYCITYSELECTOR_TEXT_BEFORE" description="MOD_MYCITYSELECTOR_TEXT_BEFORE" rows="5" cols="50"/>
+                <field name="text_after" type="textarea" label="MOD_MYCITYSELECTOR_TEXT_AFTER" description="MOD_MYCITYSELECTOR_TEXT_AFTER" rows="5" cols="50"/>
+                <field name="cache" type="list" default="0" label="COM_MODULES_FIELD_CACHING_LABEL" description="COM_MODULES_FIELD_CACHING_DESC">
+                    <option value="1">JGLOBAL_USE_GLOBAL</option>
+                    <option value="0">COM_MODULES_FIELD_VALUE_NOCACHING</option>
+                </field>
+                <field name="cache_time" type="text" default="900" label="COM_MODULES_FIELD_CACHE_TIME_LABEL" description="COM_MODULES_FIELD_CACHE_TIME_DESC"/>
+            </fieldset>
+		</fields>
+	</config>
+</extension>

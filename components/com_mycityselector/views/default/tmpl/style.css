@@ -1,0 +1,14 @@
+
+#mcs-cities-list .mcs-items,
+#mcs-cities-list .mcs-items ul {
+    list-style: none;
+}
+#mcs-cities-list .mcs-items li {
+    margin: 0;
+    padding: 0;
+}
+#mcs-cities-list .mcs-items > li > ul > li {
+    display: inline-block;
+    width: 50%;
+    vertical-align: top;
+}
